@@ -5,7 +5,7 @@ Sorry, unfortunately I did not create this website yet. See also below links in 
 - Open Source
     - <https://github.com/usagi> ; library, app ( computer software )
 - Online Store and Showcases
-    - <https://usagi-network.booth.pm/"> ; shop, tool, 3d-model
+    - <https://usagi-network.booth.pm/> ; shop, tool, 3d-model
     - <https://www.thingiverse.com/lunatichare/designs> ; showcase, 3d-model
 - Blogs
     - <https://usagi.hatenablog.jp/> ; geeks blog
