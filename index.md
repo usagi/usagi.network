@@ -13,9 +13,9 @@ Sorry, unfortunately I did not create this website yet. See also below links in 
     - <https://tasty.hatenablog.jp/> ; foods blog
     - <https://play-game.hatenablog.jp/> ; gaming blog
 - Social Networks
-    - <https://twitter.com/usagi_network"> ; geeks talk, contact
-    - <https://www.facebook.com/usagi.wrp"> ; casual life talk, contact
-    - <https://www.instagram.com/usagi_wrp/"> ; photos
+    - <https://twitter.com/usagi_network> ; geeks talk, contact
+    - <https://www.facebook.com/usagi.wrp> ; casual life talk, contact
+    - <https://www.instagram.com/usagi_network/> ; photos
 
 ---
 usagi.network is a personal blanding by Usagi Ito since 2020.
