@@ -18,4 +18,4 @@ Sorry, unfortunately I did not create this website yet. See also below links in 
     - <https://www.instagram.com/usagi_network/> ; photos
 
 ---
-usagi.network is a personal blanding by Usagi Ito since 2020.
+usagi.network is a personal blanding by Usagi Ito since 2022.
