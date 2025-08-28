@@ -1,0 +1,9 @@
+name = "usagi-network-stream-proxy"
+main = "src/worker.js"
+compatibility_date = "2025-08-28"
+
+[vars]
+TWITCH_CHANNEL_LOGIN = "usaginetwork"
+
+[observability]
+enabled = true

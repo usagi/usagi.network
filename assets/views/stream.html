@@ -6,11 +6,15 @@
   このページでは人気クリップと直近のVOD、旧いアーカイブ（YouTube）をサイトのデザインに合わせて自動生成して表示します。
   </div>
 
-<!-- Optional: live player (offline時はオフライン画面) -->
+<!-- Optional: live player (Twitch公式埋め込み) -->
 <div id="live-wrap" class="player-wrap is-hidden">
   <iframe id="twitch-iframe" allowfullscreen frameborder="0"></iframe>
   <iframe class="twitch-chat is-hidden" id="twitch-chat" frameborder="0"></iframe>
-</div>
+  <div class="player-links">
+    <a class="btn btn--live" href="https://twitch.tv/usaginetwork" target="_blank" rel="noopener">Open Twitch</a>
+  </div>
+  <small class="hint">Twitch公式プレイヤー/チャットを直接表示します。</small>
+  </div>
 
 <section class="strip">
   <h3 class="strip__title">Twitch 人気クリップ</h3>
@@ -25,4 +29,10 @@
 <section class="strip">
   <h3 class="strip__title">YouTube 過去アーカイブ</h3>
   <div id="grid-yt" class="grid" role="list"></div>
+  <div id="yt-official" class="player-wrap is-hidden">
+    <iframe id="yt-playlist" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+    <div class="player-links">
+      <a class="btn btn--ghost" id="yt-channel-link" target="_blank" rel="noopener">Open YouTube</a>
+    </div>
+  </div>
 </section>

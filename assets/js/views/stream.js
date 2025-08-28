@@ -30,8 +30,12 @@ export default { mount, unmount };
 
 // --- Stream logic ---
 async function initializeStream(){
-	// 1) Optionally detect live status and show embedded player + chat
-	setupLiveEmbeds();
+	// 1) Official Twitch embed if enabled; otherwise keep hidden
+	if (SOURCES.twitch?.useOfficialEmbeds) {
+		setupTwitchOfficialEmbeds();
+	} else {
+		setupLiveEmbeds();
+	}
 
 	// 2) Fetch and render Twitch clips
 	const clips = await loadTwitchClips();
@@ -41,20 +45,31 @@ async function initializeStream(){
 	const vods = await loadTwitchVods();
 	renderCards(vods, document.getElementById('grid-vods'));
 
-	// 4) Fetch and render YouTube archives (older)
-	const yt = await loadYouTubeArchives();
-	renderCards(yt, document.getElementById('grid-yt'));
+	// 4) YouTube: official playlist embed if configured; else render cards
+	const usedOfficial = await setupYouTubeOfficialEmbed();
+	if (!usedOfficial){
+		const yt = await loadYouTubeArchives();
+		renderCards(yt, document.getElementById('grid-yt'));
+	}
 }
 
 function renderCards(items, grid){
 	if (!grid) return;
 	grid.innerHTML = '';
-	(items || []).forEach((it) => {
+	const list = Array.isArray(items) ? items : [];
+	if (list.length === 0){
+		const msg = document.createElement('div');
+		msg.className = 'empty';
+		msg.textContent = 'まだ項目がありません。しばらくしてから再度お試しください。';
+		grid.appendChild(msg);
+		return;
+	}
+	list.forEach((it) => {
 		const a = document.createElement('article');
 		const kind = it.kind || 'vod';
 		const cutClass = kind === 'clip' ? 'card--clip' : kind === 'vod' ? 'card--vod' : kind === 'track' ? 'card--track' : 'card--map';
 		a.className = `card ${cutClass}`;
-		const thumb = it.thumbnail || it.thumbnail_url || '';
+		const thumb = resolveItemThumb(it);
 		a.innerHTML = `
 			<div class="card__cut"></div>
 			${thumb ? `<img class="card__thumb" src="${thumb}" alt="">` : ''}
@@ -67,6 +82,17 @@ function renderCards(items, grid){
 		a.addEventListener('click', () => openDetailEmbed(it));
 		grid.appendChild(a);
 	});
+}
+
+function resolveItemThumb(it){
+	let u = it.thumbnail || it.thumbnail_url || it.preview_image_url || it.thumb || '';
+	if (!u) return '';
+	// Twitch VOD thumbnails include template tokens like %{width}x%{height} or {width}x{height}
+	if (u.includes('%{width}x%{height}') || u.includes('{width}x{height}')){
+		const size = '640x360';
+		u = u.replace('%{width}x%{height}', size).replace('{width}x{height}', size);
+	}
+	return u;
 }
 
 function openDetailEmbed(item){
@@ -106,6 +132,48 @@ function setupLiveEmbeds(){
 	// chat.src = `https://www.twitch.tv/embed/usaginetwork/chat?parent=${location.hostname}`;
 }
 
+function setupTwitchOfficialEmbeds(){
+	const liveWrap = document.getElementById('live-wrap');
+	const player = document.getElementById('twitch-iframe');
+	const chat = document.getElementById('twitch-chat');
+	if (!liveWrap || !player || !chat) return;
+	const channel = SOURCES.twitch?.channel || 'usaginetwork';
+	liveWrap.classList.remove('is-hidden');
+	// Prefer dark theme for player
+	player.src = `https://player.twitch.tv/?channel=${encodeURIComponent(channel)}&parent=${location.hostname}&autoplay=true&theme=dark`;
+	chat.classList.remove('is-hidden');
+	// Twitch chat dark mode (darkpopout); unsupported params are ignored safely
+	chat.src = `https://www.twitch.tv/embed/${encodeURIComponent(channel)}/chat?parent=${location.hostname}&darkpopout`;
+}
+
+async function setupYouTubeOfficialEmbed(){
+	const wrap = document.getElementById('yt-official');
+	const iframe = document.getElementById('yt-playlist');
+	const link = document.getElementById('yt-channel-link');
+	if (!wrap || !iframe || !link) return false;
+	const yt = SOURCES.youtube || {};
+	const handle = yt.handle || 'usagi.network';
+	link.href = `https://www.youtube.com/@${encodeURIComponent(handle)}`;
+	link.textContent = `@${handle}`;
+	if (!yt.useOfficialPlaylistEmbed) { wrap.classList.add('is-hidden'); return false; }
+	let playlistId = yt.uploadsPlaylistId || null;
+	if (!playlistId && yt.channelId && yt.channelId.startsWith('UC')){
+		// Official uploads playlist ID is 'UU' + channelId.slice(2)
+		playlistId = 'UU' + yt.channelId.slice(2);
+	}
+	if (!playlistId){ wrap.classList.add('is-hidden'); return false; }
+	const params = new URLSearchParams({ list: playlistId, autoplay: '1', rel: '0', modestbranding: '1' });
+	// YouTube embed: no explicit dark theme, but use params that look better on dark backgrounds
+	params.set('color', 'white'); // progress bar color
+	params.set('iv_load_policy', '3'); // hide annotations
+	params.set('playsinline', '1');
+	iframe.src = `https://www.youtube.com/embed/videoseries?${params.toString()}`;
+	wrap.classList.remove('is-hidden');
+	const grid = document.getElementById('grid-yt');
+	if (grid) grid.classList.add('is-hidden');
+	return true;
+}
+
 // --- Data loaders (client-only). Prefer static JSON assets, try dynamic scraping where safe, fallback to placeholders. ---
 import { SOURCES } from '#api/config.js';
 async function loadJSON(path){
@@ -115,6 +183,32 @@ async function loadJSON(path){
 		const data = await res.json();
 		const items = Array.isArray(data) ? data : Array.isArray(data?.items) ? data.items : [];
 		return items;
+	} catch { return null; }
+}
+
+function resolveApiBase(){
+	const configured = SOURCES.api?.base?.trim() || '';
+	const host = location.hostname;
+	const isLocal = host === 'localhost' || host === '127.0.0.1';
+	// URL override: ?proxy=local | remote
+	const pref = new URLSearchParams(location.search).get('proxy');
+	if (pref === 'local') return 'http://127.0.0.1:8787';
+	if (pref === 'remote') return configured;
+	// Default: on localhost prefer local wrangler dev; otherwise use configured remote base
+	if (isLocal) return 'http://127.0.0.1:8787';
+	return configured;
+}
+
+async function loadFromProxy(path){
+	const base = resolveApiBase();
+ console.log(base);
+	if (!base) return null;
+	const url = `${base}${path.startsWith('/') ? path : '/' + path}`;
+	try {
+		const res = await fetch(url, { cache: 'no-store' });
+		if (!res.ok) return null;
+		const data = await res.json();
+		return Array.isArray(data) ? data : Array.isArray(data?.items) ? data.items : [];
 	} catch { return null; }
 }
 
@@ -134,8 +228,12 @@ function normalize(items = [], provider, kind){
 }
 
 async function loadTwitchClips(){
+	// 0) Try proxy
+	const viaProxy = await loadFromProxy('/api/twitch/clips');
+	if (Array.isArray(viaProxy) && viaProxy.length) return normalize(viaProxy, 'twitch', 'clip');
+	// 1) Static JSON
 	const items = await loadJSON('/assets/data/stream/twitch-clips.json');
-	if (items) return normalize(items, 'twitch', 'clip');
+	if (Array.isArray(items) && items.length) return normalize(items, 'twitch', 'clip');
 	// Fallback
 	return normalize([
 		{ id: 'EnergeticAmazingPineappleHassaanChop', title:'神回ハイライト', date:'2025-08-10', thumbnail:'https://static-cdn.jtvnw.net/ttv-static/404_preview-320x180.jpg', tag:'Clip' },
@@ -143,8 +241,12 @@ async function loadTwitchClips(){
 }
 
 async function loadTwitchVods(){
+	// 0) Try proxy
+	const viaProxy = await loadFromProxy('/api/twitch/vods');
+	if (Array.isArray(viaProxy) && viaProxy.length) return normalize(viaProxy, 'twitch', 'vod');
+	// 1) Static JSON
 	const items = await loadJSON('/assets/data/stream/twitch-vods.json');
-	if (items) return normalize(items, 'twitch', 'vod');
+	if (Array.isArray(items) && items.length) return normalize(items, 'twitch', 'vod');
 	// Fallback
 	return normalize([
 		{ id: '2134567890', title:'開発配信: SPA整備とUI仕上げ', date:'2025-08-27', thumbnail:'https://static-cdn.jtvnw.net/ttv-static/404_preview-640x360.jpg', tag:'VOD' },
@@ -152,9 +254,12 @@ async function loadTwitchVods(){
 }
 
 async function loadYouTubeArchives(){
+	// 0) Try proxy
+	const viaProxy = await loadFromProxy('/api/youtube/archives');
+	if (Array.isArray(viaProxy) && viaProxy.length) return normalize(viaProxy, 'youtube', 'archive');
 	// 1) Try static JSON if present
 	const staticItems = await loadJSON('/assets/data/stream/youtube-archives.json');
-	if (staticItems) return normalize(staticItems, 'youtube', 'archive');
+	if (Array.isArray(staticItems) && staticItems.length) return normalize(staticItems, 'youtube', 'archive');
 
 	// 2) Try dynamic client-only fetch from YouTube handle page (no API key). Many modern browsers block cross-origin HTML fetches unless CORS is allowed; YouTube does not send CORS headers, so this often fails. We'll attempt via no-cors for opaque hints, then fall back.
 	try {

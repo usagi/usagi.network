@@ -480,13 +480,17 @@ body {
  gap: 6px;
 }
 .card__tag {
- display: inline-block;
+ display: inline-flex;
+ align-items: center;
+ white-space: nowrap;
+ height: 22px;
+ line-height: 22px;
  font-size: 12px;
  font-weight: 800;
  letter-spacing: 0.08em;
  color: #0b0c0f;
  background: #f7d354;
- padding: 2px 8px;
+ padding: 0 10px;
  border-radius: 999px;
  width: max-content;
 }
