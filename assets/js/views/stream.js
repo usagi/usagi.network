@@ -12,16 +12,77 @@ function ensureSection(){
 
 export async function mount(){
 	const view = ensureSection();
-	view.innerHTML = '';
-	// Optional: show page-local loading if needed
-	try{
+		view.innerHTML = '';
+		view.classList.add('is-loading');
+		// LOADING overlay (URTS style) with log window
+		const overlay = document.createElement('div');
+		overlay.className = 'loading-overlay';
+		overlay.innerHTML = `
+			<div class="loading-overlay__panel is-manual">
+				<span class="loading-overlay__badge">URTS</span>
+				<div class="loading-overlay__title">LOADING</div>
+				<div class="loading-overlay__bar"><div class="loading-overlay__bar-fill" style="--pf:100%"></div></div>
+				<div class="loading-overlay__logs" id="stream-logs"></div>
+			</div>`;
+		view.appendChild(overlay);
+		const logs = overlay.querySelector('#stream-logs');
+		// Lock overlay to initial viewport position to avoid shifting during incremental loads
+		try {
+			const rect = view.getBoundingClientRect();
+			const sx = window.scrollX || document.documentElement.scrollLeft || 0;
+			const sy = window.scrollY || document.documentElement.scrollTop || 0;
+			Object.assign(overlay.style, {
+				position: 'fixed',
+				left: `${rect.left + sx}px`,
+				top: `${rect.top + sy}px`,
+				width: `${rect.width}px`,
+				height: `${rect.height}px`,
+			});
+		} catch {}
+		const setPct = (p)=>{
+			const fill = overlay.querySelector('.loading-overlay__bar-fill');
+			if (fill) fill.style.setProperty('--pf', `${Math.max(0, 100 - p)}%`);
+		};
+		const log = (msg, cls='')=>{
+			if (!logs) return; const line = document.createElement('div');
+			if (cls) line.className = cls;
+			const now = new Date().toISOString().slice(11,19);
+			line.innerHTML = `<b>[${now}]</b> ${msg}`; logs.appendChild(line); logs.scrollTop = logs.scrollHeight;
+		};
+		let step = 0; const bump = (d=15)=>{ step = Math.min(95, step + d); setPct(step); };
+		const content = document.createElement('div');
+		content.className = 'view__content';
+		try{
+		log('Fetch: view template', '');
 		const res = await fetch('/assets/views/stream.html', { cache: 'no-store' });
 		if (!res.ok) throw new Error(`Failed to load stream.html: ${res.status}`);
-		view.innerHTML = await res.text();
-		await initializeStream();
+		content.innerHTML = await res.text();
+		view.appendChild(content);
+				bump(10); log('Init: stream data pipeline');
+				// Start data pipeline asynchronously so router can clear page-fade and show this overlay
+				initializeStream(log, bump)
+					.then(() => {
+						setPct(100); log('Complete', 'ok');
+					})
+					.catch((e) => {
+						console.error(e);
+						log(String(e), 'err');
+						content.innerHTML = content.innerHTML || '<p>Failed to load stream page.</p>';
+						if (!content.isConnected) view.appendChild(content);
+					})
+					.finally(() => {
+						overlay.remove();
+						view.classList.remove('is-loading');
+					});
+				// Return early; overlay remains visible until pipeline finishes
+				return;
 	} catch (err){
 		console.error(err);
-		view.innerHTML = '<p>Failed to load stream page.</p>';
+		content.innerHTML = '<p>Failed to load stream page.</p>';
+		if (!content.isConnected) view.appendChild(content);
+		log(String(err), 'err');
+		overlay.remove();
+		view.classList.remove('is-loading');
 	}
 }
 
@@ -29,26 +90,32 @@ export function unmount(){ /* no-op */ }
 export default { mount, unmount };
 
 // --- Stream logic ---
-async function initializeStream(){
+async function initializeStream(log = ()=>{}, bump = ()=>{}){
 	// 1) Official Twitch embed if enabled; otherwise keep hidden
 	if (SOURCES.twitch?.useOfficialEmbeds) {
-		setupTwitchOfficialEmbeds();
+		log('Twitch: official embed');
+		setupTwitchOfficialEmbeds(); bump(5);
 	} else {
+		log('Twitch: official embed disabled'); bump(3);
 		setupLiveEmbeds();
 	}
 
 	// 2) Fetch and render Twitch clips
-	const clips = await loadTwitchClips();
+	log('Fetch: twitch clips');
+	const clips = await loadTwitchClips(); bump(15);
 	renderCards(clips, document.getElementById('grid-clips'));
 
 	// 3) Fetch and render recent VODs (Twitch)
-	const vods = await loadTwitchVods();
+	log('Fetch: twitch vods');
+	const vods = await loadTwitchVods(); bump(15);
 	renderCards(vods, document.getElementById('grid-vods'));
 
 	// 4) YouTube: official playlist embed if configured; else render cards
-	const usedOfficial = await setupYouTubeOfficialEmbed();
+	log('Setup: YouTube section');
+	const usedOfficial = await setupYouTubeOfficialEmbed(); bump(10);
 	if (!usedOfficial){
-		const yt = await loadYouTubeArchives();
+		log('Fetch: youtube archives');
+		const yt = await loadYouTubeArchives(); bump(15);
 		renderCards(yt, document.getElementById('grid-yt'));
 	}
 }
@@ -201,7 +268,6 @@ function resolveApiBase(){
 
 async function loadFromProxy(path){
 	const base = resolveApiBase();
- console.log(base);
 	if (!base) return null;
 	const url = `${base}${path.startsWith('/') ? path : '/' + path}`;
 	try {
