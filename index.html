@@ -1,0 +1,122 @@
+<html lang="ja">
+
+<head>
+ <meta charset="utf-8" />
+ <meta name="viewport" content="width=device-width,initial-scale=1" />
+ <title>USAGI.NETWORK</title>
+ <meta name="theme-color" content="#0b0c0f" />
+ <link rel="preconnect" href="https://player.twitch.tv" crossorigin>
+ <link data-trunk rel="css" href="assets/styles.css" />
+ <link data-trunk rel="rust" href="." />
+ <link data-trunk rel="copy-dir" href="assets/icons" />
+ <link data-trunk rel="copy-file" href="assets/image/hero-noise.svg" />
+ <link data-trunk rel="copy-dir" href="assets/image" data-target-path="image" />
+ <link data-trunk rel="copy-dir" href="assets/icons" data-target-path="assets/icons" />
+ <script type="module" src="/assets/js/main.js"></script>
+ <link rel="modulepreload" href="/assets/js/router.js">
+ <link rel="modulepreload" href="/assets/js/views/home.js">
+ <link data-trunk rel="copy-dir" href="assets/js" data-target-path="assets/js">
+ <link data-trunk rel="copy-dir" href="assets/views" data-target-path="assets/views">
+ <link data-trunk rel="copy-dir" href="assets/data" data-target-path="assets/data">
+ <script type="importmap">
+{
+  "imports": {
+    "#api/": "/assets/js/api/",
+    "#views/": "/assets/js/views/",
+    "#utils/": "/assets/js/utils/"
+  }
+}
+</script>
+</head>
+
+<body>
+ <!-- 上部メニュー -->
+ <header class="topbar" role="banner" aria-label="Site header">
+  <nav class="nav" aria-label="Primary">
+   <!-- a 要素でSPA遷移。JS側で阻止＆routerへ -->
+   <a class="nav__link" href="#home" data-route="home" aria-current="page">Home</a>
+   <a class="nav__link" href="#stream" data-route="stream">Stream</a>
+   <a class="nav__link" href="#music" data-route="music">Music</a>
+   <a class="nav__link" href="#beatsaber" data-route="beatsaber">Beat Saber</a>
+   <a class="nav__link" href="#software" data-route="software">Software</a>
+   <a class="nav__link" href="#artwork" data-route="artwork">Artwork</a>
+   <a class="nav__link" href="#about" data-route="about">About</a>
+  </nav>
+  <div class="brand">
+   <span class="logo">USAGI.NETWORK</span>
+   <small class="affil">/ Dr.USAGI – VStreamer & Creator</small>
+  </div>
+ </header>
+
+ <!-- 左サイド：SNSアイコン -->
+ <aside class="side-links" aria-label="Social">
+  <a class="side-links__item tw" href="https://twitch.tv/usaginetwork/" target="_blank" rel="noopener"
+   aria-label="Twitch">
+   <img src="/icons/twitch.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
+  </a>
+  <a class="side-links__item yt" href="https://www.youtube.com/@usagi.network" target="_blank" rel="noopener"
+   aria-label="YouTube">
+   <img src="/icons/youtube.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
+  </a>
+  <a class="side-links__item sc" href="https://soundcloud.com/usagi-network" target="_blank" rel="noopener"
+   aria-label="SoundCloud">
+   <img src="/icons/soundcloud.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
+  </a>
+  <a class="side-links__item bs" href="https://beatsaver.com/profile/168905" target="_blank" rel="noopener"
+   aria-label="BeatSaver">
+   <img src="/icons/beatsaver.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
+  </a>
+  <a class="side-links__item gh" href="https://github.com/usagi/" target="_blank" rel="noopener" aria-label="GitHub">
+   <img src="/icons/github.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
+  </a>
+  <a class="side-links__item dc" href="https://discord.gg/JaJhyKUgsA" target="_blank" rel="noopener"
+   aria-label="Discord">
+   <img src="/icons/discord.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
+  </a>
+  <a class="side-links__item x" href="https://x.com/usagi_network" target="_blank" rel="noopener" aria-label="X">
+   <img src="/icons/x.svg" alt="" width="24" height="24" loading="lazy" decoding="async" />
+  </a>
+ </aside>
+
+
+ <!-- メイン表示領域（SPA的に切り替え） -->
+ <main id="app" class="app" role="main">
+  <!-- Hero -->
+  <section class="hero" data-view="home">
+   <div class="hero__bg"></div>
+   <div class="hero__content">
+    <h1 class="hero__title">USAGI.NETWORK</h1>
+    <p class="hero__subtitle">Εὔχομαί τῇ σοφίᾳ τῶν ἀνθρώπων καὶ τῇ τέχνῃ ἄρξασθαι· ― 「人類の叡智と科学技術の発展を祈る」</p>
+    <div class="hero__cta">
+     <a class="btn btn--live" data-route="stream">Now Live?</a>
+     <a class="btn btn--ghost" data-route="music">Latest Release</a>
+    </div>
+   </div>
+  </section>
+
+  <!-- 最新活動カード（JSONから生成） -->
+  <section class="strip" data-view="home">
+   <h2 class="strip__title">Latest Activity</h2>
+   <div id="latest-grid" class="grid" role="list"></div>
+  </section>
+
+  <!-- 動的詳細エリア（カードクリックで展開） -->
+  <section id="detail" class="detail" hidden>
+   <button class="detail__close" aria-label="Close">×</button>
+   <div id="detail-body" class="detail__body"></div>
+  </section>
+
+  <!-- 以降、各ビューの内容はJSから外部HTMLを読み込みます -->
+  <section class="view is-hidden" data-view="stream"></section>
+  <section class="view is-hidden" data-view="music"></section>
+  <section class="view is-hidden" data-view="beatsaber"></section>
+  <section class="view is-hidden" data-view="software"></section>
+  <section class="view is-hidden" data-view="artwork"></section>
+  <section class="view is-hidden" data-view="about"></section>
+  <!-- Page fade overlay for main content transitions -->
+  <div id="page-fade" class="page-fade" aria-hidden="true"></div>
+ </main>
+
+</body>
+
+</html>

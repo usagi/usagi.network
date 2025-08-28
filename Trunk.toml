@@ -1,0 +1,8 @@
+[build]
+release = true
+public_url = "/"      # 独自ドメイン usagi.network で運用なら "/" でOK
+filehash = true
+
+[serve]
+port = 8080
+open = false
