@@ -1,0 +1,39 @@
+<!-- assets/views/music.html -->
+<h2>Music</h2>
+<div class="music-note">
+ 音楽コンテンツは主に <a href="https://soundcloud.com/usagi-network" target="_blank" rel="noopener">SoundCloud</a>
+ にて公開しています。<br />
+ 以下のプレイヤーから再生できます。詳細は <a href="https://soundcloud.com/usagi-network" target="_blank" rel="noopener">SoundCloud
+  プロフィール</a> を参照してください。
+</div>
+
+<section class="sc-player" aria-label="SoundCloud player">
+ <div class="scp__now">
+  <div class="scp__art" aria-hidden="true"></div>
+  <div class="scp__meta">
+   <h3 class="scp__title">Loading…</h3>
+   <div class="scp__artist">Dr.USAGI</div>
+   <div class="scp__desc" id="sc-desc">No description.</div>
+  </div>
+ </div>
+ <div class="scp__controls" role="group" aria-label="Player controls">
+  <button class="scp__btn scp__prev" aria-label="Previous" title="Previous">⟨</button>
+  <button class="scp__btn scp__play" aria-label="Play/Pause" title="Play/Pause">▶</button>
+  <button class="scp__btn scp__next" aria-label="Next" title="Next">⟩</button>
+  <div class="scp__time">
+   <span class="scp__elapsed" aria-label="elapsed">0:00</span>
+   <div class="scp__bar" role="slider" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+    <div class="scp__bar-fill"></div>
+   </div>
+   <span class="scp__duration" aria-label="duration">0:00</span>
+  </div>
+ </div>
+ <ul class="scp__list" id="sc-track-list" role="list"></ul>
+
+ <!-- Hidden official widget for playback engine -->
+ <div class="scp__iframe" aria-hidden="true">
+  <iframe id="sc-widget" title="SoundCloud widget" width="100%" height="80" scrolling="no" frameborder="no"
+   allow="autoplay"
+   src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/usagi-network&auto_play=false&visual=false&show_user=false&show_teaser=false&show_comments=false&show_reposts=false&buying=false&sharing=false&download=false"></iframe>
+ </div>
+</section>
