@@ -1,10 +1,28 @@
 <!-- assets/views/stream.html -->
 <h2>Stream</h2>
-<section class="wip" aria-live="polite">
-  <div class="wip__stripe wip__stripe--top" aria-hidden="true"></div>
-  <div class="wip__body">
-    <p class="wip__msg">このページは制作中です</p>
-    <p class="wip__sub">配信情報の連携・埋め込みを準備しています。</p>
+
+<div class="music-note" role="note">
+  USAGI.NETWORK の配信では、テック雑談・開発配信・音楽制作・Beat Saber などを中心に活動しています。<br>
+  このページでは人気クリップと直近のVOD、旧いアーカイブ（YouTube）をサイトのデザインに合わせて自動生成して表示します。
   </div>
-  <div class="wip__stripe wip__stripe--bottom" aria-hidden="true"></div>
-  </section>
+
+<!-- Optional: live player (offline時はオフライン画面) -->
+<div id="live-wrap" class="player-wrap is-hidden">
+  <iframe id="twitch-iframe" allowfullscreen frameborder="0"></iframe>
+  <iframe class="twitch-chat is-hidden" id="twitch-chat" frameborder="0"></iframe>
+</div>
+
+<section class="strip">
+  <h3 class="strip__title">Twitch 人気クリップ</h3>
+  <div id="grid-clips" class="grid" role="list"></div>
+</section>
+
+<section class="strip">
+  <h3 class="strip__title">最近の配信（VOD）</h3>
+  <div id="grid-vods" class="grid" role="list"></div>
+</section>
+
+<section class="strip">
+  <h3 class="strip__title">YouTube 過去アーカイブ</h3>
+  <div id="grid-yt" class="grid" role="list"></div>
+</section>
