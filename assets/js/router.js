@@ -19,6 +19,12 @@ let currentMod = null;
 
 export async function navigate(to = parse())
 {
+ const fade = document.getElementById('page-fade');
+ // Start fade-out (cover)
+ if (fade){
+  fade.classList.add('is-active');
+  await new Promise(r => setTimeout(r, 220));
+ }
  const loader = routes.get(to) || routes.get("home");
  const mod = await loader();                 // ルート別に遅延 import
  // 各ビューは `export async function mount()` を推奨。
@@ -59,6 +65,11 @@ export async function navigate(to = parse())
   }
  });
  currentMod = mod;
+ // Fade-in (reveal)
+ if (fade){
+  // small timeout to allow layout
+  requestAnimationFrame(() => fade.classList.remove('is-active'));
+ }
 }
 
 export function start()

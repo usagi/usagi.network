@@ -85,7 +85,7 @@
    <div class="hero__bg"></div>
    <div class="hero__content">
     <h1 class="hero__title">USAGI.NETWORK</h1>
-    <p class="hero__subtitle">Play · Create · Share</p>
+    <p class="hero__subtitle">Εὔχομαί τῇ σοφίᾳ τῶν ἀνθρώπων καὶ τῇ τέχνῃ ἄρξασθαι· ― 「人類の叡智と科学技術の発展を祈る」</p>
     <div class="hero__cta">
      <a class="btn btn--live" data-route="stream">Now Live?</a>
      <a class="btn btn--ghost" data-route="music">Latest Release</a>
@@ -105,33 +105,15 @@
    <div id="detail-body" class="detail__body"></div>
   </section>
 
-  <!-- 以降、各ビュー。初期は同ページ内で切り替える -->
-  <section class="view" data-view="stream">
-   <h2>Stream</h2>
-   <div class="grid" id="vods"></div>
-   <div class="grid" id="clips"></div>
-  </section>
-
-  <section class="view" data-view="music">
-   <h2>Music</h2>
-   <div class="grid" id="tracks"></div>
-  </section>
-
-  <section class="view" data-view="beatsaber">
-   <h2>BeatSaver</h2>
-   <div class="grid" id="maps"></div>
-  </section>
-
-  <section class="view" data-view="projects">
-   <h2>Projects</h2>
-   <ul class="list" id="repos"></ul>
-  </section>
-
-  <section class="view" data-view="about">
-   <h2>About</h2>
-   <p>Dr.USAGI is a VStreamer and creator under <strong>USAGI.NETWORK</strong>. Streams, music releases, Beat Saber
-    maps, and software projects converge here.</p>
-  </section>
+  <!-- 以降、各ビューの内容はJSから外部HTMLを読み込みます -->
+  <section class="view is-hidden" data-view="stream"></section>
+  <section class="view is-hidden" data-view="music"></section>
+  <section class="view is-hidden" data-view="beatsaber"></section>
+  <section class="view is-hidden" data-view="software"></section>
+  <section class="view is-hidden" data-view="artwork"></section>
+  <section class="view is-hidden" data-view="about"></section>
+  <!-- Page fade overlay for main content transitions -->
+  <div id="page-fade" class="page-fade" aria-hidden="true"></div>
  </main>
 
 </body>
