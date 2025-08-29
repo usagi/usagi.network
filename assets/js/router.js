@@ -54,18 +54,9 @@ export async function navigate(to = parse())
    if (hero) hero.classList.toggle('is-hidden', to !== 'home');
    homeStrips.forEach(s => s.classList.toggle('is-hidden', to !== 'home'));
   }
+  // Update active nav immediately so UI reflects intent even if mount fails
+  setActiveNav(to);
   await mountFn();
-  document.querySelectorAll(".nav__link").forEach(a =>
-  {
-   if (a.dataset.route === to)
-   {
-    a.setAttribute("aria-current", "page");
-   }
-   else
-   {
-    a.removeAttribute("aria-current");
-   }
-  });
   currentMod = mod;
  } catch (err) {
   console.warn('Navigation error:', err);
@@ -77,12 +68,24 @@ export async function navigate(to = parse())
    hero?.classList.remove('is-hidden');
    homeStrips.forEach(s => s.classList.remove('is-hidden'));
   }
+  // Keep nav state consistent even on error
+  setActiveNav(to);
  } finally {
   // Fade-in (reveal)
   if (fade){
    requestAnimationFrame(() => fade.classList.remove('is-active'));
   }
  }
+}
+
+function setActiveNav(to){
+ document.querySelectorAll('.nav__link').forEach(a => {
+  if ((a.dataset.route || '').toLowerCase() === (to || '').toLowerCase()){
+   a.setAttribute('aria-current', 'page');
+  } else {
+   a.removeAttribute('aria-current');
+  }
+ });
 }
 
 export function start()

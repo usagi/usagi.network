@@ -136,6 +136,88 @@ async function setupHeroLive(){
 	});
 }
 
+// --- Hero Ambient (flow-field particle background) ---
+let __ambientStop = null;
+async function startHeroAmbient(){
+	try{
+		const cvs = document.getElementById('hero-ambient');
+		if(!cvs) return;
+		const hero = cvs.closest('.hero');
+		const ctx = cvs.getContext('2d', { alpha: true });
+		if(!ctx || !hero) return;
+		const dpr = Math.min(2, window.devicePixelRatio || 1);
+		const prefersReduce = matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
+		function resize(){
+			const r = hero.getBoundingClientRect();
+			cvs.width = Math.floor(r.width * dpr);
+			cvs.height = Math.floor(r.height * dpr);
+			cvs.style.width = r.width + 'px';
+			cvs.style.height = r.height + 'px';
+		}
+		resize();
+		let rafId = 0;
+		// Flow-field based on simple sine noise; many particles leave soft trails
+		const count = prefersReduce ? 600 : 1400;
+		const speed = prefersReduce ? 0.35*dpr : 0.55*dpr;
+		const fade = prefersReduce ? 0.08 : 0.05; // trail persistence
+		const hueBase = 190; // cyan→teal range fits site theme
+		const particles = new Array(count).fill(0).map(() => ({
+			x: Math.random()*cvs.width,
+			y: Math.random()*cvs.height,
+			vx: 0,
+			vy: 0,
+			life: Math.random()*200 + 200,
+			hue: hueBase + Math.random()*30,
+		}));
+		function field(x,y,t){
+			const nx = x/cvs.width * 3.0;
+			const ny = y/cvs.height * 3.0;
+			// angle varies smoothly across space/time
+			const a = Math.sin(nx*2.1 + t*0.0005) + Math.sin(ny*1.7 - t*0.0008) + Math.sin((nx+ny)*1.3 + t*0.0003);
+			return a * 0.9; // radians-ish
+		}
+		function step(ts){
+			for(const p of particles){
+				if(--p.life < 0){
+					p.x = Math.random()*cvs.width; p.y = Math.random()*cvs.height; p.vx=0; p.vy=0; p.life = Math.random()*200 + 200; p.hue = hueBase + Math.random()*30;
+				}
+				const a = field(p.x, p.y, ts);
+				p.vx += Math.cos(a) * 0.06; // small acceleration along field
+				p.vy += Math.sin(a) * 0.06;
+				// speed cap
+				const vmax = speed;
+				const v = Math.hypot(p.vx, p.vy) || 1e-6;
+				p.vx = p.vx / v * vmax;
+				p.vy = p.vy / v * vmax;
+				const x0 = p.x, y0 = p.y;
+				p.x += p.vx; p.y += p.vy;
+				// wrap
+				if(p.x < 0) p.x += cvs.width; else if(p.x >= cvs.width) p.x -= cvs.width;
+				if(p.y < 0) p.y += cvs.height; else if(p.y >= cvs.height) p.y -= cvs.height;
+				// draw segment
+				ctx.strokeStyle = `hsla(${p.hue}, 90%, 56%, ${prefersReduce? 0.05 : 0.035})`;
+				ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(p.x, p.y); ctx.stroke();
+			}
+		}
+		function draw(ts){
+			// fade previous frame for trails
+			ctx.globalCompositeOperation = 'source-over';
+			ctx.fillStyle = `rgba(0,0,0,${fade})`;
+			ctx.fillRect(0,0,cvs.width,cvs.height);
+			// draw lines using screen to glow a bit
+			ctx.globalCompositeOperation = 'screen';
+			ctx.lineWidth = dpr < 2 ? 0.8 : 0.7; // thin lines; retina slightly thinner
+			step(ts);
+			ctx.globalCompositeOperation = 'source-over';
+		}
+		function tick(ts){ draw(ts); rafId = requestAnimationFrame(tick); }
+		rafId = requestAnimationFrame(tick);
+		const onResize = () => { cancelAnimationFrame(rafId); resize(); ctx.clearRect(0,0,cvs.width,cvs.height); rafId = requestAnimationFrame(tick); };
+		window.addEventListener('resize', onResize);
+		__ambientStop = () => { cancelAnimationFrame(rafId); window.removeEventListener('resize', onResize); ctx.clearRect(0,0,cvs.width,cvs.height); };
+	}catch{}
+}
+
 	// --- Hero Game of Life (subtle, glowing) ---
 	let __lifeStop = null;
 	async function startHeroLife(){
@@ -153,88 +235,6 @@ async function setupHeroLive(){
 				cvs.height = Math.floor(r.height * dpr);
 				cvs.style.width = r.width + 'px';
 				cvs.style.height = r.height + 'px';
-			}
-
-			// --- Hero Ambient (flow-field particle background) ---
-			let __ambientStop = null;
-			async function startHeroAmbient(){
-				try{
-					const cvs = document.getElementById('hero-ambient');
-					if(!cvs) return;
-					const hero = cvs.closest('.hero');
-					const ctx = cvs.getContext('2d', { alpha: true });
-					if(!ctx || !hero) return;
-					const dpr = Math.min(2, window.devicePixelRatio || 1);
-					const prefersReduce = matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
-					function resize(){
-						const r = hero.getBoundingClientRect();
-						cvs.width = Math.floor(r.width * dpr);
-						cvs.height = Math.floor(r.height * dpr);
-						cvs.style.width = r.width + 'px';
-						cvs.style.height = r.height + 'px';
-					}
-					resize();
-					let rafId = 0;
-					// Flow-field based on simple sine noise; many particles leave soft trails
-					const count = prefersReduce ? 600 : 1400;
-					const speed = prefersReduce ? 0.35*dpr : 0.55*dpr;
-					const fade = prefersReduce ? 0.08 : 0.05; // trail persistence
-					const hueBase = 190; // cyan→teal range fits site theme
-					const particles = new Array(count).fill(0).map(() => ({
-						x: Math.random()*cvs.width,
-						y: Math.random()*cvs.height,
-						vx: 0,
-						vy: 0,
-						life: Math.random()*200 + 200,
-						hue: hueBase + Math.random()*30,
-					}));
-					function field(x,y,t){
-						const nx = x/cvs.width * 3.0;
-						const ny = y/cvs.height * 3.0;
-						// angle varies smoothly across space/time
-						const a = Math.sin(nx*2.1 + t*0.0005) + Math.sin(ny*1.7 - t*0.0008) + Math.sin((nx+ny)*1.3 + t*0.0003);
-						return a * 0.9; // radians-ish
-					}
-					function step(ts){
-						for(const p of particles){
-							if(--p.life < 0){
-								p.x = Math.random()*cvs.width; p.y = Math.random()*cvs.height; p.vx=0; p.vy=0; p.life = Math.random()*200 + 200; p.hue = hueBase + Math.random()*30;
-							}
-							const a = field(p.x, p.y, ts);
-							p.vx += Math.cos(a) * 0.06; // small acceleration along field
-							p.vy += Math.sin(a) * 0.06;
-							// speed cap
-							const vmax = speed;
-							const v = Math.hypot(p.vx, p.vy) || 1e-6;
-							p.vx = p.vx / v * vmax;
-							p.vy = p.vy / v * vmax;
-							const x0 = p.x, y0 = p.y;
-							p.x += p.vx; p.y += p.vy;
-							// wrap
-							if(p.x < 0) p.x += cvs.width; else if(p.x >= cvs.width) p.x -= cvs.width;
-							if(p.y < 0) p.y += cvs.height; else if(p.y >= cvs.height) p.y -= cvs.height;
-							// draw segment
-							ctx.strokeStyle = `hsla(${p.hue}, 90%, 56%, ${prefersReduce? 0.05 : 0.035})`;
-							ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(p.x, p.y); ctx.stroke();
-						}
-					}
-					function draw(ts){
-						// fade previous frame for trails
-						ctx.globalCompositeOperation = 'source-over';
-						ctx.fillStyle = `rgba(0,0,0,${fade})`;
-						ctx.fillRect(0,0,cvs.width,cvs.height);
-						// draw lines using screen to glow a bit
-						ctx.globalCompositeOperation = 'screen';
-						ctx.lineWidth = dpr < 2 ? 0.8 : 0.7; // thin lines; retina slightly thinner
-						step(ts);
-						ctx.globalCompositeOperation = 'source-over';
-					}
-					function tick(ts){ draw(ts); rafId = requestAnimationFrame(tick); }
-					rafId = requestAnimationFrame(tick);
-					const onResize = () => { cancelAnimationFrame(rafId); resize(); ctx.clearRect(0,0,cvs.width,cvs.height); rafId = requestAnimationFrame(tick); };
-					window.addEventListener('resize', onResize);
-					__ambientStop = () => { cancelAnimationFrame(rafId); window.removeEventListener('resize', onResize); ctx.clearRect(0,0,cvs.width,cvs.height); };
-				}catch{}
 			}
 			resize();
 			let rafId = 0;
