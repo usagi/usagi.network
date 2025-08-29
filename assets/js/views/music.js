@@ -12,6 +12,21 @@ function ensureSection() {
 
 export async function mount() {
 	const view = ensureSection();
+	// If we've already booted once in this session, keep the existing widget to avoid reloading
+	if (view.dataset.ready === '1') return;
+
+	// Try sessionStorage cache (TTL: 60s)
+	try {
+		const raw = sessionStorage.getItem('view:music');
+		if (raw) {
+			const cached = JSON.parse(raw);
+			if (cached && cached.ts && (Date.now() - cached.ts) < 60_000 && typeof cached.tpl === 'string') {
+				view.innerHTML = cached.tpl;
+				await initPlayer(() => { view.dataset.ready = '1'; });
+				return;
+			}
+		}
+	} catch {}
 	// Clean container and add overlay first so it survives innerHTML
 	view.innerHTML = '';
 	const overlay = document.createElement('div');
@@ -32,7 +47,28 @@ export async function mount() {
 		if (!res.ok) throw new Error(`Failed to load music.html: ${res.status}`);
 		content.innerHTML = await res.text();
 		view.appendChild(content);
-		await initPlayer(() => overlay.remove());
+		// Position overlay over the sc-player area
+		try {
+			const player = content.querySelector('.sc-player');
+			if (player) {
+				const r = player.getBoundingClientRect();
+				const sx = window.scrollX || document.documentElement.scrollLeft || 0;
+				const sy = window.scrollY || document.documentElement.scrollTop || 0;
+				Object.assign(overlay.style, {
+					position: 'fixed',
+					left: `${r.left + sx}px`,
+					top: `${r.top + sy}px`,
+					width: `${r.width}px`,
+					height: `${r.height}px`,
+				});
+			}
+		} catch {}
+		await initPlayer(() => {
+			overlay.remove();
+			view.dataset.ready = '1';
+			// Cache template for fast remount within TTL
+			try { sessionStorage.setItem('view:music', JSON.stringify({ ts: Date.now(), tpl: view.innerHTML })); } catch {}
+		});
 	} catch (err) {
 		console.error(err);
 		content.innerHTML = '<p>Failed to load music content.</p>';
@@ -69,6 +105,9 @@ async function initPlayer(onReady) {
 	const iframe = document.getElementById('sc-widget');
 	if (!iframe) { if (typeof onReady === 'function') onReady(); return; }
 	const widget = window.SC.Widget(iframe);
+	// Link to global BGM controller
+	const bgm = await import('#utils/bgm.js');
+	bgm.attachWidget(widget);
 
 	const artEl = document.querySelector('.scp__art');
 	const titleEl = document.querySelector('.scp__title');
@@ -147,9 +186,10 @@ async function initPlayer(onReady) {
 
 	function updateNowPlaying(info) {
 		if (titleEl) titleEl.textContent = info.title || 'Untitled';
-		if (artistEl) artistEl.textContent = info.user?.username || 'Dr.USAGI';
+		if (artistEl) artistEl.textContent = info.user?.username || 'USAGI.NETWORK';
 		const art = info.artwork_url || info.user?.avatar_url;
-		if (art && artEl) artEl.style.backgroundImage = `url(${art.replace('-large', '-t300x300')})`;
+		const art300 = art ? art.replace('-large', '-t300x300') : '';
+		if (art300 && artEl) artEl.style.backgroundImage = `url(${art300})`;
 		else if (artEl) artEl.style.backgroundImage = '';
 		const d = (info.description || '').trim();
 		if (descEl) {
@@ -160,6 +200,8 @@ async function initPlayer(onReady) {
 				descEl.style.display = 'none';
 			}
 		}
+		// Update mini controller metadata
+		bgm.setMeta({ title: info.title || 'Untitled', artist: 'USAGI.NETWORK', artUrl: art300 });
 	}
 
 	widget.bind(window.SC.Widget.Events.READY, () => {

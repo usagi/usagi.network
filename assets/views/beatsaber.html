@@ -1,10 +1,149 @@
 <!-- assets/views/beatsaber.html -->
 <h2>Beat Saber</h2>
-<section class="wip" aria-live="polite">
-  <div class="wip__stripe wip__stripe--top" aria-hidden="true"></div>
-  <div class="wip__body">
-    <p class="wip__msg">このページは制作中です</p>
-    <p class="wip__sub">Beat Saber のマップ一覧やリンクを準備しています。</p>
+
+<div class="music-note" role="note">
+ Beat Saber 向けのカスタムセイバー / カスタムノーツ / カスタムヒットサウンドなどを制作しています。<br>
+ カスタムマップについては <a href="https://beatsaver.com/profile/168905" target="_blank" rel="noopener">BeatSaver</a> をご覧ください。
+</div>
+
+<!-- Index: quick navigation to sections -->
+<nav class="index-nav" aria-label="Beat Saber Contents">
+ <span class="index-nav__label">INDEX</span>
+ <a class="btn" href="#sabers">Custom Sabers</a>
+ <a class="btn" href="#notes">Custom Notes</a>
+ <a class="btn" href="#hitsounds">Hit Sounds</a>
+ <a class="btn" href="#cams">Camera Scripts</a>
+ <a class="btn btn--ghost" href="#install">Install & Notes</a>
+</nav>
+
+<section id="sabers" class="strip" aria-labelledby="sabers-title">
+ <h3 class="strip__title">Custom Sabers</h3>
+ <div role="list" class="features">
+  <article role="listitem" class="feature">
+   <div class="feature__media feature__media--saber" data-cat="custom_saber" data-item="vulpisfoglia"
+    aria-hidden="true"></div>
+   <div class="feature__body">
+    <div class="feature__meta">
+     <span class="tag">Arknights:二次創作</span>
+     <span class="sub">v1.0.0 - 2025-08-29</span>
+    </div>
+    <h3 id="sabers-title" class="feature__title">Vulpisfoglia.saber</h3>
+    <p class="feature__desc">アークナイツに登場する“先駆兵”オペレーター、<a href="https://arknights.fandom.com/wiki/Vulpisfoglia"
+      target="_blank" rel="noopener">ウルピスフォリア</a>の剣をモチーフにした物理剣タイプのカスタムセイバーです。<br>
+     アークナイツドクターの皆様も、勿論そうでない方も、美しくクールで特徴的なこの剣をお楽しみ頂ければ幸いです。</p>
+    <p>
+     こちらのカスタムセイバーは<a href="https://darkun.booth.pm/" target="_blank" rel="noopener">ダークん</a>さま制作の二次創作モデル<a
+      href="https://booth.pm/ja/items/6894353" target="_blank"
+      rel="noopener">「ウルピスフォリアの剣」</a>を基にカスタムセイバー化し一般公開の許諾を頂きました。ありがとうございます！
+    </p>
+    <div class="feature__actions">
+     <a class="btn js-dl" data-item="vulpisfoglia" data-cat="custom_saber" data-title="Vulpisfoglia.saber"
+      data-zip="Vulpisfoglia.saber-1.0.0.zip" href="#" aria-disabled="true">Download</a>
+     <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="vulpisfoglia"
+      data-cat="custom_saber" data-title="Vulpisfoglia.saber" href="#">利用規約（同意するとダウンロードできるようになります）</a>
+    </div>
+   </div>
+  </article>
+
+ </div>
+</section>
+
+<section id="notes" class="strip" aria-labelledby="notes-title">
+ <h3 class="strip__title">Custom Notes</h3>
+<article role="region" aria-labelledby="notes-title" class="feature">
+  <div class="feature__media feature__media--notes" data-cat="custom_note" data-item="usa-notes-00" aria-hidden="true"></div>
+  <div class="feature__body">
+   <div class="feature__meta">
+    <span class="tag">Dr.USAGI Original</span>
+    <span class="sub">v1.0.0 - 2024-08-07</span>
+   </div>
+  <h3 id="notes-title" class="feature__title">usa-notes-00</h3>
+   <p class="feature__desc">うさぎモチーフのかわいいカスタムノーツです。うさぎ博士ちゃん ― Dr.USAGI/USAGI.NETWORK
+    のロゴにもあしらわれているうさぎモチーフのノーツを実際にビートセイバーでお楽しみ頂けます。</p>
+   <p>（※うさぎを斬っているのではありません。うさぎモチーフのノーツを斬っているのです。🐰）</p>
+   <div class="feature__actions">
+    <a class="btn js-dl" data-item="usa-notes-00" data-cat="custom_note" data-title="usa-notes-00" data-zip="usa-notes-00-1.0.0.zip" href="#"
+     aria-disabled="true">Download</a>
+    <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="usa-notes-00"
+     data-cat="custom_note" data-title="usa-notes-00" href="#">利用規約（同意するとダウンロードできるようになります）</a>
+   </div>
   </div>
-  <div class="wip__stripe wip__stripe--bottom" aria-hidden="true"></div>
+ </article>
+</section>
+
+<section id="hitsounds" class="strip" aria-labelledby="hits-title">
+ <h3 class="strip__title">Custom Hit Sounds</h3>
+ <article role="region" aria-labelledby="hits-title" class="feature">
+  <div class="feature__media feature__media--hits" data-cat="custom_sound" data-item="usa-hit-00" data-embed-urls="https://www.youtube.com/watch?v=SZLqoNMPrUI" aria-hidden="true"></div>
+  <div class="feature__body">
+   <div class="feature__meta">
+    <span class="tag">Dr.USAGI Original</span>
+    <span class="sub">v1.0.0</span>
+   </div>
+   <h3 id="hits-title" class="feature__title">usa-hit-00</h3>
+   <p class="feature__desc">失われた時代の科学技術で造られた闇を払う効果を持っているかもしれないセイバーをブンブン振った時に鳴るかもしれない荘かな効果音です。「シャンー」的な音がします。</p>
+   <div class="feature__actions">
+  <a class="btn js-dl" data-item="usa-hit-00" data-cat="custom_sound" data-title="usa-hit-00" data-zip="usa-hit-00-1.0.0.zip" href="#"
+     aria-disabled="true">Download</a>
+  <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="usa-hit-00"
+   data-cat="custom_sound" data-title="usa-hit-00" href="#">利用規約（同意するとダウンロードできるようになります）</a>
+   </div>
+  </div>
+ </article>
+</section>
+
+<section id="cams" class="strip" aria-labelledby="cams-title">
+ <h3 class="strip__title">Camera Scripts</h3>
+ <article role="region" aria-labelledby="cams-title" class="feature">
+  <div class="feature__media feature__media--notes" data-cat="camera_script" data-item="usa-cam-00" data-embed-url="https://clips.twitch.tv/HandsomeYawningVampireKappaClaus-buoO9fqDyZKbW-MC" aria-hidden="true"></div>
+  <div class="feature__body">
+   <div class="feature__meta">
+    <span class="tag">Dr.USAGI Original</span>
+    <span class="sub">v1.0.0</span>
+   </div>
+   <h3 id="cams-title" class="feature__title">usa-cam-00</h3>
+   <p class="feature__desc">配信用や録画向けに、譜面とプレイの魅力が伝わるよう設計したカメラスクリプトです。導入すれば、決め所で自然に寄り/引き/アングルが変化します。</p>
+   <div class="feature__actions">
+    <a class="btn js-dl" data-item="usa-cam-00" data-cat="camera_script" data-title="usa-cam-00" data-zip="usa-cam-00-1.0.0.zip" href="#" aria-disabled="true">Download</a>
+    <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="usa-cam-00" data-cat="camera_script" data-title="usa-cam-00" href="#">利用規約（同意するとダウンロードできるようになります）</a>
+   </div>
+  </div>
+ </article>
+</section>
+
+<section id="install" class="strip" aria-labelledby="install-title">
+ <h3 class="strip__title">Install & Notes</h3>
+ <div class="list">
+  <li>導入: <a href="https://www.bsmanager.io/" target="_blank"
+    rel="noopener">BSManager</a>または手作業などで必要な Mod を導入後、<b>CustomSabers</b> | <b>CustomNotes</b> | <b>UserData/SoundReplacer/</b> など対応した
+   フォルダーへファイルを配置します。</li>
+  <li>不具合や要望は <a href="https://github.com/usagi/usagi.network/issues" target="_blank" rel="noopener">GitHub Issues</a>
+   へ。</li>
+ </div>
+</section>
+
+<!-- Terms of Use Overlay -->
+<section id="terms" class="detail" role="dialog" aria-modal="true" aria-labelledby="terms-title" hidden>
+ <button class="detail__close" aria-label="Close">×</button>
+ <div class="detail__body" id="terms-body">
+  <h3 id="terms-title" style="margin-top:0">Terms of Use / 利用規約</h3>
+  <p><strong>Applies to:</strong> <span id="terms-item">Selected item</span></p>
+  <ol class="list">
+   <li><b>Personal use only (非商用個人利用のみ)</b> — You may use these assets in your personal gameplay, streams, and videos.
+    商用利用は事前許可が必要です。</li>
+   <li><b>No redistribution (再配布禁止)</b> — Don’t re-upload original files or pack them into modpacks.
+    元ファイルの再配布や改変配布は禁止です。</li>
+   <li><b>Credit required (クレジット表記)</b> — Please credit “USAGI.NETWORK” with a link to this page.
+    公開時は本ページへのリンクを明記してください。</li>
+   <li><b>Collaborations & derivatives (協力制作・二次創作)</b> — Some works are made with collaborators or under derivative-work
+    policies; follow the respective creators’ and rights holders’ terms. 一部作品は協力者や版元の二次創作規定に従います。</li>
+   <li><b>No claim as your own (自作発言の禁止)</b> — Don’t claim authorship of these assets. 自作としての主張は禁止です。</li>
+   <li><b>Takedown (削除要請)</b> — On request from rights holders or collaborators, files or links may be removed.
+    権利者や協力者の要請により公開を停止する場合があります。</li>
+  </ol>
+  <div class="feature__actions" style="margin-top:10px;">
+   <button class="btn" id="terms-accept">Agree / 同意する</button>
+   <button class="btn btn--ghost" id="terms-cancel">Close / 閉じる</button>
+  </div>
+ </div>
 </section>

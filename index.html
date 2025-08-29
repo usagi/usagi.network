@@ -12,12 +12,6 @@
  <link data-trunk rel="copy-file" href="assets/image/hero-noise.svg" />
  <link data-trunk rel="copy-dir" href="assets/image" data-target-path="image" />
  <link data-trunk rel="copy-dir" href="assets/icons" data-target-path="assets/icons" />
- <script type="module" src="/assets/js/main.js"></script>
- <link rel="modulepreload" href="/assets/js/router.js">
- <link rel="modulepreload" href="/assets/js/views/home.js">
- <link data-trunk rel="copy-dir" href="assets/js" data-target-path="assets/js">
- <link data-trunk rel="copy-dir" href="assets/views" data-target-path="assets/views">
- <link data-trunk rel="copy-dir" href="assets/data" data-target-path="assets/data">
  <script type="importmap">
 {
   "imports": {
@@ -27,6 +21,13 @@
   }
 }
 </script>
+ <script type="module" src="/assets/js/main.js"></script>
+ <link rel="modulepreload" href="/assets/js/router.js">
+ <link rel="modulepreload" href="/assets/js/views/home.js">
+ <link data-trunk rel="copy-dir" href="assets/js" data-target-path="assets/js">
+ <link data-trunk rel="copy-dir" href="assets/views" data-target-path="assets/views">
+ <link data-trunk rel="copy-dir" href="assets/data" data-target-path="assets/data">
+ <link data-trunk rel="copy-dir" href="assets/beatsaber" data-target-path="assets/beatsaber">
 </head>
 
 <body>
@@ -82,20 +83,49 @@
  <!-- メイン表示領域（SPA的に切り替え） -->
  <main id="app" class="app" role="main">
   <!-- Hero -->
-  <section class="hero" data-view="home">
-   <div class="hero__bg"></div>
-   <div class="hero__content">
-    <h1 class="hero__title">USAGI.NETWORK</h1>
-    <p class="hero__subtitle">Εὔχομαί τῇ σοφίᾳ τῶν ἀνθρώπων καὶ τῇ τέχνῃ ἄρξασθαι· ― 「人類の叡智と科学技術の発展を祈る」</p>
-    <div class="hero__cta">
-     <a class="btn btn--live" data-route="stream">Now Live?</a>
-     <a class="btn btn--ghost" data-route="music">Latest Release</a>
+   <section class="hero is-hidden" data-view="home">
+    <div class="hero__bg"></div>
+    <canvas id="hero-ambient" class="hero__ambient" aria-hidden="true"></canvas>
+    <canvas id="hero-life" class="hero__life" aria-hidden="true"></canvas>
+    <!-- Decorative ornaments across the hero (root-level for layering) -->
+    <div class="hero__ornaments" aria-hidden="true" role="presentation">
+      <div class="orn-chip oc1"></div>
+      <div class="orn-chip oc2"></div>
+      <div class="orn-ring or1"></div>
+      <div class="orn-ring or2"></div>
+      <div class="orn-line ol1"></div>
+      <div class="orn-line ol2"></div>
     </div>
-   </div>
-  </section>
+    <div class="hero__content">
+     <h1 class="hero__title">USAGI.NETWORK</h1>
+     <p class="hero__subtitle">Εὔχομαί τῇ σοφίᾳ τῶν ἀνθρώπων καὶ τῇ τέχνῃ ἄρξασθαι· ― 「人類の叡智と科学技術の発展を祈る」</p>
+     <div class="hero__cta" aria-hidden="true">
+      <div class="ornament" role="presentation">
+       <div class="ornament__panel">
+        <div class="ornament__grid"></div>
+        <div class="ornament__scan"></div>
+        <div class="ornament__ticker">
+         <div class="ornament__ticker-inner">
+          <span>URTS // SYSTEM ONLINE · ÆTHER LINK STABLE · 01 · 02 · 03 · 04 · 05 · Θειοτήτων Σοφία · USAGI.NETWORK · </span>
+          <span>URTS // SYSTEM ONLINE · ÆTHER LINK STABLE · 01 · 02 · 03 · 04 · 05 · Θειοτήτων Σοφία · USAGI.NETWORK · </span>
+         </div>
+        </div>
+        <div class="ornament__bars" aria-hidden="true">
+         <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+        </div>
+        <div class="ornament__dial" aria-hidden="true"></div>
+        <div class="ornament__badge">URTS</div>
+        <div class="ornament__cut"></div>
+       </div>
+      </div>
+     </div>
+    </div>
+    <!-- Subtle live embed (appears bottom-right when Twitch is live) -->
+    <div id="hero-live" class="hero__live" aria-hidden="true"></div>
+   </section>
 
   <!-- 最新活動カード（JSONから生成） -->
-  <section class="strip" data-view="home">
+  <section class="strip is-hidden" data-view="home">
    <h2 class="strip__title">Latest Activity</h2>
    <div id="latest-grid" class="grid" role="list"></div>
   </section>
@@ -114,7 +144,7 @@
   <section class="view is-hidden" data-view="artwork"></section>
   <section class="view is-hidden" data-view="about"></section>
   <!-- Page fade overlay for main content transitions -->
-  <div id="page-fade" class="page-fade" aria-hidden="true"></div>
+  <div id="page-fade" class="page-fade is-active" aria-hidden="true"></div>
  </main>
 
 </body>
