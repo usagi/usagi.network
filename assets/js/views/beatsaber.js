@@ -119,9 +119,10 @@ async function initOneGallery(media){
 		const base = `/assets/beatsaber/${cat}/${item}/`;
 		const imgBase = base + 'image/';
 		const vidBase = base + 'media/';
+		const noLocalVideo = media.hasAttribute('data-no-local-video');
 		// Collect media from the single, correct base
 		const imageUrls = await probeSequentialImages(imgBase, 24);
-		const videoUrls = await probeSequentialVideos(vidBase, 6);
+		const videoUrls = noLocalVideo ? [] : await probeSequentialVideos(vidBase, 6);
 		const slides = [
 			...imageUrls.map(src => ({ type: 'image', src })),
 			...videoUrls.map(src => ({ type: 'video', src }))
