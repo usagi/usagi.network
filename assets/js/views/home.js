@@ -7,6 +7,8 @@ export async function mount(){
 	const grid = document.getElementById('latest-grid');
 	if (!grid) return;
 	grid.innerHTML = '';
+	// Prepend a manual announcement card (temporary)
+	prependManualRebuildCard(grid);
 	// Try to render subtle live embed if streaming now
 	setupHeroLive().catch(() => {});
 	// Start subtle ambient background + Life animation
@@ -23,6 +25,23 @@ export async function mount(){
 		console.warn('Latest load failed', e);
 		appendNotice(grid);
 	}
+}
+
+// Temporary: prepend a manual Latest Activity card for the website rebuild kickoff
+function prependManualRebuildCard(grid){
+	try{
+		const card = document.createElement('article');
+		card.className = 'card card--map';
+		card.innerHTML = `
+			<div class="card__cut"></div>
+			<div class="card__body">
+				<span class="card__tag">お知らせ</span>
+				<h3 class="card__title">${escapeHtml('USAGI.NETWORK公式ウェブサイトの再建が開始されました。SOFTWARE, ARTWORKを除く全てのページが稼働中です。')}</h3>
+				<div class="card__date">2025-08-28</div>
+			</div>
+		`;
+		grid.appendChild(card);
+	}catch{}
 }
 
 function renderLatestCard(it){
@@ -136,7 +155,7 @@ async function setupHeroLive(){
 				cvs.style.height = r.height + 'px';
 			}
 
-			// --- Hero Ambient (flowing metaball-like blobs) ---
+			// --- Hero Ambient (flow-field particle background) ---
 			let __ambientStop = null;
 			async function startHeroAmbient(){
 				try{
@@ -156,48 +175,63 @@ async function setupHeroLive(){
 					}
 					resize();
 					let rafId = 0;
-					const blobCount = prefersReduce ? 5 : 9;
-					const blobs = [];
-					for(let i=0;i<blobCount;i++){
-						blobs.push({
-							x: Math.random()*cvs.width,
-							y: Math.random()*cvs.height,
-							r: (Math.random()*120 + 120) * dpr,
-							vx: (Math.random()*0.5 - 0.25)*dpr,
-							vy: (Math.random()*0.4 - 0.2)*dpr,
-							hue: 190 + Math.random()*30,
-						});
+					// Flow-field based on simple sine noise; many particles leave soft trails
+					const count = prefersReduce ? 600 : 1400;
+					const speed = prefersReduce ? 0.35*dpr : 0.55*dpr;
+					const fade = prefersReduce ? 0.08 : 0.05; // trail persistence
+					const hueBase = 190; // cyan→teal range fits site theme
+					const particles = new Array(count).fill(0).map(() => ({
+						x: Math.random()*cvs.width,
+						y: Math.random()*cvs.height,
+						vx: 0,
+						vy: 0,
+						life: Math.random()*200 + 200,
+						hue: hueBase + Math.random()*30,
+					}));
+					function field(x,y,t){
+						const nx = x/cvs.width * 3.0;
+						const ny = y/cvs.height * 3.0;
+						// angle varies smoothly across space/time
+						const a = Math.sin(nx*2.1 + t*0.0005) + Math.sin(ny*1.7 - t*0.0008) + Math.sin((nx+ny)*1.3 + t*0.0003);
+						return a * 0.9; // radians-ish
 					}
-					function step(){
-						for(const b of blobs){
-							b.x += b.vx; b.y += b.vy;
-							if(b.x < -b.r) { b.x = cvs.width + b.r*0.5; }
-							if(b.x > cvs.width + b.r) { b.x = -b.r*0.5; }
-							if(b.y < -b.r) { b.y = cvs.height + b.r*0.5; }
-							if(b.y > cvs.height + b.r) { b.y = -b.r*0.5; }
+					function step(ts){
+						for(const p of particles){
+							if(--p.life < 0){
+								p.x = Math.random()*cvs.width; p.y = Math.random()*cvs.height; p.vx=0; p.vy=0; p.life = Math.random()*200 + 200; p.hue = hueBase + Math.random()*30;
+							}
+							const a = field(p.x, p.y, ts);
+							p.vx += Math.cos(a) * 0.06; // small acceleration along field
+							p.vy += Math.sin(a) * 0.06;
+							// speed cap
+							const vmax = speed;
+							const v = Math.hypot(p.vx, p.vy) || 1e-6;
+							p.vx = p.vx / v * vmax;
+							p.vy = p.vy / v * vmax;
+							const x0 = p.x, y0 = p.y;
+							p.x += p.vx; p.y += p.vy;
+							// wrap
+							if(p.x < 0) p.x += cvs.width; else if(p.x >= cvs.width) p.x -= cvs.width;
+							if(p.y < 0) p.y += cvs.height; else if(p.y >= cvs.height) p.y -= cvs.height;
+							// draw segment
+							ctx.strokeStyle = `hsla(${p.hue}, 90%, 56%, ${prefersReduce? 0.05 : 0.035})`;
+							ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(p.x, p.y); ctx.stroke();
 						}
 					}
-					function draw(t){
-						ctx.clearRect(0,0,cvs.width,cvs.height);
-						if(!prefersReduce){ ctx.filter = 'blur(24px)'; }
-						ctx.globalCompositeOperation = 'lighter';
-						for(const b of blobs){
-							const a = 0.06 + 0.04*Math.sin((t/4000) + b.x*0.0008 + b.y*0.0006);
-							const c1 = `hsla(${b.hue}, 90%, 52%, ${a})`;
-							const c2 = `hsla(${b.hue+20}, 80%, 46%, ${a*0.9})`;
-							const g = ctx.createRadialGradient(b.x, b.y, b.r*0.1, b.x, b.y, b.r);
-							g.addColorStop(0, c1);
-							g.addColorStop(1, c2);
-							ctx.fillStyle = g;
-							ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI*2); ctx.fill();
-						}
-						ctx.filter = 'none';
+					function draw(ts){
+						// fade previous frame for trails
+						ctx.globalCompositeOperation = 'source-over';
+						ctx.fillStyle = `rgba(0,0,0,${fade})`;
+						ctx.fillRect(0,0,cvs.width,cvs.height);
+						// draw lines using screen to glow a bit
+						ctx.globalCompositeOperation = 'screen';
+						ctx.lineWidth = dpr < 2 ? 0.8 : 0.7; // thin lines; retina slightly thinner
+						step(ts);
 						ctx.globalCompositeOperation = 'source-over';
 					}
-					let last=0, acc=0; const intv = prefersReduce ? 60 : 30; // ~fps tick for step
-					function tick(ts){ if(!last) last=ts; const dt=ts-last; last=ts; acc+=dt; if(acc>intv){ step(); acc=0; } draw(ts); rafId = requestAnimationFrame(tick); }
+					function tick(ts){ draw(ts); rafId = requestAnimationFrame(tick); }
 					rafId = requestAnimationFrame(tick);
-					const onResize = () => { cancelAnimationFrame(rafId); resize(); rafId = requestAnimationFrame(tick); };
+					const onResize = () => { cancelAnimationFrame(rafId); resize(); ctx.clearRect(0,0,cvs.width,cvs.height); rafId = requestAnimationFrame(tick); };
 					window.addEventListener('resize', onResize);
 					__ambientStop = () => { cancelAnimationFrame(rafId); window.removeEventListener('resize', onResize); ctx.clearRect(0,0,cvs.width,cvs.height); };
 				}catch{}
