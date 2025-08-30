@@ -2,6 +2,14 @@
   {
     "provider": "twitch",
     "kind": "vod",
+    "id": "2553177182",
+    "title": "【アークナイツ】「挽歌が灰に還る時」（※兼・新アバターWarudo負荷試験配信）",
+    "date": "2025-08-29T22:56:06Z",
+    "thumbnail_url": "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png"
+  },
+  {
+    "provider": "twitch",
+    "kind": "vod",
     "id": "2550573937",
     "title": "【VRChat】新アバター動作試験、おすすめワールドがあれば教えてね（3D酔い or しごはじまで）",
     "date": "2025-08-26T22:17:18Z",
@@ -86,13 +94,5 @@
     "title": "【アークナイツ】 「SEE YOU SOON また明日」ステージ初見攻略",
     "date": "2025-08-09T10:52:17Z",
     "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/9578ba83d86ad0bb74cf_usaginetwork_314692760433_1754736731//thumb/thumb0-%{width}x%{height}.jpg"
-  },
-  {
-    "provider": "twitch",
-    "kind": "vod",
-    "id": "2530741754",
-    "title": "【アークナイツ】相見歓 / S&MOステージ攻略",
-    "date": "2025-08-04T09:20:14Z",
-    "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/6273c121d54a24bca11a_usaginetwork_314673048945_1754299208//thumb/thumb0-%{width}x%{height}.jpg"
   }
 ]
