@@ -2,6 +2,14 @@
   {
     "provider": "twitch",
     "kind": "vod",
+    "id": "2554027991",
+    "title": "【ビートセイバー】ゆったりお楽しみ＆新アバター負荷試験",
+    "date": "2025-08-30T21:22:19Z",
+    "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/cd17238cec07df11c22c_usaginetwork_314807608819_1756588933//thumb/thumb0-%{width}x%{height}.jpg"
+  },
+  {
+    "provider": "twitch",
+    "kind": "vod",
     "id": "2553177182",
     "title": "【アークナイツ】「挽歌が灰に還る時」（※兼・新アバターWarudo負荷試験配信）",
     "date": "2025-08-29T22:56:06Z",
@@ -86,13 +94,5 @@
     "title": "【Poly Bridge】そうだ、橋を架けよう #6",
     "date": "2025-08-09T17:36:02Z",
     "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/b4772fcf451adf06998c_usaginetwork_314693779186_1754760957//thumb/thumb0-%{width}x%{height}.jpg"
-  },
-  {
-    "provider": "twitch",
-    "kind": "vod",
-    "id": "2535336275",
-    "title": "【アークナイツ】 「SEE YOU SOON また明日」ステージ初見攻略",
-    "date": "2025-08-09T10:52:17Z",
-    "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/9578ba83d86ad0bb74cf_usaginetwork_314692760433_1754736731//thumb/thumb0-%{width}x%{height}.jpg"
   }
 ]
