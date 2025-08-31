@@ -2,6 +2,14 @@
   {
     "provider": "twitch",
     "kind": "vod",
+    "id": "2554479807",
+    "title": "【ARKNIGHTS】熱砂秘聞：翠夢の遺跡より",
+    "date": "2025-08-31T10:52:58Z",
+    "thumbnail_url": "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png"
+  },
+  {
+    "provider": "twitch",
+    "kind": "vod",
     "id": "2554027991",
     "title": "【ビートセイバー】ゆったりお楽しみ＆新アバター負荷試験",
     "date": "2025-08-30T21:22:19Z",
@@ -86,13 +94,5 @@
     "title": "【アークナイツ】統合回顧「ミヅキと紺碧の樹」難易度上げ 5 から",
     "date": "2025-08-13T20:08:01Z",
     "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/6bc9f01f8f38eb6daa18_usaginetwork_314739883763_1755115675//thumb/thumb0-%{width}x%{height}.jpg"
-  },
-  {
-    "provider": "twitch",
-    "kind": "vod",
-    "id": "2535591932",
-    "title": "【Poly Bridge】そうだ、橋を架けよう #6",
-    "date": "2025-08-09T17:36:02Z",
-    "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/b4772fcf451adf06998c_usaginetwork_314693779186_1754760957//thumb/thumb0-%{width}x%{height}.jpg"
   }
 ]
