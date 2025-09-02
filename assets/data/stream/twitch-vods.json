@@ -2,6 +2,14 @@
   {
     "provider": "twitch",
     "kind": "vod",
+    "id": "2556163643",
+    "title": "【Poly Bridge】そうだ、橋を架けよう #7",
+    "date": "2025-09-02T09:25:06Z",
+    "thumbnail_url": "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png"
+  },
+  {
+    "provider": "twitch",
+    "kind": "vod",
     "id": "2554479807",
     "title": "【ARKNIGHTS】熱砂秘聞：翠夢の遺跡より",
     "date": "2025-08-31T10:52:58Z",
@@ -86,13 +94,5 @@
     "title": "【アークナイツ】危機契約 #3 / イェラグ蝕裂の氷湖 ＆ 血塗られし焦土 400",
     "date": "2025-08-14T17:58:44Z",
     "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/d898b71a63a0340459b5_usaginetwork_314743554291_1755194319//thumb/thumb0-%{width}x%{height}.jpg"
-  },
-  {
-    "provider": "twitch",
-    "kind": "vod",
-    "id": "2539210775",
-    "title": "【アークナイツ】統合回顧「ミヅキと紺碧の樹」難易度上げ 5 から",
-    "date": "2025-08-13T20:08:01Z",
-    "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/6bc9f01f8f38eb6daa18_usaginetwork_314739883763_1755115675//thumb/thumb0-%{width}x%{height}.jpg"
   }
 ]
