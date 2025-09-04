@@ -2,6 +2,14 @@
   {
     "provider": "twitch",
     "kind": "vod",
+    "id": "2557789456",
+    "title": "【アークナイツ】挽歌が灰に還る時/EX消えゆく炎 or 協心競技#1",
+    "date": "2025-09-04T08:44:01Z",
+    "thumbnail_url": "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png"
+  },
+  {
+    "provider": "twitch",
+    "kind": "vod",
     "id": "2556163643",
     "title": "【Poly Bridge】そうだ、橋を架けよう #7 (5-1…5-6)",
     "date": "2025-09-02T09:25:06Z",
@@ -86,13 +94,5 @@
     "title": "【雑談 Beat Saber マッピング】3拍子はお好きですか？",
     "date": "2025-08-15T14:20:31Z",
     "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/5e4d9efefcfe2599e07b_usaginetwork_314746919795_1755267625//thumb/thumb0-%{width}x%{height}.jpg"
-  },
-  {
-    "provider": "twitch",
-    "kind": "vod",
-    "id": "2539981675",
-    "title": "【アークナイツ】危機契約 #3 / イェラグ蝕裂の氷湖 ＆ 血塗られし焦土 400",
-    "date": "2025-08-14T17:58:44Z",
-    "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/d898b71a63a0340459b5_usaginetwork_314743554291_1755194319//thumb/thumb0-%{width}x%{height}.jpg"
   }
 ]
