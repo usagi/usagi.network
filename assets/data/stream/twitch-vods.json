@@ -2,6 +2,14 @@
   {
     "provider": "twitch",
     "kind": "vod",
+    "id": "2558640895",
+    "title": "【アークナイツ】協心競技#1 上級＆特級",
+    "date": "2025-09-05T10:06:55Z",
+    "thumbnail_url": "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png"
+  },
+  {
+    "provider": "twitch",
+    "kind": "vod",
     "id": "2557789456",
     "title": "【アークナイツ】挽歌が灰に還る時/EX消えゆく炎 or 協心競技#1",
     "date": "2025-09-04T08:44:01Z",
@@ -86,13 +94,5 @@
     "title": "【Poly Bridge】そうだ、橋を架けよう #7",
     "date": "2025-08-16T13:28:57Z",
     "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/9f024a802a039ec2916a_usaginetwork_314750834675_1755350931//thumb/thumb0-%{width}x%{height}.jpg"
-  },
-  {
-    "provider": "twitch",
-    "kind": "vod",
-    "id": "2540726142",
-    "title": "【雑談 Beat Saber マッピング】3拍子はお好きですか？",
-    "date": "2025-08-15T14:20:31Z",
-    "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/5e4d9efefcfe2599e07b_usaginetwork_314746919795_1755267625//thumb/thumb0-%{width}x%{height}.jpg"
   }
 ]
