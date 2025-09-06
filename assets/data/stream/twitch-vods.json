@@ -2,6 +2,14 @@
   {
     "provider": "twitch",
     "kind": "vod",
+    "id": "2559328483",
+    "title": "Ⓒ2025 Marvelous Inc.【DAEMON X MACHINA TITANIC SCION】 #1",
+    "date": "2025-09-06T03:12:06Z",
+    "thumbnail_url": "https://vod-secure.twitch.tv/_404/404_processing_%{width}x%{height}.png"
+  },
+  {
+    "provider": "twitch",
+    "kind": "vod",
     "id": "2558640895",
     "title": "【アークナイツ】協心競技#1 上級＆特級",
     "date": "2025-09-05T10:06:55Z",
@@ -86,13 +94,5 @@
     "title": "【アークナイツ】危機契約 #3 / チェルノボーグ 第13区跡 ＆ 血塗られし焦土 天災降臨作戦/幽邃霊魂作戦/540チャレンジ",
     "date": "2025-08-18T12:31:10Z",
     "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/04c981567df7bd923715_usaginetwork_314728075506_1755520261//thumb/thumb0-%{width}x%{height}.jpg"
-  },
-  {
-    "provider": "twitch",
-    "kind": "vod",
-    "id": "2541599697",
-    "title": "【Poly Bridge】そうだ、橋を架けよう #7",
-    "date": "2025-08-16T13:28:57Z",
-    "thumbnail_url": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/9f024a802a039ec2916a_usaginetwork_314750834675_1755350931//thumb/thumb0-%{width}x%{height}.jpg"
   }
 ]
