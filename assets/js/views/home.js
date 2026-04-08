@@ -35,6 +35,7 @@ function renderLatestCard(it)
  a.className = `card ${cutClass}`;
  const tag = it.kind === 'clip' ? 'Clip' : it.kind === 'vod' ? 'VOD' : (it.provider === 'youtube' ? 'YouTube' : 'Archive');
  const thumb = resolveItemThumb(it);
+ const isPlayable = isPlayableItem(it);
  a.innerHTML = `
 		<div class="card__cut"></div>
 		${thumb ? `<img class="card__thumb" src="${thumb}" alt="">` : ''}
@@ -44,8 +45,38 @@ function renderLatestCard(it)
 			<div class="card__date">${it.date || ''}</div>
 		</div>
 	`;
- a.addEventListener('click', () => openDetailEmbed(it));
+ if (isPlayable)
+ {
+  a.style.cursor = 'pointer';
+  a.addEventListener('click', () => openDetailEmbed(it));
+ }
+ const img = a.querySelector('.card__thumb');
+ if (img)
+ {
+  let tried = 0;
+  img.addEventListener('error', () =>
+  {
+   if (tried === 0)
+   {
+    tried += 1;
+    const alt = buildAltThumb(thumb);
+    if (alt && alt !== img.src)
+    {
+     img.src = alt;
+     return;
+    }
+   }
+   img.remove();
+  }, { once: false });
+ }
  return a;
+}
+
+function isPlayableItem(it)
+{
+ if (!it || !it.id) return false;
+ return (it.provider === 'twitch' && (it.kind === 'clip' || it.kind === 'vod'))
+  || (it.provider === 'youtube');
 }
 
 function resolveItemThumb(it)
@@ -61,11 +92,21 @@ function resolveItemThumb(it)
  return u;
 }
 
+function buildAltThumb(url)
+{
+ const u = String(url || '');
+ if (!u) return '';
+ // Try a smaller Twitch size as fallback for rare CDN variant misses.
+ if (u.includes('640x360')) return u.replace('640x360', '320x180');
+ if (u.includes('480x272')) return u.replace('480x272', '260x147');
+ return '';
+}
+
 function openDetailEmbed(item)
 {
  const panel = document.getElementById('detail');
  const body = document.getElementById('detail-body');
- if (!panel || !body) return;
+ if (!panel || !body || !item?.id) return;
  import('#utils/bgm.js').then(mod => mod.pauseIfPlaying?.()).catch(() => { });
  const closeBtn = panel.querySelector('.detail__close');
  body.innerHTML = '';
