@@ -31,6 +31,6 @@ export const SOURCES = {
  },
  api: {
   // Set your Cloudflare Worker base URL (no trailing slash), e.g. 'https://your-worker.workers.dev'
-  base: 'https://usagi-network-stream-proxy.usaginetwork.workers.dev',
+    base: '',
  }
 };
