@@ -34,16 +34,61 @@ function renderLatestCard(it)
  const cutClass = it.kind === 'clip' ? 'card--clip' : it.kind === 'vod' ? 'card--vod' : 'card--map';
  a.className = `card ${cutClass}`;
  const tag = it.kind === 'clip' ? 'Clip' : it.kind === 'vod' ? 'VOD' : (it.provider === 'youtube' ? 'YouTube' : 'Archive');
+ const thumb = resolveItemThumb(it);
  a.innerHTML = `
 		<div class="card__cut"></div>
-		${it.thumbnail ? `<img class="card__thumb" src="${it.thumbnail}" alt="">` : ''}
+		${thumb ? `<img class="card__thumb" src="${thumb}" alt="">` : ''}
 		<div class="card__body">
 			<span class="card__tag">${tag}</span>
 			<h3 class="card__title">${escapeHtml(it.title)}</h3>
 			<div class="card__date">${it.date || ''}</div>
 		</div>
 	`;
+ a.addEventListener('click', () => openDetailEmbed(it));
  return a;
+}
+
+function resolveItemThumb(it)
+{
+ let u = it.thumbnail || it.thumbnail_url || it.preview_image_url || '';
+ if (!u) return '';
+ // Twitch VOD thumbnails may include template tokens.
+ if (u.includes('%{width}x%{height}') || u.includes('{width}x{height}'))
+ {
+  const size = '640x360';
+  u = u.replace('%{width}x%{height}', size).replace('{width}x{height}', size);
+ }
+ return u;
+}
+
+function openDetailEmbed(item)
+{
+ const panel = document.getElementById('detail');
+ const body = document.getElementById('detail-body');
+ if (!panel || !body) return;
+ import('#utils/bgm.js').then(mod => mod.pauseIfPlaying?.()).catch(() => { });
+ const closeBtn = panel.querySelector('.detail__close');
+ body.innerHTML = '';
+ const wrap = document.createElement('div');
+ wrap.className = 'embed';
+
+ if (item.provider === 'twitch')
+ {
+  if (item.kind === 'clip')
+  {
+   wrap.innerHTML = `<iframe src="https://clips.twitch.tv/embed?clip=${encodeURIComponent(item.id)}&parent=${location.hostname}&autoplay=true" height="360" width="640" allowfullscreen></iframe>`;
+  } else
+  {
+   wrap.innerHTML = `<iframe src="https://player.twitch.tv/?video=${encodeURIComponent(item.id)}&parent=${location.hostname}&autoplay=true" height="360" width="640" allowfullscreen></iframe>`;
+  }
+ } else if (item.provider === 'youtube')
+ {
+  wrap.innerHTML = `<iframe width="640" height="360" src="https://www.youtube.com/embed/${encodeURIComponent(item.id)}" title="YouTube video" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+ }
+
+ body.appendChild(wrap);
+ panel.hidden = false;
+ closeBtn?.addEventListener('click', () => { panel.hidden = true; body.innerHTML = ''; }, { once: true });
 }
 
 function appendNotice(grid)
