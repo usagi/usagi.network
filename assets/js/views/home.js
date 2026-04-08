@@ -7,8 +7,6 @@ export async function mount(){
 	const grid = document.getElementById('latest-grid');
 	if (!grid) return;
 	grid.innerHTML = '';
-	// Prepend a manual announcement card (temporary)
-	prependManualRebuildCard(grid);
 	// Try to render subtle live embed if streaming now
 	setupHeroLive().catch(() => {});
 	// Start subtle ambient background + Life animation
@@ -26,24 +24,6 @@ export async function mount(){
 		appendNotice(grid);
 	}
 }
-
-// Temporary: prepend a manual Latest Activity card for the website rebuild kickoff
-function prependManualRebuildCard(grid){
-	try{
-		const card = document.createElement('article');
-		card.className = 'card card--map';
-		card.innerHTML = `
-			<div class="card__cut"></div>
-			<div class="card__body">
-				<span class="card__tag">お知らせ</span>
-				<h3 class="card__title">${escapeHtml('USAGI.NETWORK公式ウェブサイトの再建が開始されました。SOFTWARE, ARTWORKを除く全てのページが稼働中です。')}</h3>
-				<div class="card__date">2025-08-28</div>
-			</div>
-		`;
-		grid.appendChild(card);
-	}catch{}
-}
-
 function renderLatestCard(it){
 	const a = document.createElement('article');
 	const cutClass = it.kind === 'clip' ? 'card--clip' : it.kind === 'vod' ? 'card--vod' : 'card--map';

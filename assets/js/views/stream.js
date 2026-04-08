@@ -374,7 +374,13 @@ async function loadTwitchClips()
  // 0) Try proxy
  const viaProxy = await loadFromProxy('/api/twitch/clips');
  if (Array.isArray(viaProxy) && viaProxy.length) return normalize(viaProxy, 'twitch', 'clip');
- // 1) Static JSON
+ // 1) Remote auto-refreshed JSON
+ const remoteBase = String(SOURCES.data?.streamBaseUrl || '').replace(/\/$/, '');
+ if (remoteBase){
+  const remoteItems = await loadJSON(`${remoteBase}/twitch-clips.json`);
+  if (Array.isArray(remoteItems) && remoteItems.length) return normalize(remoteItems, 'twitch', 'clip');
+ }
+ // 2) Static JSON fallback
  const items = await loadJSON('/assets/data/stream/twitch-clips.json');
  if (Array.isArray(items) && items.length) return normalize(items, 'twitch', 'clip');
  // Fallback
@@ -386,7 +392,13 @@ async function loadTwitchVods()
  // 0) Try proxy
  const viaProxy = await loadFromProxy('/api/twitch/vods');
  if (Array.isArray(viaProxy) && viaProxy.length) return normalize(viaProxy, 'twitch', 'vod');
- // 1) Static JSON
+ // 1) Remote auto-refreshed JSON
+ const remoteBase = String(SOURCES.data?.streamBaseUrl || '').replace(/\/$/, '');
+ if (remoteBase){
+  const remoteItems = await loadJSON(`${remoteBase}/twitch-vods.json`);
+  if (Array.isArray(remoteItems) && remoteItems.length) return normalize(remoteItems, 'twitch', 'vod');
+ }
+ // 2) Static JSON fallback
  const items = await loadJSON('/assets/data/stream/twitch-vods.json');
  if (Array.isArray(items) && items.length) return normalize(items, 'twitch', 'vod');
  // Fallback
@@ -398,11 +410,17 @@ async function loadYouTubeArchives()
  // 0) Try proxy
  const viaProxy = await loadFromProxy('/api/youtube/archives');
  if (Array.isArray(viaProxy) && viaProxy.length) return normalize(viaProxy, 'youtube', 'archive');
- // 1) Try static JSON if present
+ // 1) Try remote auto-refreshed JSON
+ const remoteBase = String(SOURCES.data?.streamBaseUrl || '').replace(/\/$/, '');
+ if (remoteBase){
+  const remoteItems = await loadJSON(`${remoteBase}/youtube-archives.json`);
+  if (Array.isArray(remoteItems) && remoteItems.length) return normalize(remoteItems, 'youtube', 'archive');
+ }
+ // 2) Try static JSON if present
  const staticItems = await loadJSON('/assets/data/stream/youtube-archives.json');
  if (Array.isArray(staticItems) && staticItems.length) return normalize(staticItems, 'youtube', 'archive');
 
- // 2) Try dynamic client-only fetch from YouTube handle page (no API key). Many modern browsers block cross-origin HTML fetches unless CORS is allowed; YouTube does not send CORS headers, so this often fails. We'll attempt via no-cors for opaque hints, then fall back.
+ // 3) Try dynamic client-only fetch from YouTube handle page (no API key). Many modern browsers block cross-origin HTML fetches unless CORS is allowed; YouTube does not send CORS headers, so this often fails. We'll attempt via no-cors for opaque hints, then fall back.
  try
  {
   const handle = SOURCES.youtube?.handle || 'usagi.network';
@@ -412,6 +430,6 @@ async function loadYouTubeArchives()
   // Given CORS limitations, we pivot to oEmbed (which supports CORS) per-video only if we know some IDs.
  } catch { }
 
- // 3) Last resort fallback: show a single known video as placeholder
+ // 4) Last resort fallback: empty list
  return normalize([], 'youtube', 'archive');
 }
