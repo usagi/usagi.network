@@ -22,6 +22,8 @@ export const SOURCES = {
   limit: 50,
     // Optional worker base only for SoundCloud API (empty disables worker fetch for music).
     apiBase: '',
+  // Static JSON endpoint for auto-refreshed tracks (version-1 branch via GitHub raw).
+  dataUrl: 'https://raw.githubusercontent.com/usagi/usagi.network/version-1/assets/data/soundcloud-tracks.json',
  },
  api: {
   // Set your Cloudflare Worker base URL (no trailing slash), e.g. 'https://your-worker.workers.dev'

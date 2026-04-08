@@ -189,7 +189,9 @@ async function initPlayer(onReady)
  {
   try
   {
-   const r = await fetch('/assets/data/soundcloud-tracks.json', { cache: 'no-store' });
+         const remoteDataUrl = String(SOURCES.soundcloud?.dataUrl || '').trim();
+         const pathOrUrl = remoteDataUrl || '/assets/data/soundcloud-tracks.json';
+         const r = await fetch(pathOrUrl, { cache: 'no-store' });
    if (r.ok)
    {
     const data = await r.json();
@@ -198,6 +200,19 @@ async function initPlayer(onReady)
    }
   } catch { }
  }
+   if (!useExternalList)
+   {
+      try
+      {
+         const r = await fetch('/assets/data/soundcloud-tracks.json', { cache: 'no-store' });
+         if (r.ok)
+         {
+            const data = await r.json();
+            tracks = Array.isArray(data) ? data : Array.isArray(data?.tracks) ? data.tracks : [];
+            if (tracks.length) useExternalList = true;
+         }
+      } catch { }
+   }
 
  function renderList()
  {
