@@ -19,17 +19,20 @@ export async function mount()
  if (view.dataset.ready === '1') return;
 
  // Try sessionStorage cache (TTL: 60s)
- try {
+ try
+ {
   const raw = sessionStorage.getItem('view:stream');
-  if (raw){
+  if (raw)
+  {
    const cached = JSON.parse(raw);
-   if (cached && cached.ts && (Date.now() - cached.ts) < 60_000 && typeof cached.tpl === 'string'){
+   if (cached && cached.ts && (Date.now() - cached.ts) < 60_000 && typeof cached.tpl === 'string')
+   {
     view.innerHTML = cached.tpl;
     view.dataset.ready = '1';
     return;
    }
   }
- } catch {}
+ } catch { }
  view.innerHTML = '';
  view.classList.add('is-loading');
  // LOADING overlay (URTS style) with log window
@@ -80,24 +83,26 @@ export async function mount()
   if (!res.ok) throw new Error(`Failed to load stream.html: ${res.status}`);
   content.innerHTML = await res.text();
   view.appendChild(content);
-    // Position overlay over the first strip region (cards area)
-    try {
-        const target = content.querySelector('.strip');
-        if (target) {
-            const r = target.getBoundingClientRect();
-            const sx = window.scrollX || document.documentElement.scrollLeft || 0;
-            const sy = window.scrollY || document.documentElement.scrollTop || 0;
-            const minH = 360; // ensure overlay looks like a proper content block
-            const h = Math.max(r.height, minH);
-            Object.assign(overlay.style, {
-                position: 'fixed',
-                left: `${r.left + sx}px`,
-                top: `${r.top + sy}px`,
-                width: `${r.width}px`,
-                height: `${h}px`,
-            });
-        }
-    } catch {}
+  // Position overlay over the first strip region (cards area)
+  try
+  {
+   const target = content.querySelector('.strip');
+   if (target)
+   {
+    const r = target.getBoundingClientRect();
+    const sx = window.scrollX || document.documentElement.scrollLeft || 0;
+    const sy = window.scrollY || document.documentElement.scrollTop || 0;
+    const minH = 360; // ensure overlay looks like a proper content block
+    const h = Math.max(r.height, minH);
+    Object.assign(overlay.style, {
+     position: 'fixed',
+     left: `${r.left + sx}px`,
+     top: `${r.top + sy}px`,
+     width: `${r.width}px`,
+     height: `${h}px`,
+    });
+   }
+  } catch { }
   bump(10); log('Init: stream data pipeline');
   // Start data pipeline asynchronously so router can clear page-fade and show this overlay
   initializeStream(log, bump)
@@ -106,7 +111,7 @@ export async function mount()
     setPct(100); log('Complete', 'ok');
     view.dataset.ready = '1';
     // Cache template for fast remount within TTL
-    try { sessionStorage.setItem('view:stream', JSON.stringify({ ts: Date.now(), tpl: view.innerHTML })); } catch {}
+    try { sessionStorage.setItem('view:stream', JSON.stringify({ ts: Date.now(), tpl: view.innerHTML })); } catch { }
    })
    .catch((e) =>
    {
@@ -376,7 +381,8 @@ async function loadTwitchClips()
  if (Array.isArray(viaProxy) && viaProxy.length) return normalize(viaProxy, 'twitch', 'clip');
  // 1) Remote auto-refreshed JSON
  const remoteBase = String(SOURCES.data?.streamBaseUrl || '').replace(/\/$/, '');
- if (remoteBase){
+ if (remoteBase)
+ {
   const remoteItems = await loadJSON(`${remoteBase}/twitch-clips.json`);
   if (Array.isArray(remoteItems) && remoteItems.length) return normalize(remoteItems, 'twitch', 'clip');
  }
@@ -394,7 +400,8 @@ async function loadTwitchVods()
  if (Array.isArray(viaProxy) && viaProxy.length) return normalize(viaProxy, 'twitch', 'vod');
  // 1) Remote auto-refreshed JSON
  const remoteBase = String(SOURCES.data?.streamBaseUrl || '').replace(/\/$/, '');
- if (remoteBase){
+ if (remoteBase)
+ {
   const remoteItems = await loadJSON(`${remoteBase}/twitch-vods.json`);
   if (Array.isArray(remoteItems) && remoteItems.length) return normalize(remoteItems, 'twitch', 'vod');
  }
@@ -412,7 +419,8 @@ async function loadYouTubeArchives()
  if (Array.isArray(viaProxy) && viaProxy.length) return normalize(viaProxy, 'youtube', 'archive');
  // 1) Try remote auto-refreshed JSON
  const remoteBase = String(SOURCES.data?.streamBaseUrl || '').replace(/\/$/, '');
- if (remoteBase){
+ if (remoteBase)
+ {
   const remoteItems = await loadJSON(`${remoteBase}/youtube-archives.json`);
   if (Array.isArray(remoteItems) && remoteItems.length) return normalize(remoteItems, 'youtube', 'archive');
  }
