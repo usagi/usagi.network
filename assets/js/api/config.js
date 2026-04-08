@@ -16,6 +16,13 @@ export const SOURCES = {
   vodsLimit: 12,
   useOfficialEmbeds: false,
  },
+ soundcloud: {
+  profileUrl: 'https://soundcloud.com/usagi-network',
+  tracksUrl: 'https://soundcloud.com/usagi-network/tracks',
+  limit: 50,
+    // Optional worker base only for SoundCloud API (empty disables worker fetch for music).
+    apiBase: '',
+ },
  api: {
   // Set your Cloudflare Worker base URL (no trailing slash), e.g. 'https://your-worker.workers.dev'
   base: 'https://usagi-network-stream-proxy.usaginetwork.workers.dev',

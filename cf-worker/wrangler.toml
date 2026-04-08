@@ -4,6 +4,8 @@ compatibility_date = "2025-08-28"
 
 [vars]
 TWITCH_CHANNEL_LOGIN = "usaginetwork"
+SOUNDCLOUD_PROFILE_URL = "https://soundcloud.com/usagi-network"
+SOUNDCLOUD_LIMIT = "50"
 
 [observability]
 enabled = true

@@ -7,6 +7,7 @@ This Worker exposes JSON endpoints to proxy Twitch/YouTube for the site without 
 - GET /api/twitch/clips -> latest clips (12)
 - GET /api/twitch/vods -> latest vods (12)
 - GET /api/youtube/archives -> latest youtube videos (12)
+- GET /api/soundcloud/tracks -> latest soundcloud tracks (rss based)
 
 ## Env Vars (Wrangler)
 
@@ -15,6 +16,9 @@ This Worker exposes JSON endpoints to proxy Twitch/YouTube for the site without 
 - TWITCH_CHANNEL_LOGIN (default set in wrangler.toml)
 - YOUTUBE_API_KEY
 - YOUTUBE_CHANNEL_ID
+- SOUNDCLOUD_PROFILE_URL (optional, default: <https://soundcloud.com/usagi-network>)
+- SOUNDCLOUD_USER_ID (optional; if omitted, resolved from oEmbed)
+- SOUNDCLOUD_LIMIT (optional, default: 50)
 
 ## Deploy
 

@@ -9,6 +9,7 @@
 <!-- Index: quick navigation to sections -->
 <nav class="index-nav" aria-label="Beat Saber Contents">
  <span class="index-nav__label">INDEX</span>
+ <a class="btn" href="#plugins">Plugins</a>
  <a class="btn" href="#sabers">Custom Sabers</a>
  <a class="btn" href="#notes">Custom Notes</a>
  <a class="btn" href="#hitsounds">Hit Sounds</a>
@@ -16,19 +17,43 @@
  <a class="btn btn--ghost" href="#install">Install & Notes</a>
 </nav>
 
+<section id="plugins" class="strip" aria-labelledby="plugins-title">
+ <h3 class="strip__title">Plugins</h3>
+ <article role="region" aria-labelledby="plugins-title" class="feature">
+  <div class="feature__media" data-cat="plugin" data-item="unbs-attention"
+   data-image-urls="https://raw.githubusercontent.com/usagi/unbs-attention/main/images/ss-0.jpg https://raw.githubusercontent.com/usagi/unbs-attention/main/images/ss-1.jpg"
+   aria-hidden="true"></div>
+  <div class="feature__body">
+   <div class="feature__meta">
+    <span class="tag">Plugin</span>
+    <span class="sub">v1.0.0 - 2026-04-08</span>
+   </div>
+   <h3 id="plugins-title" class="feature__title">UNBS-Attention</h3>
+   <p class="feature__desc">Beat Saber 向けに、曲選択画面で "attention" 情報を表示するプラグインです。カテゴリ別表示や表示位置調整、必要に応じた確認表示などに対応しています。</p>
+   <div class="feature__actions">
+    <a class="btn" href="https://github.com/usagi/unbs-attention" target="_blank" rel="noopener">Repository</a>
+    <a class="btn btn--ghost" href="https://github.com/usagi/unbs-attention/releases" target="_blank"
+     rel="noopener">Releases</a>
+   </div>
+  </div>
+ </article>
+</section>
+
 <section id="sabers" class="strip" aria-labelledby="sabers-title">
  <h3 class="strip__title">Custom Sabers</h3>
  <div role="list" class="features">
   <article role="listitem" class="feature">
-  <div class="feature__media feature__media--saber" data-cat="custom_saber" data-item="vulpisfoglia" data-embed-urls="https://youtu.be/V1tgKgxomT4" data-no-local-video="true"
-    aria-hidden="true"></div>
+   <div class="feature__media feature__media--saber" data-cat="custom_saber" data-item="vulpisfoglia"
+    data-embed-urls="https://youtu.be/V1tgKgxomT4" data-no-local-video="true" aria-hidden="true"></div>
    <div class="feature__body">
     <div class="feature__meta">
      <span class="tag">Arknights:二次創作</span>
      <span class="sub">v1.0.0 - 2025-08-29</span>
     </div>
     <h3 id="sabers-title" class="feature__title">Vulpisfoglia.saber</h3>
-    <p class="feature__desc"><a href="https://arknights.jp/" target="_blank" rel="noopener">アークナイツ</a>に登場する“先駆兵”オペレーター、<a href="https://arknights.wikiru.jp/index.php?%E3%82%A6%E3%83%AB%E3%83%94%E3%82%B9%E3%83%95%E3%82%A9%E3%83%AA%E3%82%A2"
+    <p class="feature__desc"><a href="https://arknights.jp/" target="_blank"
+      rel="noopener">アークナイツ</a>に登場する“先駆兵”オペレーター、<a
+      href="https://arknights.wikiru.jp/index.php?%E3%82%A6%E3%83%AB%E3%83%94%E3%82%B9%E3%83%95%E3%82%A9%E3%83%AA%E3%82%A2"
       target="_blank" rel="noopener">ウルピスフォリア</a>の剣をモチーフにした物理剣タイプのカスタムセイバーです。<br>
      アークナイツドクターの皆様も、勿論そうでない方も、美しくクールで特徴的なこの剣をお楽しみ頂ければ幸いです。</p>
     <p>
@@ -50,20 +75,21 @@
 
 <section id="notes" class="strip" aria-labelledby="notes-title">
  <h3 class="strip__title">Custom Notes</h3>
-<article role="region" aria-labelledby="notes-title" class="feature">
-  <div class="feature__media feature__media--notes" data-cat="custom_note" data-item="usa-notes-00" aria-hidden="true"></div>
+ <article role="region" aria-labelledby="notes-title" class="feature">
+  <div class="feature__media feature__media--notes" data-cat="custom_note" data-item="usa-notes-00" aria-hidden="true">
+  </div>
   <div class="feature__body">
    <div class="feature__meta">
     <span class="tag">Dr.USAGI Original</span>
     <span class="sub">v1.0.0 - 2024-08-07</span>
    </div>
-  <h3 id="notes-title" class="feature__title">usa-notes-00</h3>
+   <h3 id="notes-title" class="feature__title">usa-notes-00</h3>
    <p class="feature__desc">うさぎモチーフのかわいいカスタムノーツです。うさぎ博士ちゃん ― Dr.USAGI/USAGI.NETWORK
     のロゴにもあしらわれているうさぎモチーフのノーツを実際にビートセイバーでお楽しみ頂けます。</p>
    <p>（※うさぎを斬っているのではありません。うさぎモチーフのノーツを斬っているのです。🐰）</p>
    <div class="feature__actions">
-    <a class="btn js-dl" data-item="usa-notes-00" data-cat="custom_note" data-title="usa-notes-00" data-zip="usa-notes-00-1.0.0.zip" href="#"
-     aria-disabled="true">Download</a>
+    <a class="btn js-dl" data-item="usa-notes-00" data-cat="custom_note" data-title="usa-notes-00"
+     data-zip="usa-notes-00-1.0.0.zip" href="#" aria-disabled="true">Download</a>
     <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="usa-notes-00"
      data-cat="custom_note" data-title="usa-notes-00" href="#">利用規約（同意するとダウンロードできるようになります）</a>
    </div>
@@ -74,7 +100,8 @@
 <section id="hitsounds" class="strip" aria-labelledby="hits-title">
  <h3 class="strip__title">Custom Hit Sounds</h3>
  <article role="region" aria-labelledby="hits-title" class="feature">
-  <div class="feature__media feature__media--hits" data-cat="custom_sound" data-item="usa-hit-00" data-embed-urls="https://www.youtube.com/watch?v=SZLqoNMPrUI" aria-hidden="true"></div>
+  <div class="feature__media feature__media--hits" data-cat="custom_sound" data-item="usa-hit-00"
+   data-embed-urls="https://www.youtube.com/watch?v=SZLqoNMPrUI" aria-hidden="true"></div>
   <div class="feature__body">
    <div class="feature__meta">
     <span class="tag">Dr.USAGI Original</span>
@@ -83,10 +110,10 @@
    <h3 id="hits-title" class="feature__title">usa-hit-00</h3>
    <p class="feature__desc">失われた時代の科学技術で造られた闇を払う効果を持っているかもしれないセイバーをブンブン振った時に鳴るかもしれない荘かな効果音です。「シャンー」的な音がします。</p>
    <div class="feature__actions">
-  <a class="btn js-dl" data-item="usa-hit-00" data-cat="custom_sound" data-title="usa-hit-00" data-zip="usa-hit-00-1.0.0.zip" href="#"
-     aria-disabled="true">Download</a>
-  <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="usa-hit-00"
-   data-cat="custom_sound" data-title="usa-hit-00" href="#">利用規約（同意するとダウンロードできるようになります）</a>
+    <a class="btn js-dl" data-item="usa-hit-00" data-cat="custom_sound" data-title="usa-hit-00"
+     data-zip="usa-hit-00-1.0.0.zip" href="#" aria-disabled="true">Download</a>
+    <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="usa-hit-00"
+     data-cat="custom_sound" data-title="usa-hit-00" href="#">利用規約（同意するとダウンロードできるようになります）</a>
    </div>
   </div>
  </article>
@@ -95,7 +122,8 @@
 <section id="cams" class="strip" aria-labelledby="cams-title">
  <h3 class="strip__title">Camera Scripts</h3>
  <article role="region" aria-labelledby="cams-title" class="feature">
-  <div class="feature__media feature__media--notes" data-cat="camera_script" data-item="usa-cam-00" data-embed-url="https://clips.twitch.tv/HandsomeYawningVampireKappaClaus-buoO9fqDyZKbW-MC" aria-hidden="true"></div>
+  <div class="feature__media feature__media--notes" data-cat="camera_script" data-item="usa-cam-00"
+   data-embed-url="https://clips.twitch.tv/HandsomeYawningVampireKappaClaus-buoO9fqDyZKbW-MC" aria-hidden="true"></div>
   <div class="feature__body">
    <div class="feature__meta">
     <span class="tag">Dr.USAGI Original</span>
@@ -104,8 +132,10 @@
    <h3 id="cams-title" class="feature__title">usa-cam-00</h3>
    <p class="feature__desc">配信用や録画向けに、譜面とプレイの魅力が伝わるよう設計したカメラスクリプトです。導入すれば、決め所で自然に寄り/引き/アングルが変化します。</p>
    <div class="feature__actions">
-    <a class="btn js-dl" data-item="usa-cam-00" data-cat="camera_script" data-title="usa-cam-00" data-zip="usa-cam-00-1.0.0.zip" href="#" aria-disabled="true">Download</a>
-    <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="usa-cam-00" data-cat="camera_script" data-title="usa-cam-00" href="#">利用規約（同意するとダウンロードできるようになります）</a>
+    <a class="btn js-dl" data-item="usa-cam-00" data-cat="camera_script" data-title="usa-cam-00"
+     data-zip="usa-cam-00-1.0.0.zip" href="#" aria-disabled="true">Download</a>
+    <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="usa-cam-00"
+     data-cat="camera_script" data-title="usa-cam-00" href="#">利用規約（同意するとダウンロードできるようになります）</a>
    </div>
   </div>
  </article>
@@ -114,8 +144,8 @@
 <section id="install" class="strip" aria-labelledby="install-title">
  <h3 class="strip__title">Install & Notes</h3>
  <div class="list">
-  <li>導入: <a href="https://www.bsmanager.io/" target="_blank"
-    rel="noopener">BSManager</a>または手作業などで必要な Mod を導入後、<b>CustomSabers</b> | <b>CustomNotes</b> | <b>UserData/SoundReplacer/</b> など対応した
+  <li>導入: <a href="https://www.bsmanager.io/" target="_blank" rel="noopener">BSManager</a>または手作業などで必要な Mod
+   を導入後、<b>CustomSabers</b> | <b>CustomNotes</b> | <b>UserData/SoundReplacer/</b> など対応した
    フォルダーへファイルを配置します。</li>
   <li>不具合や要望は <a href="https://github.com/usagi/usagi.network/issues" target="_blank" rel="noopener">GitHub Issues</a>
    へ。</li>

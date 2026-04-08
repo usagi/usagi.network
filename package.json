@@ -1,5 +1,9 @@
 {
-  "devDependencies": {
-    "wrangler": "^4.33.1"
-  }
+ "scripts": {
+  "fetch:stream": "node scripts/fetch-stream-data.cjs",
+  "fetch:soundcloud": "node scripts/fetch-soundcloud-data.cjs"
+ },
+ "devDependencies": {
+  "wrangler": "^4.33.1"
+ }
 }
