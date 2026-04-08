@@ -135,7 +135,7 @@ async function initPlayer(onReady)
   sharing: false,
   download: false,
  };
-    iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(profileUrl)}&auto_play=false&visual=false&show_user=false&show_teaser=false&show_comments=false&show_reposts=false&buying=false&sharing=false&download=false`;
+ iframe.src = `https://w.soundcloud.com/player/?url=${encodeURIComponent(profileUrl)}&auto_play=false&visual=false&show_user=false&show_teaser=false&show_comments=false&show_reposts=false&buying=false&sharing=false&download=false`;
  const widget = window.SC.Widget(iframe);
  // Link to global BGM controller
  const bgm = await import('#utils/bgm.js');
@@ -158,7 +158,7 @@ async function initPlayer(onReady)
  let currentIndex = 0;
  let useExternalList = false;
  let readyPass = 0;
-    let triedTracksFallback = false;
+ let triedTracksFallback = false;
  let triedProfileFallback = false;
  let didFinalizeReady = false;
  const finalizeReady = () =>
@@ -169,29 +169,29 @@ async function initPlayer(onReady)
  };
 
  // Prefer server-side feed cache from worker, then fallback to local JSON.
-   const scApiBase = String(SOURCES.soundcloud?.apiBase || '').trim().replace(/\/$/, '');
-   if (scApiBase)
+ const scApiBase = String(SOURCES.soundcloud?.apiBase || '').trim().replace(/\/$/, '');
+ if (scApiBase)
  {
-      try
+  try
   {
-         const endpoint = `${scApiBase}/api/soundcloud/tracks`;
-         const r = await fetch(endpoint, { cache: 'no-store' });
-         if (r.ok)
-         {
-            const data = await r.json();
-            tracks = Array.isArray(data) ? data : Array.isArray(data?.tracks) ? data.tracks : [];
-            if (tracks.length) useExternalList = true;
-         }
-  }
-      catch { }
+   const endpoint = `${scApiBase}/api/soundcloud/tracks`;
+   const r = await fetch(endpoint, { cache: 'no-store' });
+   if (r.ok)
+   {
+    const data = await r.json();
+    tracks = Array.isArray(data) ? data : Array.isArray(data?.tracks) ? data.tracks : [];
+    if (tracks.length) useExternalList = true;
    }
+  }
+  catch { }
+ }
  if (!useExternalList)
  {
   try
   {
-         const remoteDataUrl = String(SOURCES.soundcloud?.dataUrl || '').trim();
-         const pathOrUrl = remoteDataUrl || '/assets/data/soundcloud-tracks.json';
-         const r = await fetch(pathOrUrl, { cache: 'no-store' });
+   const remoteDataUrl = String(SOURCES.soundcloud?.dataUrl || '').trim();
+   const pathOrUrl = remoteDataUrl || '/assets/data/soundcloud-tracks.json';
+   const r = await fetch(pathOrUrl, { cache: 'no-store' });
    if (r.ok)
    {
     const data = await r.json();
@@ -200,19 +200,19 @@ async function initPlayer(onReady)
    }
   } catch { }
  }
-   if (!useExternalList)
+ if (!useExternalList)
+ {
+  try
+  {
+   const r = await fetch('/assets/data/soundcloud-tracks.json', { cache: 'no-store' });
+   if (r.ok)
    {
-      try
-      {
-         const r = await fetch('/assets/data/soundcloud-tracks.json', { cache: 'no-store' });
-         if (r.ok)
-         {
-            const data = await r.json();
-            tracks = Array.isArray(data) ? data : Array.isArray(data?.tracks) ? data.tracks : [];
-            if (tracks.length) useExternalList = true;
-         }
-      } catch { }
+    const data = await r.json();
+    tracks = Array.isArray(data) ? data : Array.isArray(data?.tracks) ? data.tracks : [];
+    if (tracks.length) useExternalList = true;
    }
+  } catch { }
+ }
 
  function renderList()
  {
@@ -343,16 +343,16 @@ async function initPlayer(onReady)
     tracks = Array.isArray(list) ? list : [];
     currentIndex = 0;
     renderList();
-            if (!tracks.length && !triedTracksFallback)
-            {
-                // Retry once against /tracks when profile enumeration is empty.
-                triedTracksFallback = true;
-                widget.load(tracksUrl, embedOptions);
-                return;
-            }
-            if (!tracks.length && !triedProfileFallback)
+    if (!tracks.length && !triedTracksFallback)
     {
-                // Retry once back to profile URL when /tracks cannot be enumerated.
+     // Retry once against /tracks when profile enumeration is empty.
+     triedTracksFallback = true;
+     widget.load(tracksUrl, embedOptions);
+     return;
+    }
+    if (!tracks.length && !triedProfileFallback)
+    {
+     // Retry once back to profile URL when /tracks cannot be enumerated.
      triedProfileFallback = true;
      widget.load(profileUrl, embedOptions);
      return;
@@ -461,6 +461,6 @@ async function initPlayer(onReady)
   widget.load(url, { ...embedOptions, auto_play: !!autoplay });
  }
 
-    // Force-load the profile source first to maximize enumerable tracks.
-    widget.load(profileUrl, embedOptions);
+ // Force-load the profile source first to maximize enumerable tracks.
+ widget.load(profileUrl, embedOptions);
 }
