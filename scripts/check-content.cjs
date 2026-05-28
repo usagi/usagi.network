@@ -15,6 +15,7 @@ function existsAsset(url, source)
  const clean = url.split('?')[0].replace(/^\//, '');
  const file = path.join(root, clean);
  if (!fs.existsSync(file)) failures.push(`${source}: missing ${url}`);
+ return file;
 }
 
 function requireText(value, source)
@@ -80,6 +81,7 @@ function checkProtocolOrder(item)
 function checkArtwork()
 {
  const data = readJson('assets/data/artwork.json');
+ requireText(data.cacheVersion, 'artwork cacheVersion');
  checkUniqueIds(data.groups, 'artwork');
  for (const group of data.groups || [])
  {
@@ -87,9 +89,54 @@ function checkArtwork()
   for (const item of group.items || [])
   {
    requireText(item.title, `${group.id} artwork title`);
-   existsAsset(item.src, `${group.title} / ${item.title}`);
+   const file = existsAsset(item.src, `${group.title} / ${item.title}`);
+   if (file) checkImageDimensions(file, `${group.title} / ${item.title}`);
   }
  }
+}
+
+function checkImageDimensions(file, source)
+{
+ const ext = path.extname(file).toLowerCase();
+ if (ext !== '.webp' && ext !== '.png' && ext !== '.jpg' && ext !== '.jpeg') return;
+ const stat = fs.statSync(file);
+ if (stat.size <= 0) failures.push(`${source}: image is empty`);
+ if (ext === '.webp')
+ {
+  const data = fs.readFileSync(file);
+  const size = readWebpSize(data);
+  if (!size) failures.push(`${source}: cannot read WebP dimensions`);
+  else if (size.width < 200 || size.height < 200) failures.push(`${source}: image too small ${size.width}x${size.height}`);
+ }
+}
+
+function readWebpSize(data)
+{
+ if (data.length < 30 || data.toString('ascii', 0, 4) !== 'RIFF' || data.toString('ascii', 8, 12) !== 'WEBP') return null;
+ const type = data.toString('ascii', 12, 16);
+ if (type === 'VP8X' && data.length >= 30)
+ {
+  return {
+   width: 1 + data.readUIntLE(24, 3),
+   height: 1 + data.readUIntLE(27, 3),
+  };
+ }
+ if (type === 'VP8 ' && data.length >= 30)
+ {
+  return {
+   width: data.readUInt16LE(26) & 0x3fff,
+   height: data.readUInt16LE(28) & 0x3fff,
+  };
+ }
+ if (type === 'VP8L' && data.length >= 25)
+ {
+  const b0 = data[21], b1 = data[22], b2 = data[23], b3 = data[24];
+  return {
+   width: 1 + (((b1 & 0x3f) << 8) | b0),
+   height: 1 + (((b3 & 0x0f) << 10) | (b2 << 2) | ((b1 & 0xc0) >> 6)),
+  };
+ }
+ return null;
 }
 
 checkSoftware();
