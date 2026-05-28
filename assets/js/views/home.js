@@ -42,7 +42,7 @@ function renderLatestCard(it)
 		<div class="card__body">
 			<span class="card__tag">${tag}</span>
 			<h3 class="card__title">${escapeHtml(it.title)}</h3>
-			<div class="card__date">${it.date || ''}</div>
+			<div class="card__date">${formatActivityDate(it.date)}</div>
 		</div>
 	`;
  if (isPlayable)
@@ -101,6 +101,13 @@ function buildAltThumb(url)
  if (u.includes('640x360')) return u.replace('640x360', '320x180');
  if (u.includes('480x272')) return u.replace('480x272', '260x147');
  return '';
+}
+
+function formatActivityDate(value)
+{
+ const date = new Date(value || '');
+ if (Number.isNaN(date.getTime())) return String(value || '');
+ return date.toISOString().slice(0, 10);
 }
 
 function openDetailEmbed(item)
