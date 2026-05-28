@@ -31,6 +31,16 @@ jobs:
         run: cargo install --locked trunk
       - name: Build (Trunk)
         run: trunk build --release
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Smoke test built site
+        run: |
+          node scripts/serve-static.cjs dist 4173 &
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then break; fi
+            sleep 1
+          done
+          npm run smoke:site -- http://127.0.0.1:4173/
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
