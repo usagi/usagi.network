@@ -5,7 +5,8 @@
   "serve:dist": "node scripts/serve-static.cjs dist 4173",
   "smoke:site": "node scripts/smoke-site.cjs",
   "fetch:stream": "node scripts/fetch-stream-data.cjs",
-  "fetch:soundcloud": "node scripts/fetch-soundcloud-data.cjs"
+  "fetch:soundcloud": "node scripts/fetch-soundcloud-data.cjs",
+  "refresh:software": "node scripts/refresh-software-releases.cjs"
  },
  "devDependencies": {
   "playwright": "^1.60.0",
