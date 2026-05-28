@@ -1,0 +1,53 @@
+{
+ "cacheVersion": "20260528",
+ "groups": [
+  {
+   "id": "key-visuals",
+   "title": "Key Visuals",
+   "layout": "showcase",
+   "items": [
+    {
+     "title": "2026 Main Visual",
+     "src": "/assets/artwork/2026-main.webp",
+     "hero": true
+    },
+    {
+     "title": "2026 feat. 2023",
+     "src": "/assets/artwork/2026-feat-2023.webp",
+     "wide": true
+    },
+    {
+     "title": "2024 Main Icon",
+     "src": "/assets/artwork/2024-main-icon.webp"
+    },
+    {
+     "title": "2023 Main Poster",
+     "src": "/assets/artwork/2023-main-poster.webp"
+    }
+   ]
+  },
+  {
+   "id": "motion-refs",
+   "title": "Motion References",
+   "layout": "grid refs",
+   "items": [
+    {
+     "title": "U Pose",
+     "src": "/assets/artwork/un-motion-pose-u.webp"
+    },
+    {
+     "title": "T Pose",
+     "src": "/assets/artwork/un-motion-pose-t.webp"
+    },
+    {
+     "title": "T Pose / Wrist Front",
+     "src": "/assets/artwork/un-motion-pose-t-wrist-front.webp"
+    },
+    {
+     "title": "I Pose",
+     "src": "/assets/artwork/un-motion-pose-i.webp"
+    }
+   ]
+  }
+ ]
+}

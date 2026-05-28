@@ -1,0 +1,49 @@
+{
+ "groups": [
+  {
+   "id": "un-avatar-series",
+   "title": "U.N. Avatar Series",
+   "items": [
+    {
+     "title": "U.N. Avatar",
+     "tag": "Avatar Renderer",
+     "repo": "usagi/un-avatar",
+     "fallbackVersion": "v1.0.0",
+     "fallbackReleaseDate": "2026-05-27T12:52:42Z",
+     "description": "UNMF/Z または VMC/UDP のモーション入力を受け、VRM / glTF アバターを軽快に描画する仮想アバターレンダラーです。透過ウィンドウ、スクリーンショット保存、Spout2 Sender 出力に対応します。",
+     "specs": ["VRM / glTF", "UNMF/Z", "VMC/UDP", "Spout2"],
+     "media": {
+      "screenshot": "/assets/software/un-avatar/screenshot-0.png",
+      "icon": "/assets/software/un-avatar/icon.png"
+     }
+    },
+    {
+     "title": "U.N. Motion",
+     "tag": "Motion Capture",
+     "repo": "usagi/un-motion",
+     "fallbackVersion": "v1.0.0",
+     "fallbackReleaseDate": "2026-05-24T13:41:10Z",
+     "description": "Web カメラや VMC/UDP、iFacialMocap 入力から体、顔、手などのモーションを推定・補正し、UNMF/Z または VMC/UDP で出力するモーションキャプチャアプリです。",
+     "specs": ["Webcam", "MediaPipe", "UNMF/Z", "VMC/UDP", "iFacialMocap"],
+     "media": {
+      "screenshot": "/assets/software/un-motion/screenshot-0.png",
+      "icon": "/assets/software/un-motion/icon.png"
+     }
+    },
+    {
+     "title": "U.N. Virtual Eye Tracker",
+     "tag": "Virtual Eye Tracker",
+     "repo": "usagi/un-virtual-eye-tracker",
+     "fallbackVersion": "v2.0.0",
+     "fallbackReleaseDate": "2026-05-27T21:32:30Z",
+     "description": "UNMF/Z、VMC/OSC、iFacialMocap などのフェイストラッキング入力を、ETS2 / ATS のヘッドトラッキングやマウス・キーボード出力へ変換する仮想アイトラッカーです。",
+     "specs": ["Face Tracking", "UNMF/Z", "VMC/OSC", "iFacialMocap", "ETS2 / ATS"],
+     "media": {
+      "screenshot": "/assets/software/un-virtual-eye-tracker/screenshot-0.png",
+      "icon": "/assets/software/un-virtual-eye-tracker/icon.png"
+     }
+    }
+   ]
+  }
+ ]
+}

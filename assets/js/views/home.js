@@ -1,5 +1,4 @@
 // assets/js/views/home.js
-import { fetchLatestActivity } from '#api/aggregate-latest.js';
 import { SOURCES } from '#api/config.js';
 
 export async function mount()
@@ -7,6 +6,7 @@ export async function mount()
  console.log('Home page mounted');
  const grid = document.getElementById('latest-grid');
  if (!grid) return;
+ const { fetchLatestActivity } = await import('#api/aggregate-latest.js?v=20260528');
  grid.innerHTML = '';
  // Try to render subtle live embed if streaming now
  setupHeroLive().catch(() => { });
@@ -31,9 +31,9 @@ export async function mount()
 function renderLatestCard(it)
 {
  const a = document.createElement('article');
- const cutClass = it.kind === 'clip' ? 'card--clip' : it.kind === 'vod' ? 'card--vod' : 'card--map';
+ const cutClass = it.kind === 'clip' ? 'card--clip' : it.kind === 'vod' ? 'card--vod' : it.kind === 'release' ? 'card--release' : 'card--map';
  a.className = `card ${cutClass}`;
- const tag = it.kind === 'clip' ? 'Clip' : it.kind === 'vod' ? 'VOD' : (it.provider === 'youtube' ? 'YouTube' : 'Archive');
+ const tag = it.kind === 'clip' ? 'Clip' : it.kind === 'vod' ? 'VOD' : it.kind === 'release' ? 'Release' : (it.provider === 'youtube' ? 'YouTube' : 'Archive');
  const thumb = resolveItemThumb(it);
  const isPlayable = isPlayableItem(it);
  a.innerHTML = `
@@ -75,6 +75,7 @@ function renderLatestCard(it)
 function isPlayableItem(it)
 {
  if (!it || !it.id) return false;
+ if (it.provider === 'github' && it.url) return true;
  return (it.provider === 'twitch' && (it.kind === 'clip' || it.kind === 'vod'))
   || (it.provider === 'youtube');
 }
@@ -104,6 +105,11 @@ function buildAltThumb(url)
 
 function openDetailEmbed(item)
 {
+ if (item.provider === 'github' && item.url)
+ {
+  window.open(item.url, '_blank', 'noopener');
+  return;
+ }
  const panel = document.getElementById('detail');
  const body = document.getElementById('detail-body');
  if (!panel || !body || !item?.id) return;
@@ -216,10 +222,22 @@ async function setupHeroLive()
 
 // --- Hero Ambient (flow-field particle background) ---
 let __ambientStop = null;
+async function waitForHeroBox(hero)
+{
+ for (let i = 0; i < 30; i++)
+ {
+  const r = hero.getBoundingClientRect();
+  if (r.width > 0 && r.height > 0) return r;
+  await new Promise(resolve => requestAnimationFrame(resolve));
+ }
+ return hero.getBoundingClientRect();
+}
+
 async function startHeroAmbient()
 {
  try
  {
+  try { __ambientStop?.(); __ambientStop = null; } catch { }
   const cvs = document.getElementById('hero-ambient');
   if (!cvs) return;
   const hero = cvs.closest('.hero');
@@ -227,15 +245,18 @@ async function startHeroAmbient()
   if (!ctx || !hero) return;
   const dpr = Math.min(2, window.devicePixelRatio || 1);
   const prefersReduce = matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
+  await waitForHeroBox(hero);
   function resize()
   {
    const r = hero.getBoundingClientRect();
+   if (r.width <= 0 || r.height <= 0) return false;
    cvs.width = Math.floor(r.width * dpr);
    cvs.height = Math.floor(r.height * dpr);
    cvs.style.width = r.width + 'px';
    cvs.style.height = r.height + 'px';
+   return true;
   }
-  resize();
+  if (!resize()) return;
   let rafId = 0;
   // Flow-field based on simple sine noise; many particles leave soft trails
   const count = prefersReduce ? 600 : 1400;
@@ -310,6 +331,7 @@ async function startHeroLife()
 {
  try
  {
+  try { __lifeStop?.(); __lifeStop = null; } catch { }
   const cvs = document.getElementById('hero-life');
   if (!cvs) return;
   const hero = cvs.closest('.hero');
@@ -317,15 +339,18 @@ async function startHeroLife()
   if (!ctx || !hero) return;
   const dpr = Math.min(2, window.devicePixelRatio || 1);
   const prefersReduce = matchMedia?.('(prefers-reduced-motion: reduce)')?.matches === true;
+  await waitForHeroBox(hero);
   function resize()
   {
    const r = hero.getBoundingClientRect();
+   if (r.width <= 0 || r.height <= 0) return false;
    cvs.width = Math.floor(r.width * dpr);
    cvs.height = Math.floor(r.height * dpr);
    cvs.style.width = r.width + 'px';
    cvs.style.height = r.height + 'px';
+   return true;
   }
-  resize();
+  if (!resize()) return;
   let rafId = 0;
   const cellSize = prefersReduce ? 10 : 8; // px at CSS pixel
   const w = () => Math.floor(cvs.width / (cellSize * dpr));

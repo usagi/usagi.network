@@ -1,10 +1,25 @@
 <!-- assets/views/artwork.html -->
 <h2>Artwork</h2>
-<section class="wip" aria-live="polite">
-  <div class="wip__stripe wip__stripe--top" aria-hidden="true"></div>
-  <div class="wip__body">
-    <p class="wip__msg">このページは制作中です</p>
-    <p class="wip__sub">イラストやスクリーンショット等のギャラリーを準備しています。</p>
+
+<div class="music-note" role="note">
+ USAGI.NETWORK のキービジュアル、キャラクターアート、制作資料のギャラリーです。<br>
+ イラストの制作には OpenAI / DALL-E などの生成AIも活用されています。
+</div>
+
+<nav class="index-nav" aria-label="Artwork Contents">
+ <span class="index-nav__label">INDEX</span>
+</nav>
+
+<div data-artwork-root></div>
+
+<section id="artwork-viewer" class="artwork-viewer" role="dialog" aria-modal="true"
+ aria-labelledby="artwork-viewer-title" hidden>
+ <button class="artwork-viewer__backdrop" type="button" aria-label="Close"></button>
+ <div class="artwork-viewer__panel">
+  <div class="artwork-viewer__stage">
+   <img class="artwork-viewer__img" alt="">
+   <button class="artwork-viewer__close" type="button" aria-label="Close">×</button>
   </div>
-  <div class="wip__stripe wip__stripe--bottom" aria-hidden="true"></div>
+  <div class="artwork-viewer__title" id="artwork-viewer-title"></div>
+ </div>
 </section>

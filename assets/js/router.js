@@ -1,12 +1,12 @@
 // assets/js/router.js
 const routes = new Map([
- ["home", () => import("./views/home.js")],
- ["stream", () => import("./views/stream.js")],
- ["music", () => import("./views/music.js")],
- ["beatsaber", () => import("./views/beatsaber.js")],
- ["software", () => import("./views/software.js")],
- ["artwork", () => import("./views/artwork.js")],
- ["about", () => import("./views/about.js")],
+ ["home", () => import("./views/home.js?v=20260528")],
+ ["stream", () => import("./views/stream.js?v=20260528")],
+ ["music", () => import("./views/music.js?v=20260528")],
+ ["beatsaber", () => import("./views/beatsaber.js?v=20260528")],
+ ["software", () => import("./views/software.js?v=20260528")],
+ ["artwork", () => import("./views/artwork.js?v=20260528")],
+ ["about", () => import("./views/about.js?v=20260528")],
 ]);
 
 function parse()
@@ -16,9 +16,40 @@ function parse()
 }
 
 let currentMod = null;
+let currentRoute = null;
+
+function escapeSelectorId(id)
+{
+ return CSS?.escape ? CSS.escape(id) : id;
+}
+
+function scrollToAnchorInCurrentView(id)
+{
+ if (!id) return false;
+ const candidates = [
+  currentRoute ? document.querySelector(`[data-view="${currentRoute}"]`) : null,
+  document.querySelector('.view[data-view]:not(.is-hidden)'),
+ ];
+ for (const root of candidates)
+ {
+  const target = root?.querySelector(`#${escapeSelectorId(id)}`);
+  if (!target) continue;
+  const topbar = document.querySelector('.topbar');
+  const offset = topbar ? (topbar.getBoundingClientRect().height + 10) : 70;
+  const y = target.getBoundingClientRect().top + window.scrollY - offset;
+  window.scrollTo({ top: y, behavior: 'smooth' });
+  return true;
+ }
+ return false;
+}
 
 export async function navigate(to = parse())
 {
+ if (!routes.has(to))
+ {
+  if (scrollToAnchorInCurrentView(to)) return;
+  to = "home";
+ }
  const fade = document.getElementById('page-fade');
  // Start fade-out (cover)
  if (fade){
@@ -26,7 +57,7 @@ export async function navigate(to = parse())
   await new Promise(r => setTimeout(r, 220));
  }
  try {
-  const loader = routes.get(to) || routes.get("home");
+  const loader = routes.get(to);
   const mod = await loader();                 // ルート別に遅延 import
   // 各ビューは `export async function mount()` を推奨。
   // 互換: default export に関数 or { mount } を持つ場合も許容。
@@ -42,11 +73,14 @@ export async function navigate(to = parse())
   {
    try { await unmountFn(); } catch { /* noop */ }
   }
-  // SPAビュー表示の切替（data-view属性を利用）
   const app = document.getElementById("app");
+  if (app) console.log(`Navigating to ${to}`);
+  // Update active nav immediately so UI reflects intent even if mount fails
+  setActiveNav(to);
+  await mountFn();
+  // SPAビュー表示の切替（data-view属性を利用）。mount後に切り替え、空ビューの露出を避ける。
   if (app)
   {
-   console.log(`Navigating to ${to}`);
    const hero = app.querySelector('.hero[data-view="home"]');
    const homeStrips = app.querySelectorAll('.strip[data-view="home"]');
    const views = app.querySelectorAll('.view[data-view]');
@@ -54,10 +88,8 @@ export async function navigate(to = parse())
    if (hero) hero.classList.toggle('is-hidden', to !== 'home');
    homeStrips.forEach(s => s.classList.toggle('is-hidden', to !== 'home'));
   }
-  // Update active nav immediately so UI reflects intent even if mount fails
-  setActiveNav(to);
-  await mountFn();
   currentMod = mod;
+  currentRoute = routes.has(to) ? to : "home";
  } catch (err) {
   console.warn('Navigation error:', err);
   // Homeへの遷移で失敗したら最低限表示は確保
@@ -90,7 +122,13 @@ function setActiveNav(to){
 
 export function start()
 {
- addEventListener("hashchange", () => navigate());
+ addEventListener("hashchange", () =>
+ {
+  const raw = location.hash.replace(/^#/, "");
+  const bareAnchor = raw && !raw.startsWith("/") && !routes.has(raw.toLowerCase());
+  if (bareAnchor && scrollToAnchorInCurrentView(raw.toLowerCase())) return;
+  navigate();
+ });
  document.querySelectorAll(".nav__link").forEach(a =>
  {
   a.addEventListener("click", (e) =>

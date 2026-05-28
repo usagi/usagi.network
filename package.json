@@ -1,9 +1,12 @@
 {
  "scripts": {
+  "build:artwork": "python scripts/build-artwork-webp.py",
+  "check:content": "node scripts/check-content.cjs",
   "fetch:stream": "node scripts/fetch-stream-data.cjs",
   "fetch:soundcloud": "node scripts/fetch-soundcloud-data.cjs"
  },
  "devDependencies": {
+  "playwright": "^1.60.0",
   "wrangler": "^4.33.1"
  }
 }
