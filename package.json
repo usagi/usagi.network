@@ -9,7 +9,7 @@
   "refresh:software": "node scripts/refresh-software-releases.cjs"
  },
  "devDependencies": {
-  "playwright": "^1.60.0",
-  "wrangler": "^4.33.1"
+  "playwright": "^1.60",
+  "wrangler": "^4.95"
  }
 }
