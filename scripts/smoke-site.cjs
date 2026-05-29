@@ -18,11 +18,17 @@ async function main()
  const browser = await chromium.launch({ headless: true });
  const page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
  const consoleIssues = [];
+ const responseIssues = [];
  page.on('console', msg =>
  {
   if (msg.type() === 'error') consoleIssues.push(msg.text());
  });
  page.on('pageerror', err => consoleIssues.push(err.message));
+ page.on('response', res =>
+ {
+  const status = res.status();
+  if (status >= 400) responseIssues.push(`${status} ${res.url()}`);
+ });
 
  await checkHome(page);
  await checkSoftware(page);
@@ -30,8 +36,15 @@ async function main()
 
  await browser.close();
 
+ const localOrigin = new URL(baseUrl).origin;
+ const relevantResponses = responseIssues.filter(issue =>
+ {
+  const url = issue.replace(/^\d+\s+/, '');
+  try { return new URL(url).origin === localOrigin; } catch { return true; }
+ });
  const relevantIssues = consoleIssues.filter(issue =>
-  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters/i.test(issue));
+  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters|Failed to load resource/i.test(issue));
+ if (relevantResponses.length) fail(`failed local resources:\n${relevantResponses.join('\n')}`);
  if (relevantIssues.length) fail(`console errors:\n${relevantIssues.join('\n')}`);
 
  if (failures.length)
@@ -51,6 +64,7 @@ async function gotoRoute(page, route)
 async function checkHome(page)
 {
  await gotoRoute(page, 'home');
+ await page.waitForFunction(() => document.querySelectorAll('#latest-grid .card').length > 0, null, { timeout: 6000 }).catch(() => { });
  const state = await page.evaluate(() => ({
   releaseCount: [...document.querySelectorAll('#latest-grid .card')]
    .filter(card => card.querySelector('.card__tag')?.textContent === 'Release').length,
