@@ -26,8 +26,8 @@
      "title": "U.N. Motion",
      "tag": "Motion Capture",
      "repo": "usagi/un-motion",
-     "fallbackVersion": "v1.0.0",
-     "fallbackReleaseDate": "2026-05-24T13:41:10Z",
+     "fallbackVersion": "v1.1.0",
+     "fallbackReleaseDate": "2026-05-30T06:17:52Z",
      "description": "Web カメラや VMC/UDP、iFacialMocap 入力から体、顔、手などのモーションを推定・補正し、UNMF/Z または VMC/UDP で出力するモーションキャプチャアプリです。",
      "specs": [
       "Webcam",
