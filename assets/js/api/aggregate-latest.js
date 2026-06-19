@@ -1,6 +1,6 @@
 // Aggregate items from our data JSON and shape them for Home "Latest Activity".
 import { SOURCES } from '#api/config.js';
-import { getLatestGitHubReleases } from '#api/github.js?v=20260528';
+import { getLatestGitHubReleases } from '#api/github.js?v=20260619';
 
 export async function fetchLatestActivity()
 {

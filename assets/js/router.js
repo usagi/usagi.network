@@ -1,12 +1,12 @@
 // assets/js/router.js
 const routes = new Map([
- ["home", () => import("./views/home.js?v=20260528")],
- ["stream", () => import("./views/stream.js?v=20260528")],
- ["music", () => import("./views/music.js?v=20260528")],
- ["beatsaber", () => import("./views/beatsaber.js?v=20260528")],
- ["software", () => import("./views/software.js?v=20260528")],
- ["artwork", () => import("./views/artwork.js?v=20260528")],
- ["about", () => import("./views/about.js?v=20260528")],
+ ["home", () => import("./views/home.js?v=20260619")],
+ ["stream", () => import("./views/stream.js?v=20260619")],
+ ["music", () => import("./views/music.js?v=20260619")],
+ ["beatsaber", () => import("./views/beatsaber.js?v=20260619")],
+ ["software", () => import("./views/software.js?v=20260619")],
+ ["artwork", () => import("./views/artwork.js?v=20260619")],
+ ["about", () => import("./views/about.js?v=20260619")],
 ]);
 
 function parse()

@@ -1,5 +1,5 @@
 // assets/js/main.js
-import { start } from "./router.js?v=20260528";
+import { start } from "./router.js?v=20260619";
 import "./utils/dom.js";        // ensure layout tweaks (top padding) apply immediately
 import "./utils/bgm-ui.js";
 

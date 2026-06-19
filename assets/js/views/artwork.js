@@ -1,5 +1,5 @@
 // assets/js/views/artwork.js
-import { initImageLightbox, initIndexNav } from '#utils/page.js?v=20260528';
+import { initImageLightbox, initIndexNav } from '#utils/page.js?v=20260619';
 
 function ensureSection(){
 	let view = document.querySelector('[data-view="artwork"]');

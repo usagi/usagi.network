@@ -1,6 +1,6 @@
 // assets/js/views/software.js
-import { getLatestGitHubVersion } from '#api/github.js?v=20260528';
-import { initIndexNav } from '#utils/page.js?v=20260528';
+import { getLatestGitHubVersion } from '#api/github.js?v=20260619';
+import { initIndexNav } from '#utils/page.js?v=20260619';
 
 function ensureSection(){
 	let view = document.querySelector('[data-view="software"]');

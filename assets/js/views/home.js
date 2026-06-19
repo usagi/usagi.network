@@ -6,7 +6,7 @@ export async function mount()
  console.log('Home page mounted');
  const grid = document.getElementById('latest-grid');
  if (!grid) return;
- const { fetchLatestActivity } = await import('#api/aggregate-latest.js?v=20260528');
+ const { fetchLatestActivity } = await import('#api/aggregate-latest.js?v=20260619');
  grid.innerHTML = '';
  // Try to render subtle live embed if streaming now
  setupHeroLive().catch(() => { });
