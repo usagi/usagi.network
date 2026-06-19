@@ -8,11 +8,22 @@
      "title": "U.N. Avatar",
      "tag": "Avatar Renderer",
      "repo": "usagi/un-avatar",
+     "links": [
+      {
+       "label": "U.N. Avatar Official Web",
+       "url": "https://usagi.github.io/un-avatar/"
+      }
+     ],
      "fallbackVersion": "v1.0.0",
      "fallbackReleaseDate": "2026-05-27T12:52:42Z",
-     "description": "UNMF/Z または VMC/UDP のモーション入力を受け、VRM / glTF アバターを軽快に描画する仮想アバターレンダラーです。透過ウィンドウ、スクリーンショット保存、Spout2 Sender 出力に対応します。",
+     "description": "UNMF/Z または VMC/UDP のモーション入力を受け、VRM / MToon / SpringBone, VRC 向けモデル / lilToon / PhysBone のアバターを軽快に描画する仮想アバターレンダラーです。透過ウィンドウ、スクリーンショット保存、Spout2 Sender 出力に対応します。",
      "specs": [
-      "VRM / glTF",
+      "VRM",
+      "MToon",
+      "SpringBone",
+      "VRC 向けモデル",
+      "lilToon",
+      "PhysBone",
       "UNMF/Z",
       "VMC/UDP",
       "Spout2"

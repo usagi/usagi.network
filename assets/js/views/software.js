@@ -76,6 +76,9 @@ function renderSoftwareCard(item)
 	article.dataset.githubRepo = item.repo || '';
 	article.setAttribute('role', 'listitem');
 	const specs = (item.specs || []).map(spec => `<span>${escapeHtml(spec)}</span>`).join('');
+	const extraLinks = (item.links || []).map(link =>
+		`<a class="btn btn--ghost" href="${escapeAttr(link.url || '')}" target="_blank" rel="noopener">${escapeHtml(link.label || '')}</a>`
+	).join('');
 	article.innerHTML = `
 		<div class="feature__media software-media">
 			<img class="software-media__shot" src="${escapeAttr(item.media?.screenshot || '')}" alt="${escapeAttr(item.title)} screenshot" loading="lazy" decoding="async">
@@ -92,6 +95,7 @@ function renderSoftwareCard(item)
 			<div class="feature__actions">
 				<a class="btn" href="${escapeAttr(repoUrl)}" target="_blank" rel="noopener">Repository</a>
 				<a class="btn btn--ghost" href="${escapeAttr(repoUrl)}/releases" target="_blank" rel="noopener" data-role="releases">Releases</a>
+				${extraLinks}
 			</div>
 		</div>`;
 	return article;
