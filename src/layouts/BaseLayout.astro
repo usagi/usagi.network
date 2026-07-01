@@ -55,8 +55,11 @@ const canonicalUrl = new URL(canonical || Astro.url.pathname, site.url).toString
   <main id="app" class="app" role="main">
    <slot />
   </main>
+  <section id="detail" class="detail" hidden aria-label="Embedded media">
+   <button class="detail__close" type="button" aria-label="Close">&times;</button>
+   <div id="detail-body" class="detail__body"></div>
+  </section>
   <script type="module" src="/assets/js/utils/dom.js"></script>
   <script type="module" src="/assets/js/utils/bgm-ui.js"></script>
  </body>
 </html>
-

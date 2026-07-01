@@ -1,6 +1,6 @@
 // Aggregate items from our data JSON and shape them for Home "Latest Activity".
-import { SOURCES } from '#api/config.js';
-import { getLatestGitHubReleases } from '#api/github.js?v=20260619';
+import { SOURCES } from './config.js';
+import { getLatestGitHubReleases } from './github.js?v=20260702';
 
 export async function fetchLatestActivity()
 {
@@ -73,7 +73,7 @@ async function fetchSoftwareReleases()
 function buildReleaseUrl(repo, tag)
 {
  if (!repo) return '';
- const cleanTag = String(tag || '').replace(/^v/i, '');
+ const cleanTag = String(tag || '').trim();
  return cleanTag ? `https://github.com/${repo}/releases/tag/${encodeURIComponent(cleanTag)}` : `https://github.com/${repo}/releases`;
 }
 

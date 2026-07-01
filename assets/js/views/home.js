@@ -1,33 +1,53 @@
 // assets/js/views/home.js
-import { SOURCES } from '#api/config.js';
+import { SOURCES } from '../api/config.js';
+
+let __heroRuntime = null;
 
 export async function mount()
 {
  console.log('Home page mounted');
  const grid = document.getElementById('latest-grid');
- if (!grid) return;
- const { fetchLatestActivity } = await import('#api/aggregate-latest.js?v=20260619');
- grid.innerHTML = '';
  // Try to render subtle live embed if streaming now
  setupHeroLive().catch(() => { });
- // Start subtle ambient background + Life animation
- startHeroAmbient().catch(() => { });
- startHeroLife().catch(() => { });
+ // Prefer the WebGPU hero. Canvas 2D remains a fallback for unsupported browsers.
+ startHeroVisual().catch(() => { });
+ if (!grid) return;
  try
  {
+  const { fetchLatestActivity } = await import('../api/aggregate-latest.js?v=20260702');
   const items = await fetchLatestActivity();
   if (items.length === 0)
   {
-   appendNotice(grid);
+   if (grid.children.length === 0) appendNotice(grid);
    return;
   }
+  grid.innerHTML = '';
   items.forEach((it) => grid.appendChild(renderLatestCard(it)));
  } catch (e)
  {
   console.warn('Latest load failed', e);
-  appendNotice(grid);
+  if (grid.children.length === 0) appendNotice(grid);
  }
 }
+async function startHeroVisual()
+{
+ try
+ {
+  const { startHeroWebGPU } = await import('../hero-webgpu.js?v=20260702');
+  const runtime = await startHeroWebGPU();
+  if (runtime)
+  {
+   __heroRuntime = runtime;
+   return;
+  }
+ } catch (err)
+ {
+  console.warn('WebGPU hero unavailable, using canvas fallback', err);
+ }
+ startHeroAmbient().catch(() => { });
+ startHeroLife().catch(() => { });
+}
+
 function renderLatestCard(it)
 {
  const a = document.createElement('article');
@@ -120,7 +140,7 @@ function openDetailEmbed(item)
  const panel = document.getElementById('detail');
  const body = document.getElementById('detail-body');
  if (!panel || !body || !item?.id) return;
- import('#utils/bgm.js').then(mod => mod.pauseIfPlaying?.()).catch(() => { });
+ import('../utils/bgm.js').then(mod => mod.pauseIfPlaying?.()).catch(() => { });
  const closeBtn = panel.querySelector('.detail__close');
  body.innerHTML = '';
  const wrap = document.createElement('div');
@@ -172,6 +192,7 @@ function escapeHtml(str)
 export function unmount()
 {
  // 必要ならイベント解除・DOM掃除
+ try { __heroRuntime?.stop?.(); __heroRuntime = null; } catch { }
  try { __lifeStop?.(); __lifeStop = null; } catch { }
  try { __ambientStop?.(); __ambientStop = null; } catch { }
 }
@@ -217,7 +238,7 @@ async function setupHeroLive()
  {
   el.classList.add('is-active');
   el.removeAttribute('aria-hidden');
-  import('#utils/bgm.js').then(m => m.pauseIfPlaying?.()).catch(() => { });
+  import('../utils/bgm.js').then(m => m.pauseIfPlaying?.()).catch(() => { });
  });
  // When stream goes offline: hide panel
  player.addEventListener(window.Twitch.Player.OFFLINE, () =>

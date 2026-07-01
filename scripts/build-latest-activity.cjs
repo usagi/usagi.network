@@ -43,7 +43,7 @@ function normalizeVersion(value)
 function buildReleaseUrl(repo, tag)
 {
  if (!repo) return '';
- const cleanTag = String(tag || '').replace(/^v/i, '');
+ const cleanTag = String(tag || '').trim();
  return cleanTag ? `https://github.com/${repo}/releases/tag/${encodeURIComponent(cleanTag)}` : `https://github.com/${repo}/releases`;
 }
 
@@ -92,4 +92,3 @@ function main()
 }
 
 main();
-

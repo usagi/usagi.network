@@ -8,8 +8,10 @@ const items = latestData.items || [];
 <BaseLayout active="home" title="USAGI.NETWORK" description="USAGI.NETWORK official archive for Dr.USAGI streams, music, software, artwork, and essays.">
  <section class="hero" data-view="home">
   <div class="hero__bg"></div>
+  <canvas id="hero-webgpu" class="hero__webgpu" aria-hidden="true"></canvas>
   <canvas id="hero-ambient" class="hero__ambient" aria-hidden="true"></canvas>
   <canvas id="hero-life" class="hero__life" aria-hidden="true"></canvas>
+  <div id="hero-live" class="hero__live" aria-hidden="true"></div>
   <div class="hero__ornaments" aria-hidden="true" role="presentation">
    <div class="orn-chip oc1"></div>
    <div class="orn-chip oc2"></div>
@@ -39,8 +41,13 @@ const items = latestData.items || [];
      </div>
     </div>
    </div>
-  </div>
- </section>
+ </div>
+</section>
+
+<script type="module">
+ import { mount } from '/assets/js/views/home.js?v=20260702';
+ mount().catch(err => console.warn('Home runtime failed', err));
+</script>
 
  <section class="strip">
   <h2 class="strip__title">Latest Activity</h2>
@@ -49,4 +56,3 @@ const items = latestData.items || [];
   </div>
  </section>
 </BaseLayout>
-

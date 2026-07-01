@@ -1,6 +1,24 @@
 {
-  "generated_at": "2026-07-01T15:15:44.036Z",
+  "generated_at": "2026-07-01T15:47:26.263Z",
   "items": [
+    {
+      "id": "release:usagi/un-avatar:v2.1.0",
+      "provider": "github",
+      "kind": "release",
+      "title": "U.N. Avatar v2.1.0",
+      "date": "2026-06-29T11:38:46Z",
+      "thumbnail": "/assets/software/un-avatar/screenshot-0.png",
+      "url": "https://github.com/usagi/un-avatar/releases/tag/v2.1.0"
+    },
+    {
+      "id": "release:usagi/un-motion:v1.1.1",
+      "provider": "github",
+      "kind": "release",
+      "title": "U.N. Motion v1.1.1",
+      "date": "2026-06-28T07:02:07Z",
+      "thumbnail": "/assets/software/un-motion/screenshot-0.png",
+      "url": "https://github.com/usagi/un-motion/releases/tag/v1.1.1"
+    },
     {
       "id": "release:usagi/un-virtual-eye-tracker:v2.0.0",
       "provider": "github",
@@ -8,25 +26,7 @@
       "title": "U.N. Virtual Eye Tracker v2.0.0",
       "date": "2026-05-27T21:32:30Z",
       "thumbnail": "/assets/software/un-virtual-eye-tracker/screenshot-0.png",
-      "url": "https://github.com/usagi/un-virtual-eye-tracker/releases/tag/2.0.0"
-    },
-    {
-      "id": "release:usagi/un-avatar:v1.0.0",
-      "provider": "github",
-      "kind": "release",
-      "title": "U.N. Avatar v1.0.0",
-      "date": "2026-05-27T12:52:42Z",
-      "thumbnail": "/assets/software/un-avatar/screenshot-0.png",
-      "url": "https://github.com/usagi/un-avatar/releases/tag/1.0.0"
-    },
-    {
-      "id": "release:usagi/un-motion:v1.0.0",
-      "provider": "github",
-      "kind": "release",
-      "title": "U.N. Motion v1.0.0",
-      "date": "2026-05-24T13:41:10Z",
-      "thumbnail": "/assets/software/un-motion/screenshot-0.png",
-      "url": "https://github.com/usagi/un-motion/releases/tag/1.0.0"
+      "url": "https://github.com/usagi/un-virtual-eye-tracker/releases/tag/v2.0.0"
     },
     {
       "id": "2550573937",

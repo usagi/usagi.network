@@ -14,8 +14,8 @@
        "url": "https://usagi.github.io/un-avatar/"
       }
      ],
-     "fallbackVersion": "v1.0.0",
-     "fallbackReleaseDate": "2026-05-27T12:52:42Z",
+     "fallbackVersion": "v2.1.0",
+     "fallbackReleaseDate": "2026-06-29T11:38:46Z",
      "description": "UNMF/Z または VMC/UDP のモーション入力を受け、VRM / MToon / SpringBone, VRC 向けモデル / lilToon / PhysBone のアバターを軽快に描画する仮想アバターレンダラーです。透過ウィンドウ、スクリーンショット保存、Spout2 Sender 出力に対応します。",
      "specs": [
       "VRM",
@@ -37,8 +37,8 @@
      "title": "U.N. Motion",
      "tag": "Motion Capture",
      "repo": "usagi/un-motion",
-     "fallbackVersion": "v1.0.0",
-     "fallbackReleaseDate": "2026-05-24T13:41:10Z",
+     "fallbackVersion": "v1.1.1",
+     "fallbackReleaseDate": "2026-06-28T07:02:07Z",
      "description": "Web カメラや VMC/UDP、iFacialMocap 入力から体、顔、手などのモーションを推定・補正し、UNMF/Z または VMC/UDP で出力するモーションキャプチャアプリです。",
      "specs": [
       "Webcam",

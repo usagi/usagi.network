@@ -334,6 +334,12 @@ a:focus-visible {
  border-radius: 18px;
  overflow: visible;
 }
+.app:has(.hero[data-view="home"]) {
+ max-width: min(1366px, calc(100vw - 160px));
+}
+.app:has(.hero[data-view="home"]) #latest-grid {
+ --min: 320px;
+}
 
 /* Each SPA view can host an overlay */
 .view {
@@ -359,15 +365,26 @@ a:focus-visible {
 .hero__bg {
  position: absolute;
  inset: 0;
+ z-index: 0;
  background:
   linear-gradient(135deg, rgba(247, 211, 84, 0.12), transparent 45%),
   radial-gradient(1200px 600px at 10% 110%, rgba(255, 255, 255, 0.06), transparent), url("/image/hero-noise.svg");
  filter: saturate(105%) contrast(105%);
 }
+.hero__webgpu {
+ position: absolute;
+ inset: 0;
+ z-index: 1;
+ width: 100%;
+ height: 100%;
+ mix-blend-mode: screen;
+ opacity: 0.92;
+ pointer-events: none;
+}
 .hero__ambient {
  position: absolute;
  inset: 0;
- z-index: 0;
+ z-index: 1;
  mix-blend-mode: overlay;
  opacity: 0.35;
  pointer-events: none;
@@ -375,15 +392,19 @@ a:focus-visible {
 .hero__life {
  position: absolute;
  inset: 0;
- z-index: 0;
+ z-index: 2;
  mix-blend-mode: screen;
  opacity: 0.45; /* mostly translucent */
  pointer-events: none;
 }
+.hero--webgpu .hero__ambient,
+.hero--webgpu .hero__life {
+ display: none;
+}
 .hero__content {
  position: relative;
  padding: clamp(20px, 6vw, 48px);
- z-index: 1; /* ensure above background/ambient/life layers */
+ z-index: 4; /* ensure above background/ambient/life layers */
 }
 .hero__content::before {
  content: "URTS // SYSTEM ONLINE";
@@ -426,7 +447,7 @@ a:focus-visible {
  position: absolute;
  inset: 0;
  pointer-events: none;
- z-index: 0; /* behind content */
+ z-index: 3;
 }
 /* Small glowing chips */
 .orn-chip { position: absolute; width: 6px; height: 6px; border-radius: 2px; background: #00c0e0; box-shadow: 0 0 10px rgba(0,229,255,0.4); opacity: 0.85; animation: chip-float 8s ease-in-out infinite; }
@@ -1522,6 +1543,9 @@ a:focus-visible {
  font-size: 22px;
 }
 @media (max-width: 760px) {
+ .app:has(.hero[data-view="home"]) {
+  max-width: calc(100vw - 28px);
+ }
  .artwork-viewer__panel {
   inset: 14px;
  }
