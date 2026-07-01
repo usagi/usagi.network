@@ -1,0 +1,62 @@
+---
+import { navItems, site } from '../lib/site.js';
+
+const {
+  title = site.title,
+  description = site.description,
+  active = '',
+  canonical,
+} = Astro.props;
+const pageTitle = title === site.title ? site.title : `${title} | ${site.title}`;
+const canonicalUrl = new URL(canonical || Astro.url.pathname, site.url).toString();
+---
+<!doctype html>
+<html lang="ja">
+ <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <meta name="theme-color" content="#0b0c0f" />
+  <link rel="canonical" href={canonicalUrl} />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={site.title} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonicalUrl} />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="preconnect" href="https://player.twitch.tv" crossorigin />
+  <link rel="stylesheet" href="/assets/styles.css" />
+ </head>
+ <body>
+  <header class="topbar" role="banner" aria-label="Site header">
+   <nav class="nav" aria-label="Primary">
+    {navItems.map(item => (
+     <a class="nav__link" href={item.href} aria-current={item.key === active ? 'page' : undefined}>{item.label}</a>
+    ))}
+   </nav>
+   <div class="brand">
+    <span class="logo">USAGI.NETWORK</span>
+    <small class="affil">/ Dr.USAGI - VStreamer & Creator</small>
+   </div>
+  </header>
+
+  <aside class="side-links" aria-label="Social">
+   <a class="side-links__item tw" href="https://twitch.tv/usaginetwork/" target="_blank" rel="noopener" aria-label="Twitch"><img src="/icons/twitch.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /></a>
+   <a class="side-links__item yt" href="https://www.youtube.com/@usagi.network" target="_blank" rel="noopener" aria-label="YouTube"><img src="/icons/youtube.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /></a>
+   <a class="side-links__item sc" href="https://soundcloud.com/usagi-network" target="_blank" rel="noopener" aria-label="SoundCloud"><img src="/icons/soundcloud.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /></a>
+   <a class="side-links__item bs" href="https://beatsaver.com/profile/168905" target="_blank" rel="noopener" aria-label="BeatSaver"><img src="/icons/beatsaver.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /></a>
+   <a class="side-links__item gh" href="https://github.com/usagi/" target="_blank" rel="noopener" aria-label="GitHub"><img src="/icons/github.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /></a>
+   <a class="side-links__item dc" href="https://discord.gg/JaJhyKUgsA" target="_blank" rel="noopener" aria-label="Discord"><img src="/icons/discord.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /></a>
+   <a class="side-links__item x" href="https://x.com/usagi_network" target="_blank" rel="noopener" aria-label="X"><img src="/icons/x.svg" alt="" width="24" height="24" loading="lazy" decoding="async" /></a>
+  </aside>
+
+  <main id="app" class="app" role="main">
+   <slot />
+  </main>
+  <script type="module" src="/assets/js/utils/dom.js"></script>
+  <script type="module" src="/assets/js/utils/bgm-ui.js"></script>
+ </body>
+</html>
+

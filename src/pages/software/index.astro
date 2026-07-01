@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SoftwareCard from '../../components/SoftwareCard.astro';
+import softwareData from '../../../assets/data/software.json';
+---
+<BaseLayout active="software" title="Software" description="USAGI.NETWORK software for streaming, virtual avatars, motion capture, and game integrations.">
+ <h1>Software</h1>
+ <div class="music-note" role="note">
+  USAGI.NETWORK が制作している、配信・ゲーム連携・仮想アバター向けソフトウェアの一覧です。
+ </div>
+ <nav class="index-nav" aria-label="Software Contents">
+  <span class="index-nav__label">INDEX</span>
+  {(softwareData.groups || []).map(group => <a class="btn" href={`#${group.id}`}>{group.title}</a>)}
+ </nav>
+ {(softwareData.groups || []).map(group => (
+  <section id={group.id} class="strip" aria-labelledby={`${group.id}-title`}>
+   <h2 class="strip__title" id={`${group.id}-title`}>{group.title}</h2>
+   <div class="features" role="list">
+    {(group.items || []).map(item => <SoftwareCard item={item} />)}
+   </div>
+  </section>
+ ))}
+</BaseLayout>
+

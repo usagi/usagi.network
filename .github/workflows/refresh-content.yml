@@ -14,15 +14,16 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Install deps
-        run: |
-          npm --version
+        run: npm ci
 
       - name: Run fetcher
         env:
@@ -35,6 +36,7 @@ jobs:
           node scripts/fetch-stream-data.cjs
           node scripts/fetch-soundcloud-data.cjs
           node scripts/refresh-software-releases.cjs
+          node scripts/build-latest-activity.cjs
 
       - name: Commit changes
         run: |
@@ -43,7 +45,7 @@ jobs:
           else
             git config user.name "github-actions"
             git config user.email "actions@users.noreply.github.com"
-            git add assets/data/stream/*.json assets/data/soundcloud-tracks.json assets/data/software.json
-            git commit -m "chore(data): refresh stream and soundcloud JSON"
-            git push --force origin HEAD:version-1
+            git add assets/data/stream/*.json assets/data/soundcloud-tracks.json assets/data/software.json assets/data/latest-activity.json
+            git commit -m "chore(data): refresh auto data"
+            git push --force origin HEAD:auto-data
           fi

@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import artworkData from '../../../assets/data/artwork.json';
+---
+<BaseLayout active="artwork" title="Artwork" description="USAGI.NETWORK key visuals, character art, and production references.">
+ <h1>Artwork</h1>
+ <div class="music-note" role="note">
+  USAGI.NETWORK のキービジュアル、キャラクターアート、制作資料のギャラリーです。
+ </div>
+ <nav class="index-nav" aria-label="Artwork Contents">
+  <span class="index-nav__label">INDEX</span>
+  {(artworkData.groups || []).map(group => <a class="btn" href={`#${group.id}`}>{group.title}</a>)}
+ </nav>
+ {(artworkData.groups || []).map(group => (
+  <section id={group.id} class="strip">
+   <h2 class="strip__title">{group.title}</h2>
+   <div class={group.layout === 'showcase' ? 'artwork-showcase' : 'artwork-grid artwork-grid--refs'}>
+    {(group.items || []).map(item => (
+     <a class={item.hero ? 'artwork-hero' : `artwork-card${item.wide ? ' artwork-card--wide' : ''}`} href={item.src} target="_blank" rel="noopener">
+      <img src={item.src} alt={item.title} loading="lazy" decoding="async" />
+      <span class={item.hero ? 'artwork-hero__label' : ''}>{item.title}</span>
+     </a>
+    ))}
+   </div>
+  </section>
+ ))}
+</BaseLayout>
+

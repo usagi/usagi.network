@@ -1,0 +1,14 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import fs from 'node:fs';
+import path from 'node:path';
+
+const html = fs.readFileSync(path.resolve('assets/views/beatsaber.html'), 'utf8');
+---
+<BaseLayout active="beatsaber" title="Beat Saber" description="Beat Saber custom assets and tools by USAGI.NETWORK.">
+ <section data-view="beatsaber">
+  <Fragment set:html={html} />
+ </section>
+ <script type="module" src="/assets/js/views/beatsaber-terms.js"></script>
+</BaseLayout>
+

@@ -1,0 +1,20 @@
+---
+import { formatDate, resolveThumb } from '../lib/site.js';
+
+const { item } = Astro.props;
+const kind = item.kind || 'archive';
+const cutClass = kind === 'clip' ? 'card--clip' : kind === 'vod' ? 'card--vod' : kind === 'release' ? 'card--release' : 'card--map';
+const tag = kind === 'clip' ? 'Clip' : kind === 'vod' ? 'VOD' : kind === 'release' ? 'Release' : item.provider === 'youtube' ? 'YouTube' : 'Archive';
+const thumb = resolveThumb(item.thumbnail || item.thumbnail_url || '');
+const href = item.url || '#';
+---
+<a class={`card ${cutClass}`} href={href} target={href.startsWith('http') ? '_blank' : undefined} rel={href.startsWith('http') ? 'noopener' : undefined}>
+ <div class="card__cut"></div>
+ {thumb && <img class="card__thumb" src={thumb} alt="" loading="lazy" decoding="async" />}
+ <div class="card__body">
+  <span class="card__tag">{tag}</span>
+  <h3 class="card__title">{item.title}</h3>
+  <div class="card__date">{formatDate(item.date)}</div>
+ </div>
+</a>
+

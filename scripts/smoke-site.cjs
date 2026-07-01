@@ -1,6 +1,6 @@
 const { chromium } = require('playwright');
 
-const baseUrl = normalizeBase(process.argv[2] || process.env.SITE_URL || 'http://127.0.0.1:8080/');
+const baseUrl = normalizeBase(process.argv[2] || process.env.SITE_URL || 'http://127.0.0.1:4173/');
 const failures = [];
 
 function normalizeBase(value)
@@ -33,6 +33,9 @@ async function main()
  await checkHome(page);
  await checkSoftware(page);
  await checkArtwork(page);
+ await checkEssay(page);
+ await checkMusic(page);
+ await checkStream(page);
 
  await browser.close();
 
@@ -43,7 +46,7 @@ async function main()
   try { return new URL(url).origin === localOrigin; } catch { return true; }
  });
  const relevantIssues = consoleIssues.filter(issue =>
-  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters|Failed to load resource/i.test(issue));
+  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters|SoundCloud|Failed to load resource/i.test(issue));
  if (relevantResponses.length) fail(`failed local resources:\n${relevantResponses.join('\n')}`);
  if (relevantIssues.length) fail(`console errors:\n${relevantIssues.join('\n')}`);
 
@@ -55,70 +58,96 @@ async function main()
  console.log('site smoke ok');
 }
 
-async function gotoRoute(page, route)
+async function gotoPath(page, pathname)
 {
- await page.goto(`${baseUrl}?smoke=${Date.now()}#/${route}`, { waitUntil: 'load' });
- await page.waitForTimeout(1800);
+ await page.goto(new URL(pathname, baseUrl).toString(), { waitUntil: 'load' });
+ await page.waitForTimeout(500);
 }
 
 async function checkHome(page)
 {
- await gotoRoute(page, 'home');
- await page.waitForFunction(() => document.querySelectorAll('#latest-grid .card').length > 0, null, { timeout: 6000 }).catch(() => { });
+ await gotoPath(page, '/');
  const state = await page.evaluate(() => ({
+  title: document.title,
+  navEssay: !!document.querySelector('.nav__link[href="/essay/"]'),
+  latestCount: document.querySelectorAll('#latest-grid .card').length,
   releaseCount: [...document.querySelectorAll('#latest-grid .card')]
    .filter(card => card.querySelector('.card__tag')?.textContent === 'Release').length,
-  life: {
-   width: document.getElementById('hero-life')?.width || 0,
-   height: document.getElementById('hero-life')?.height || 0,
-  },
-  visibleHome: !document.querySelector('.hero[data-view="home"]')?.classList.contains('is-hidden'),
  }));
- if (!state.visibleHome) fail('home: hero is hidden');
- if (state.releaseCount < 3) fail(`home: expected at least 3 release cards, got ${state.releaseCount}`);
- if (state.life.width <= 0 || state.life.height <= 0) fail(`home: life canvas has invalid size ${state.life.width}x${state.life.height}`);
+ if (!/USAGI\.NETWORK/.test(state.title)) fail(`home: invalid title ${state.title}`);
+ if (!state.navEssay) fail('home: Essay nav missing');
+ if (state.latestCount < 6) fail(`home: expected latest cards, got ${state.latestCount}`);
+ if (state.releaseCount < 1) fail(`home: expected release card, got ${state.releaseCount}`);
 }
 
 async function checkSoftware(page)
 {
- await gotoRoute(page, 'software');
+ await gotoPath(page, '/software/');
  const state = await page.evaluate(() => ({
-  cardCount: document.querySelectorAll('[data-view="software"] .software-feature').length,
-  indexCount: document.querySelectorAll('[data-view="software"] .index-nav a').length,
-  versions: [...document.querySelectorAll('[data-view="software"] .software-feature .sub')].map(el => el.textContent),
-  visible: !document.querySelector('[data-view="software"]')?.classList.contains('is-hidden'),
+  cardCount: document.querySelectorAll('.software-feature').length,
+  indexCount: document.querySelectorAll('.index-nav a').length,
+  officialLink: [...document.querySelectorAll('.software-feature a')]
+   .some(a => a.textContent.trim() === 'U.N. Avatar Official Web' && a.href === 'https://usagi.github.io/un-avatar/'),
+  canonical: document.querySelector('link[rel="canonical"]')?.href || '',
  }));
- if (!state.visible) fail('software: view is hidden');
  if (state.indexCount < 1) fail('software: index is empty');
  if (state.cardCount < 3) fail(`software: expected at least 3 cards, got ${state.cardCount}`);
- if (state.versions.some(v => !/^v?\d/.test(v || ''))) fail(`software: invalid versions ${state.versions.join(', ')}`);
+ if (!state.officialLink) fail('software: U.N. Avatar official link missing');
+ if (!state.canonical.endsWith('/software/')) fail(`software: bad canonical ${state.canonical}`);
+ await gotoPath(page, '/software/un-avatar/');
+ const detail = await page.evaluate(() => document.querySelector('h1')?.textContent || '');
+ if (!/U\.N\. Avatar/.test(detail)) fail('software detail: U.N. Avatar page missing');
 }
 
 async function checkArtwork(page)
 {
- await gotoRoute(page, 'artwork');
- const motionLink = page.locator('[data-view="artwork"] .index-nav a[href="#motion-refs"]');
- if (await motionLink.count() !== 1)
- {
-  fail('artwork: Motion References index link missing');
-  return;
- }
- await motionLink.click();
- await page.waitForTimeout(500);
+ await gotoPath(page, '/artwork/');
  const state = await page.evaluate(() => ({
-  cardCount: document.querySelectorAll('[data-view="artwork"] [data-full]').length,
-  hash: location.hash,
-  motionTop: Math.round(document.querySelector('#motion-refs')?.getBoundingClientRect().top ?? -9999),
-  imagesOk: [...document.querySelectorAll('[data-view="artwork"] img')]
+  cardCount: document.querySelectorAll('.artwork-hero, .artwork-card').length,
+  imagesOk: [...document.querySelectorAll('img')]
    .filter(img => img.getAttribute('src'))
    .every(img => img.naturalWidth > 0),
-  visible: !document.querySelector('[data-view="artwork"]')?.classList.contains('is-hidden'),
  }));
- if (!state.visible) fail('artwork: view is hidden');
- if (state.hash !== '#/artwork') fail(`artwork: index click changed route hash to ${state.hash}`);
- if (state.motionTop < 0 || state.motionTop > 520) fail(`artwork: motion section did not scroll into view, top=${state.motionTop}`);
  if (state.cardCount < 8) fail(`artwork: expected at least 8 artwork cards, got ${state.cardCount}`);
  if (!state.imagesOk) fail('artwork: one or more images failed to decode');
+}
+
+async function checkEssay(page)
+{
+ await gotoPath(page, '/essay/');
+ const listCount = await page.locator('.essay-card').count();
+ if (listCount < 1) fail(`essay: expected at least 1 essay, got ${listCount}`);
+ await gotoPath(page, '/essay/taste-geopolitics-fractality/');
+ const state = await page.evaluate(() => ({
+  h1: document.querySelector('h1')?.textContent || '',
+  bodyText: document.querySelector('.essay-body')?.textContent || '',
+  printButton: !!document.querySelector('.essay-actions button'),
+ }));
+ if (!state.h1.includes('味覚地政学のフラクタル性')) fail(`essay detail: bad h1 ${state.h1}`);
+ if (!state.bodyText.includes('味覚地政学のフラクタル性')) fail('essay detail: body text missing');
+ if (!state.printButton) fail('essay detail: print button missing');
+}
+
+async function checkMusic(page)
+{
+ await gotoPath(page, '/music/');
+ const state = await page.evaluate(() => ({
+  tracks: document.querySelectorAll('.features .feature').length,
+  iframe: !!document.querySelector('iframe[src*="soundcloud.com"]'),
+ }));
+ if (state.tracks < 3) fail(`music: expected tracks, got ${state.tracks}`);
+ if (!state.iframe) fail('music: SoundCloud iframe missing');
+}
+
+async function checkStream(page)
+{
+ await gotoPath(page, '/stream/');
+ const state = await page.evaluate(() => ({
+  cards: document.querySelectorAll('.card').length,
+  sections: [...document.querySelectorAll('.strip__title')].map(el => el.textContent),
+ }));
+ if (state.cards < 6) fail(`stream: expected stream cards, got ${state.cards}`);
+ if (!state.sections.some(text => text.includes('Twitch'))) fail('stream: Twitch section missing');
 }
 
 main().catch(err =>
@@ -126,3 +155,4 @@ main().catch(err =>
  console.error(err);
  process.exit(1);
 });
+

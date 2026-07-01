@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import SoftwareCard from '../../components/SoftwareCard.astro';
+import softwareData from '../../../assets/data/software.json';
+
+export function getStaticPaths()
+{
+ const items = (softwareData.groups || []).flatMap(group => (group.items || []).map(item => ({ group, item })));
+ return items.map(({ group, item }) => ({
+  params: { slug: String(item.repo || item.title || '').split('/').pop().toLowerCase() },
+  props: { group, item },
+ }));
+}
+
+const { group, item } = Astro.props;
+---
+<BaseLayout active="software" title={item.title} description={item.description}>
+ <p><a href="/software/">← Software</a></p>
+ <section class="strip" aria-labelledby="software-title">
+  <h1 id="software-title">{item.title}</h1>
+  <p class="music-note">{group.title} / {item.tag}</p>
+  <SoftwareCard item={item} />
+ </section>
+</BaseLayout>

@@ -22,13 +22,19 @@ http.createServer((req, res) =>
  const url = new URL(req.url, `http://${req.headers.host || 'localhost'}`);
  const pathname = decodeURIComponent(url.pathname);
  const rel = pathname === '/' ? 'index.html' : pathname.replace(/^\/+/, '');
- const file = path.resolve(root, rel);
+ let file = path.resolve(root, rel);
  if (!file.startsWith(root))
  {
   res.writeHead(403);
   res.end('Forbidden');
   return;
  }
+ try
+ {
+  if (fs.existsSync(file) && fs.statSync(file).isDirectory()) file = path.join(file, 'index.html');
+  else if (!path.extname(file) && fs.existsSync(`${file}.html`)) file = `${file}.html`;
+  else if (!path.extname(file) && fs.existsSync(path.join(file, 'index.html'))) file = path.join(file, 'index.html');
+ } catch { }
  fs.readFile(file, (err, data) =>
  {
   if (err)

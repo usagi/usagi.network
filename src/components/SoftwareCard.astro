@@ -1,0 +1,28 @@
+---
+const { item } = Astro.props;
+const repoUrl = `https://github.com/${item.repo}`;
+const releaseUrl = `${repoUrl}/releases`;
+---
+<article class="feature software-feature">
+ <div class="feature__media software-media">
+  <img class="software-media__shot" src={item.media?.screenshot || ''} alt={`${item.title} screenshot`} loading="lazy" decoding="async" />
+  <img class="software-media__icon" src={item.media?.icon || ''} alt="" loading="lazy" decoding="async" />
+ </div>
+ <div class="feature__body">
+  <div class="feature__meta">
+   <span class="tag">{item.tag}</span>
+   <span class="sub">{item.fallbackVersion}</span>
+  </div>
+  <h3 class="feature__title">{item.title}</h3>
+  <p class="feature__desc">{item.description}</p>
+  <div class="software-specs" aria-label={`${item.title} features`}>
+   {(item.specs || []).map(spec => <span>{spec}</span>)}
+  </div>
+  <div class="feature__actions">
+   <a class="btn" href={repoUrl} target="_blank" rel="noopener">Repository</a>
+   <a class="btn btn--ghost" href={releaseUrl} target="_blank" rel="noopener">Releases</a>
+   {(item.links || []).map(link => <a class="btn btn--ghost" href={link.url} target="_blank" rel="noopener">{link.label}</a>)}
+  </div>
+ </div>
+</article>
+

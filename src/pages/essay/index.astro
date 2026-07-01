@@ -1,0 +1,25 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getEssays } from '../../lib/essays.js';
+import { formatDate } from '../../lib/site.js';
+
+const essays = getEssays();
+---
+<BaseLayout active="essay" title="Essay" description="Essays and paper-like notes by USAGI.NETWORK.">
+ <h1>Essay</h1>
+ <div class="music-note" role="note">
+  USAGI.NETWORK による essay / paper-like notes のアーカイブです。
+ </div>
+ <div class="features">
+  {essays.map(entry => (
+   <article class="feature essay-card">
+    <div class="feature__body">
+     <div class="feature__meta"><span class="tag">Essay</span><span class="sub">{formatDate(entry.data.date)}</span></div>
+     <h2 class="feature__title"><a href={`/essay/${entry.slug}/`}>{entry.data.title}</a></h2>
+     {entry.data.subtitle && <p class="feature__desc">{entry.data.subtitle}</p>}
+     {entry.data.description && <p>{entry.data.description}</p>}
+    </div>
+   </article>
+  ))}
+ </div>
+</BaseLayout>

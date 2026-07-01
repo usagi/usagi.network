@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ActivityCard from '../../components/ActivityCard.astro';
+import clipsData from '../../../assets/data/stream/twitch-clips.json';
+import vodsData from '../../../assets/data/stream/twitch-vods.json';
+import ytData from '../../../assets/data/stream/youtube-archives.json';
+
+function withUrl(items, provider, kind)
+{
+ return (Array.isArray(items) ? items : []).map(item => ({
+  ...item,
+  provider,
+  kind,
+  date: item.date || item.published_at || item.created_at,
+  thumbnail: item.thumbnail || item.thumbnail_url,
+  url: provider === 'twitch' && kind === 'clip'
+   ? `https://clips.twitch.tv/${item.id}`
+   : provider === 'twitch'
+    ? `https://www.twitch.tv/videos/${item.id}`
+    : `https://www.youtube.com/watch?v=${item.id}`,
+ }));
+}
+
+const clips = withUrl(clipsData, 'twitch', 'clip');
+const vods = withUrl(vodsData, 'twitch', 'vod');
+const yt = withUrl(ytData, 'youtube', 'archive');
+---
+<BaseLayout active="stream" title="Stream" description="Twitch clips, recent VODs, and YouTube archives from USAGI.NETWORK.">
+ <h1>Stream</h1>
+ <div class="music-note" role="note">
+  Dr.USAGI は Twitch で Beat Saber や Arknights または考えて何かを構築するようなゲームの配信を行っています。
+ </div>
+ <section class="strip">
+  <h2 class="strip__title">Twitch 人気クリップ</h2>
+  <div class="grid" role="list">{clips.map(item => <ActivityCard item={item} />)}</div>
+ </section>
+ <section class="strip">
+  <h2 class="strip__title">最近の配信（VOD）</h2>
+  <div class="grid" role="list">{vods.map(item => <ActivityCard item={item} />)}</div>
+ </section>
+ <section class="strip">
+  <h2 class="strip__title">YouTube 過去アーカイブ</h2>
+  <div class="grid" role="list">{yt.map(item => <ActivityCard item={item} />)}</div>
+ </section>
+</BaseLayout>
+
