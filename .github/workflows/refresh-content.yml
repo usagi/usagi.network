@@ -37,6 +37,7 @@ jobs:
           node scripts/fetch-stream-data.cjs
           node scripts/fetch-soundcloud-data.cjs
           node scripts/refresh-software-releases.cjs
+          node scripts/normalize-software-media.cjs
           node scripts/build-latest-activity.cjs
 
       - name: Commit changes

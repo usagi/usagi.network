@@ -1,7 +1,7 @@
 {
  "scripts": {
   "build:ogp": "node scripts/build-ogp.cjs",
-  "build": "npm run build:ogp && node scripts/build-latest-activity.cjs && astro build && node scripts/copy-static-assets.cjs",
+  "build": "node scripts/normalize-software-media.cjs && npm run build:ogp && node scripts/build-latest-activity.cjs && astro build && node scripts/copy-static-assets.cjs",
   "build:artwork": "python scripts/build-artwork-webp.py",
   "build:latest": "node scripts/build-latest-activity.cjs",
   "check:content": "node scripts/check-content.cjs",
