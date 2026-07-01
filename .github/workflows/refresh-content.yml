@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   refresh:
@@ -39,6 +40,8 @@ jobs:
           node scripts/build-latest-activity.cjs
 
       - name: Commit changes
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           if git diff --quiet; then
             echo "No changes to commit";
@@ -48,4 +51,5 @@ jobs:
             git add assets/data/stream/*.json assets/data/soundcloud-tracks.json assets/data/software.json assets/data/latest-activity.json
             git commit -m "chore(data): refresh auto data"
             git push --force origin HEAD:auto-data
+            gh workflow run deploy-pages --ref main
           fi

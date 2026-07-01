@@ -1,7 +1,7 @@
 name: deploy-pages
 on:
   push:
-    branches: [main, auto-data]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -23,6 +23,10 @@ jobs:
           node-version: '24'
       - name: Install Node dependencies
         run: npm ci
+      - name: Overlay auto-refreshed data
+        run: |
+          git fetch origin auto-data --depth=1 || true
+          git checkout FETCH_HEAD -- assets/data || true
       - name: Check content assets
         run: npm run check:content
       - name: Build (Astro)

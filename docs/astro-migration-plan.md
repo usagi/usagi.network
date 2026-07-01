@@ -14,6 +14,9 @@ the existing automated content refresh behavior and improve search/indexability.
 - Keep automatic refresh of external activity data. The site must not depend on
   manual website updates for routine activity.
 - Rename the auto-refreshed data branch role from `version-1` to `auto-data`.
+- Treat `auto-data` as a data persistence branch, not as a Pages deployment
+  branch. GitHub Pages deployment should run from `main`; the build overlays
+  `assets/data` from `auto-data` before rendering.
 - Render searchable HTML at build time, then use client JavaScript only for
   progressive enhancement such as media players, lightboxes, BGM controls, live
   embeds, and optional latest-data refresh.
@@ -42,6 +45,12 @@ scheduled workflow or manual dispatch
   -> persist refreshed JSON to auto-data
 ```
 
+In practice, the refresh workflow persists data to `auto-data` first and then
+dispatches the Pages workflow on `main`. The Pages workflow checks out `main`,
+fetches `auto-data`, overlays `assets/data`, builds Astro, and deploys the
+artifact. This avoids GitHub Pages environment branch restrictions while keeping
+refreshed data separate from hand-authored site code.
+
 The built site should remain usable if external APIs are unavailable. In that
 case, the previous committed JSON data is the fallback source of truth.
 
@@ -64,4 +73,3 @@ case, the previous committed JSON data is the fallback source of truth.
 Essay Markdown files are canonical source documents. The web version is rendered
 as dark-mode HTML. Print/PDF output should use print CSS with a light paper-like
 layout.
-
