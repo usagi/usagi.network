@@ -1,5 +1,5 @@
 <!-- assets/views/beatsaber.html -->
-<h2>Beat Saber</h2>
+<h1>Beat Saber</h1>
 
 <div class="music-note" role="note">
  Beat Saber 向けのプラグイン / カスタムセイバー / カスタムノーツ / カスタムヒットサウンドなどを制作しています。<br>
@@ -17,10 +17,10 @@
  <a class="btn btn--ghost" href="#install">Install & Notes</a>
 </nav>
 
-<section id="plugins" class="strip" aria-labelledby="plugins-title">
- <h3 class="strip__title">Plugins</h3>
+<section id="plugins" class="strip" aria-labelledby="plugins-section-title">
+ <h2 id="plugins-section-title" class="strip__title">Plugins</h2>
  <article role="region" aria-labelledby="plugins-title" class="feature">
-  <div class="feature__media" data-cat="plugin" data-item="unbs-attention"
+  <div class="feature__media" data-cat="plugin" data-item="unbs-attention" data-image-count="0" data-video-count="0"
    data-image-urls="https://raw.githubusercontent.com/usagi/unbs-attention/main/images/ss-0.jpg https://raw.githubusercontent.com/usagi/unbs-attention/main/images/ss-1.jpg"
    aria-hidden="true"></div>
   <div class="feature__body">
@@ -39,11 +39,11 @@
  </article>
 </section>
 
-<section id="sabers" class="strip" aria-labelledby="sabers-title">
- <h3 class="strip__title">Custom Sabers</h3>
+<section id="sabers" class="strip" aria-labelledby="sabers-section-title">
+ <h2 id="sabers-section-title" class="strip__title">Custom Sabers</h2>
  <div role="list" class="features">
   <article role="listitem" class="feature">
-   <div class="feature__media feature__media--saber" data-cat="custom_saber" data-item="vulpisfoglia"
+   <div class="feature__media feature__media--saber" data-cat="custom_saber" data-item="vulpisfoglia" data-image-count="2"
     data-embed-urls="https://youtu.be/V1tgKgxomT4" data-no-local-video="true" aria-hidden="true"></div>
    <div class="feature__body">
     <div class="feature__meta">
@@ -73,10 +73,10 @@
  </div>
 </section>
 
-<section id="notes" class="strip" aria-labelledby="notes-title">
- <h3 class="strip__title">Custom Notes</h3>
+<section id="notes" class="strip" aria-labelledby="notes-section-title">
+ <h2 id="notes-section-title" class="strip__title">Custom Notes</h2>
  <article role="region" aria-labelledby="notes-title" class="feature">
-  <div class="feature__media feature__media--notes" data-cat="custom_note" data-item="usa-notes-00" aria-hidden="true">
+  <div class="feature__media feature__media--notes" data-cat="custom_note" data-item="usa-notes-00" data-image-count="2" data-no-local-video="true" aria-hidden="true">
   </div>
   <div class="feature__body">
    <div class="feature__meta">
@@ -89,7 +89,7 @@
    <p>（※うさぎを斬っているのではありません。うさぎモチーフのノーツを斬っているのです。🐰）</p>
    <div class="feature__actions">
     <a class="btn js-dl" data-item="usa-notes-00" data-cat="custom_note" data-title="usa-notes-00"
-     data-zip="usa-notes-00-1.0.0.zip" href="#" aria-disabled="true">Download</a>
+    data-zip="usa-notes-00-1.0.0/usa-notes-00-1.0.0.zip" href="#" aria-disabled="true">Download</a>
     <a class="btn btn--ghost js-利用規約（同意するとダウンロードできるようになります）" data-role="docs" data-item="usa-notes-00"
      data-cat="custom_note" data-title="usa-notes-00" href="#">利用規約（同意するとダウンロードできるようになります）</a>
    </div>
@@ -97,10 +97,10 @@
  </article>
 </section>
 
-<section id="hitsounds" class="strip" aria-labelledby="hits-title">
- <h3 class="strip__title">Custom Hit Sounds</h3>
+<section id="hitsounds" class="strip" aria-labelledby="hits-section-title">
+ <h2 id="hits-section-title" class="strip__title">Custom Hit Sounds</h2>
  <article role="region" aria-labelledby="hits-title" class="feature">
-  <div class="feature__media feature__media--hits" data-cat="custom_sound" data-item="usa-hit-00"
+  <div class="feature__media feature__media--hits" data-cat="custom_sound" data-item="usa-hit-00" data-image-count="0" data-video-count="0"
    data-embed-urls="https://www.youtube.com/watch?v=SZLqoNMPrUI" aria-hidden="true"></div>
   <div class="feature__body">
    <div class="feature__meta">
@@ -119,10 +119,10 @@
  </article>
 </section>
 
-<section id="cams" class="strip" aria-labelledby="cams-title">
- <h3 class="strip__title">Camera Scripts</h3>
+<section id="cams" class="strip" aria-labelledby="cams-section-title">
+ <h2 id="cams-section-title" class="strip__title">Camera Scripts</h2>
  <article role="region" aria-labelledby="cams-title" class="feature">
-  <div class="feature__media feature__media--notes" data-cat="camera_script" data-item="usa-cam-00"
+  <div class="feature__media feature__media--notes" data-cat="camera_script" data-item="usa-cam-00" data-image-count="0" data-video-count="0"
    data-embed-url="https://clips.twitch.tv/HandsomeYawningVampireKappaClaus-buoO9fqDyZKbW-MC" aria-hidden="true"></div>
   <div class="feature__body">
    <div class="feature__meta">
@@ -142,7 +142,7 @@
 </section>
 
 <section id="install" class="strip" aria-labelledby="install-title">
- <h3 class="strip__title">Install & Notes</h3>
+ <h2 id="install-title" class="strip__title">Install & Notes</h2>
  <div class="list">
   <li>導入: <a href="https://www.bsmanager.io/" target="_blank" rel="noopener">BSManager</a>または手作業などで必要な Mod
    を導入後、<b>CustomSabers</b> | <b>CustomNotes</b> | <b>UserData/SoundReplacer/</b> など対応した

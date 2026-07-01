@@ -20,59 +20,62 @@ export async function mount()
   const res = await fetch('/assets/views/beatsaber.html', { cache: 'no-store' });
   if (!res.ok) throw new Error(`Failed to load beatsaber.html: ${res.status}`);
   view.innerHTML = await res.text();
-  // Set default download hrefs; precise filename resolution is handled in beatsaber-terms.js
-  view.querySelectorAll('.js-dl[data-item][data-cat]')?.forEach(a =>
-  {
-   const cat = a.getAttribute('data-cat');
-   const item = a.getAttribute('data-item');
-   if (cat && item)
-   {
-    const explicit = a.getAttribute('data-zip');
-    const zip = explicit
-     ? `/assets/beatsaber/${cat}/${item}/${explicit}`
-     : `/assets/beatsaber/${cat}/${item}/${item}.zip`;
-    a.setAttribute('href', zip);
-    if (explicit) a.setAttribute('download', explicit);
-   }
-  });
-  // Try to set media backgrounds if an image is present (convention: <item>.jpg|png|webp)
-  view.querySelectorAll('.feature__media[data-item][data-cat]')?.forEach(div =>
-  {
-   const cat = div.getAttribute('data-cat');
-   const item = div.getAttribute('data-item');
-   const candidates = ['webp', 'jpg', 'png'].map(ext => `/assets/beatsaber/${cat}/${item}/${item}.${ext}`);
-   // Optimistically assign the first candidate; static hosting will 404 gracefully if missing
-   div.style.background = `#0b0c0f center/cover no-repeat url('${candidates[0]}')`;
-  });
-
-  // Build left-side sliding galleries (images/videos) for all feature media blocks
-  initFeatureGalleries(view).catch(() => { });
-
-  // Enable in-view smooth scrolling for INDEX links without breaking SPA routing
-  const idxLinks = view.querySelectorAll('.index-nav a[href^="#"]');
-  idxLinks.forEach(link =>
-  {
-   link.addEventListener('click', (e) =>
-   {
-    e.preventDefault();
-    const href = link.getAttribute('href') || '';
-    const id = href.replace(/^#/, '');
-    if (!id) return;
-    const target = view.querySelector(`#${CSS?.escape ? CSS.escape(id) : id}`);
-    if (!target) return;
-    const topbar = document.querySelector('.topbar');
-    const offset = topbar ? (topbar.getBoundingClientRect().height + 10) : 70;
-    const y = target.getBoundingClientRect().top + window.scrollY - offset;
-    window.scrollTo({ top: y, behavior: 'smooth' });
-   });
-  });
-  // Lazy-load terms logic
-  import('./beatsaber-terms.js').catch(() => { });
+  await enhance(view);
  } catch (err)
  {
   console.error(err);
   view.innerHTML = '<p>Failed to load Beat Saber page.</p>';
  }
+}
+
+export async function enhance(root = document.querySelector('[data-view="beatsaber"]') || document)
+{
+ if (!root || root.dataset?.beatsaberEnhanced === 'true') return;
+ if (root.dataset) root.dataset.beatsaberEnhanced = 'true';
+
+ // Set default download hrefs; precise filename resolution is handled in beatsaber-terms.js
+ root.querySelectorAll('.js-dl[data-item][data-cat]')?.forEach(a =>
+ {
+  const cat = a.getAttribute('data-cat');
+  const item = a.getAttribute('data-item');
+  if (cat && item)
+  {
+   const explicit = a.getAttribute('data-zip');
+   const zip = explicit
+    ? `/assets/beatsaber/${cat}/${item}/${explicit}`
+    : `/assets/beatsaber/${cat}/${item}/${item}.zip`;
+   a.setAttribute('href', zip);
+   if (explicit) a.setAttribute('download', explicit.split('/').pop() || explicit);
+  }
+ });
+
+ // Build left-side sliding galleries (images/videos) for all feature media blocks
+ await initFeatureGalleries(root).catch(() => { });
+
+ // Enable in-view smooth scrolling for INDEX links without breaking SPA routing
+ const idxLinks = root.querySelectorAll('.index-nav a[href^="#"]');
+ idxLinks.forEach(link =>
+ {
+  if (link.dataset.beatsaberScrollEnhanced === 'true') return;
+  link.dataset.beatsaberScrollEnhanced = 'true';
+  link.addEventListener('click', (e) =>
+  {
+   e.preventDefault();
+   const href = link.getAttribute('href') || '';
+   const id = href.replace(/^#/, '');
+   if (!id) return;
+   const escape = globalThis.CSS?.escape;
+   const target = root.querySelector(`#${escape ? escape(id) : id}`);
+   if (!target) return;
+   const topbar = document.querySelector('.topbar');
+   const offset = topbar ? (topbar.getBoundingClientRect().height + 10) : 70;
+   const y = target.getBoundingClientRect().top + window.scrollY - offset;
+   window.scrollTo({ top: y, behavior: 'smooth' });
+  });
+ });
+
+ // Lazy-load terms logic after downloads exist.
+ import('./beatsaber-terms.js').catch(() => { });
 }
 
 let __galleryTimers = new Set();
@@ -88,7 +91,7 @@ export function unmount()
  const lb = document.getElementById('lightbox');
  if (lb) { lb.remove(); document.body.style.overflow = ''; }
 }
-export default { mount, unmount };
+export default { mount, enhance, unmount };
 
 // --- Gallery helpers ---
 async function pauseBgmIfPlaying()
@@ -137,12 +140,20 @@ async function initOneGallery(media)
  const imgBase = base + 'image/';
  const vidBase = base + 'media/';
  const noLocalVideo = media.hasAttribute('data-no-local-video');
+ const imageCount = readOptionalCount(media, 'data-image-count');
+ const videoCount = readOptionalCount(media, 'data-video-count');
  // Collect media from the single, correct base
- const imageUrls = await probeSequentialImages(imgBase, 24);
+ const imageUrls = imageCount === null
+  ? await probeSequentialImages(imgBase, 24)
+  : buildSequentialUrls(imgBase, imageCount, media.getAttribute('data-image-ext') || 'jpg');
  const externalImageUrls = (media.getAttribute('data-image-urls') || '')
   .split(/[\s,]+/)
   .filter(Boolean);
- const videoUrls = noLocalVideo ? [] : await probeSequentialVideos(vidBase, 6);
+ const videoUrls = noLocalVideo ? [] : (
+  videoCount === null
+   ? await probeSequentialVideos(vidBase, 6)
+   : buildSequentialUrls(vidBase, videoCount, media.getAttribute('data-video-ext') || 'mp4')
+ );
  const slides = [
   ...externalImageUrls.map(src => ({ type: 'image', src })),
   ...imageUrls.map(src => ({ type: 'image', src })),
@@ -239,6 +250,19 @@ function unique(arr)
  return out;
 }
 
+function readOptionalCount(el, attr)
+{
+ const raw = el.getAttribute(attr);
+ if (raw === null) return null;
+ const parsed = Number.parseInt(raw, 10);
+ return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
+}
+
+function buildSequentialUrls(base, count, ext)
+{
+ return Array.from({ length: count }, (_, i) => `${base}${i}.${ext}`);
+}
+
 async function probeSequentialImages(base, maxCount)
 {
  const results = [];
@@ -266,14 +290,23 @@ async function probeSequentialImages(base, maxCount)
 
 async function urlExists(url)
 {
- // Load actual image to avoid servers that return 200 for HEAD on missing files
  try
  {
+  const res = await fetch(url, { method: 'HEAD', cache: 'no-store' });
+  if (!res.ok) return false;
   await loadImage(url, 3000);
   return true;
  } catch (err)
  {
-  return false;
+  // Cross-origin hosts may reject HEAD even when the image is valid.
+  try
+  {
+   await loadImage(url, 3000);
+   return true;
+  } catch
+  {
+   return false;
+  }
  }
 }
 
@@ -332,37 +365,57 @@ async function probeSequentialSounds(base, maxCount)
 
 function audioExists(src, timeoutMs = 3000)
 {
- return new Promise((resolve) =>
+ return resourceHeadExists(src).then(exists =>
  {
-  const a = new Audio();
-  let done = false;
-  const to = setTimeout(() => { if (!done) { done = true; cleanup(); resolve(false); } }, timeoutMs);
-  function cleanup() { try { a.pause(); a.src = ''; } catch (_) { } clearTimeout(to); }
-  a.preload = 'metadata';
-  a.onloadedmetadata = () => { if (!done) { done = true; cleanup(); resolve(true); } };
-  a.onerror = () => { if (!done) { done = true; cleanup(); resolve(false); } };
-  a.src = src;
+  if (!exists) return false;
+  return new Promise((resolve) =>
+  {
+   const a = new Audio();
+   let done = false;
+   const to = setTimeout(() => { if (!done) { done = true; cleanup(); resolve(false); } }, timeoutMs);
+   function cleanup() { try { a.pause(); a.src = ''; } catch (_) { } clearTimeout(to); }
+   a.preload = 'metadata';
+   a.onloadedmetadata = () => { if (!done) { done = true; cleanup(); resolve(true); } };
+   a.onerror = () => { if (!done) { done = true; cleanup(); resolve(false); } };
+   a.src = src;
+  });
  });
 }
 
 function videoExists(src, timeoutMs = 3000)
 {
- return new Promise((resolve) =>
+ return resourceHeadExists(src).then(exists =>
  {
-  const v = document.createElement('video');
-  let done = false;
-  const to = setTimeout(() => { if (!done) { done = true; cleanup(); resolve(false); } }, timeoutMs);
-  function cleanup()
+  if (!exists) return false;
+  return new Promise((resolve) =>
   {
-   v.removeAttribute('src');
-   try { v.load(); } catch (_) { }
-   clearTimeout(to);
-  }
-  v.preload = 'metadata';
-  v.onloadedmetadata = () => { if (!done) { done = true; cleanup(); resolve(true); } };
-  v.onerror = () => { if (!done) { done = true; cleanup(); resolve(false); } };
-  v.src = src;
+   const v = document.createElement('video');
+   let done = false;
+   const to = setTimeout(() => { if (!done) { done = true; cleanup(); resolve(false); } }, timeoutMs);
+   function cleanup()
+   {
+    v.removeAttribute('src');
+    try { v.load(); } catch (_) { }
+    clearTimeout(to);
+   }
+   v.preload = 'metadata';
+   v.onloadedmetadata = () => { if (!done) { done = true; cleanup(); resolve(true); } };
+   v.onerror = () => { if (!done) { done = true; cleanup(); resolve(false); } };
+   v.src = src;
+  });
  });
+}
+
+async function resourceHeadExists(src)
+{
+ try
+ {
+  const res = await fetch(src, { method: 'HEAD', cache: 'no-store' });
+  return res.ok;
+ } catch
+ {
+  return true;
+ }
 }
 
 // Lightbox modal

@@ -66,17 +66,17 @@ fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
 
  let colony = hash2(x / 5u, y / 4u, params.frame / 96u);
  let spark = hash2(x, y, params.frame);
- let inBand = abs(f32(y) - f32(params.rows) * (0.22 + 0.56 * hash2(x / 17u, 3u, params.frame / 220u))) < 3.0;
- if (params.inject == 1u && inBand && colony > 0.74 && spark > 0.965) {
+ let inBand = abs(f32(y) - f32(params.rows) * (0.20 + 0.60 * hash2(x / 17u, 3u, params.frame / 180u))) < 4.0;
+ if (params.inject == 1u && inBand && colony > 0.68 && spark > 0.94) {
   nextAlive = true;
  }
 
- var heat = max(here.heat * 0.935, 0.0);
+ var heat = max(here.heat * 0.955, 0.0);
  if (nextAlive) {
-  heat = min(1.0, heat + select(0.38, 0.72, !alive));
+  heat = min(1.0, heat + select(0.46, 0.82, !alive));
  }
  if (alive && !nextAlive) {
-  heat = max(heat, 0.32);
+  heat = max(heat, 0.42);
  }
 
  let i = idx(x, y);
@@ -126,7 +126,7 @@ fn vs(@builtin(vertex_index) vertex: u32, @builtin(instance_index) instance: u32
  let y = f32(instance / params.cols);
  let cellSize = vec2<f32>(2.0 / f32(params.cols), 2.0 / f32(params.rows));
  let q = corner(vertex);
- let inset = 0.13 + 0.09 * (1.0 - c.heat);
+ let inset = 0.09 + 0.08 * (1.0 - c.heat);
  let local = mix(vec2<f32>(inset), vec2<f32>(1.0 - inset), q);
  let pos = vec2<f32>(-1.0, -1.0) + (vec2<f32>(x, y) + local) * cellSize;
  var out: VertexOut;
@@ -145,13 +145,15 @@ fn fs(in: VertexOut) -> @location(0) vec4<f32> {
  }
  let edge = min(min(in.uv.x, 1.0 - in.uv.x), min(in.uv.y, 1.0 - in.uv.y));
  let core = smoothstep(0.02, 0.32, edge);
- let cyan = vec3<f32>(0.02, 0.78, 1.0);
- let blue = vec3<f32>(0.1, 0.22, 0.95);
- let gold = vec3<f32>(1.0, 0.78, 0.18);
+ let cyan = vec3<f32>(0.00, 0.92, 1.18);
+ let blue = vec3<f32>(0.04, 0.18, 0.86);
+ let deep = vec3<f32>(0.00, 0.08, 0.24);
+ let gold = vec3<f32>(1.0, 0.78, 0.16);
  let phase = fract(in.seed * 19.13);
- var color = mix(blue, cyan, 0.55 + 0.35 * phase);
- color = mix(color, gold, in.alive * smoothstep(0.86, 1.0, in.heat) * 0.32);
- let alpha = clamp(in.heat * (0.16 + 0.68 * in.alive) * (0.58 + core * 0.42), 0.0, 0.82);
+ var color = mix(deep, blue, 0.35 + in.heat * 0.5);
+ color = mix(color, cyan, (0.48 + 0.38 * phase) * smoothstep(0.16, 0.92, in.heat));
+ color = mix(color, gold, in.alive * smoothstep(0.9, 1.0, in.heat) * 0.18);
+ let alpha = clamp(in.heat * (0.28 + 0.76 * in.alive) * (0.46 + core * 0.62), 0.0, 0.96);
  return vec4<f32>(color * alpha, alpha);
 }
 `;
@@ -233,16 +235,16 @@ export async function startHeroWebGPU()
   {
    const x = i % cols;
    const y = Math.floor(i / cols);
-   const band = Math.abs(y / rows - (0.22 + 0.56 * next()));
-   const clustered = band < 0.12 && next() > 0.78;
-   const colony = next() > 0.985;
+   const band = Math.abs(y / rows - (0.2 + 0.6 * next()));
+   const clustered = band < 0.15 && next() > 0.68;
+   const colony = next() > 0.975;
    const alive = clustered || colony;
    data[i * 4] = alive ? 1 : 0;
    data[i * 4 + 1] = alive ? 0.85 : 0;
    data[i * 4 + 2] = next();
   }
   const glider = [[0, 1], [1, 2], [2, 0], [2, 1], [2, 2]];
-  for (let g = 0; g < 18; g++)
+  for (let g = 0; g < 30; g++)
   {
    const ox = Math.floor(next() * Math.max(1, cols - 4));
    const oy = Math.floor(next() * Math.max(1, rows - 4));

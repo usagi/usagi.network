@@ -33,7 +33,7 @@ async function startHeroVisual()
 {
  try
  {
-  const { startHeroWebGPU } = await import('../hero-webgpu.js?v=20260702');
+  const { startHeroWebGPU } = await import('../hero-webgpu.js?v=20260702-hero2');
   const runtime = await startHeroWebGPU();
   if (runtime)
   {
@@ -386,7 +386,7 @@ async function startHeroLife()
   let grid = new Uint8Array(w() * h());
   function seed()
   {
-   for (let i = 0; i < grid.length; i++) grid[i] = Math.random() < 0.18 ? 1 : 0;
+   for (let i = 0; i < grid.length; i++) grid[i] = Math.random() < 0.24 ? 1 : 0;
   }
   function idx(x, y) { return y * w() + x; }
   function step()
@@ -426,10 +426,10 @@ async function startHeroLife()
   // Gradient mapper (cyan→amber range)
   function colorAt(u)
   { // u: 0..1
-   const hue = 190 + 30 * u + 20 * Math.sin(u * 6.283);
-   const sat = 85;
-   const light = 50 + 10 * u;
-   return `hsla(${hue}, ${sat}%, ${light}%, 0.9)`;
+   const hue = 198 + 24 * u + 12 * Math.sin(u * 6.283);
+   const sat = 96;
+   const light = 38 + 24 * u;
+   return `hsla(${hue}, ${sat}%, ${light}%, 0.96)`;
   }
   // Tiny bokeh particles
   const particles = []; const pCount = prefersReduce ? 0 : 24;
@@ -452,7 +452,7 @@ async function startHeroLife()
    const wave = (Math.sin(t / 1800) + 1) / 2; // 0..1
    // fade the accumulation slightly
    actx.globalCompositeOperation = 'source-over';
-   actx.fillStyle = prefersReduce ? 'rgba(0,0,0,0.12)' : 'rgba(0,0,0,0.08)';
+   actx.fillStyle = prefersReduce ? 'rgba(0,0,0,0.11)' : 'rgba(0,0,0,0.065)';
    actx.fillRect(0, 0, accum.width, accum.height);
    // draw alive cells to accumulation with gradient + noise modulation
    for (let y = 0; y < nh; y++)
@@ -509,7 +509,8 @@ async function startHeroLife()
    ctx.save();
    const vg = ctx.createRadialGradient(cvs.width * 0.5, cvs.height * 0.55, Math.min(cvs.width, cvs.height) * 0.2, cvs.width * 0.5, cvs.height * 0.55, Math.hypot(cvs.width, cvs.height) * 0.6);
    vg.addColorStop(0, 'rgba(0,0,0,0)');
-   vg.addColorStop(1, 'rgba(0,0,0,0.18)');
+   vg.addColorStop(0.72, 'rgba(0,0,0,0.10)');
+   vg.addColorStop(1, 'rgba(0,0,0,0.34)');
    ctx.fillStyle = vg; ctx.fillRect(0, 0, cvs.width, cvs.height);
    ctx.restore();
   }

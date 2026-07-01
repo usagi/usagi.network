@@ -2,6 +2,11 @@
 const { item } = Astro.props;
 const repoUrl = `https://github.com/${item.repo}`;
 const releaseUrl = `${repoUrl}/releases`;
+const actions = [
+ { label: 'Repository', url: repoUrl, kind: 'primary' },
+ { label: 'Releases', url: releaseUrl, kind: 'secondary' },
+ ...(item.links || []).map(link => ({ label: link.label, url: link.url, kind: 'secondary' })),
+];
 ---
 <article class="feature software-feature">
  <div class="feature__media software-media">
@@ -18,11 +23,13 @@ const releaseUrl = `${repoUrl}/releases`;
   <div class="software-specs" aria-label={`${item.title} features`}>
    {(item.specs || []).map(spec => <span>{spec}</span>)}
   </div>
-  <div class="feature__actions">
-   <a class="btn" href={repoUrl} target="_blank" rel="noopener">Repository</a>
-   <a class="btn btn--ghost" href={releaseUrl} target="_blank" rel="noopener">Releases</a>
-   {(item.links || []).map(link => <a class="btn btn--ghost" href={link.url} target="_blank" rel="noopener">{link.label}</a>)}
+  <div class="software-actions" aria-label={`${item.title} links`}>
+   <span class="software-actions__label">External Links</span>
+   <div class="software-actions__links">
+    {actions.map(action => (
+     <a class={`btn ${action.kind === 'primary' ? '' : 'btn--ghost'}`} href={action.url} target="_blank" rel="noopener">{action.label}</a>
+    ))}
+   </div>
   </div>
  </div>
 </article>
-

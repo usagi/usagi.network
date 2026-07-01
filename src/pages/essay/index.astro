@@ -8,18 +8,41 @@ const essays = getEssays();
 <BaseLayout active="essay" title="Essay" description="Essays and paper-like notes by USAGI.NETWORK.">
  <h1>Essay</h1>
  <div class="music-note" role="note">
-  USAGI.NETWORK による essay / paper-like notes のアーカイブです。
+  USAGI.NETWORK による essay / paper-like notes のアーカイブです。知識、味覚、技術、文化の境界を横断する短い試論を収録します。
  </div>
- <div class="features">
+ <section class="essay-index" aria-label="Essay archive">
   {essays.map(entry => (
-   <article class="feature essay-card">
-    <div class="feature__body">
-     <div class="feature__meta"><span class="tag">Essay</span><span class="sub">{formatDate(entry.data.date)}</span></div>
-     <h2 class="feature__title"><a href={`/essay/${entry.slug}/`}>{entry.data.title}</a></h2>
-     {entry.data.subtitle && <p class="feature__desc">{entry.data.subtitle}</p>}
-     {entry.data.description && <p>{entry.data.description}</p>}
-    </div>
+   <article class="essay-card">
+    <a class="essay-card__link" href={`/essay/${entry.slug}/`}>
+     <div class="essay-card__rail">
+      <span class="essay-card__type">Essay</span>
+      <time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time>
+     </div>
+     <div class="essay-card__body">
+      <p class="essay-card__kicker">USAGI.NETWORK Knowledge Archive</p>
+      <h2>{entry.data.title}</h2>
+      {entry.data.subtitle && <p class="essay-card__subtitle">{entry.data.subtitle}</p>}
+      {entry.data.description && <p class="essay-card__abstract">{entry.data.description}</p>}
+      <dl class="essay-card__details">
+       <div>
+        <dt>Author</dt>
+        <dd>{entry.data.author}</dd>
+       </div>
+       <div>
+        <dt>Published</dt>
+        <dd><time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time></dd>
+       </div>
+      </dl>
+      {entry.data.tags?.length > 0 && (
+       <div class="essay-card__keywords" aria-label="Keywords">
+        <span>Keywords</span>
+        <p>{entry.data.tags.slice(0, 4).join(', ')}</p>
+       </div>
+      )}
+      <p class="essay-readtime" aria-label="Estimated reading time">{entry.readingMinutes} min read</p>
+     </div>
+    </a>
    </article>
   ))}
- </div>
+ </section>
 </BaseLayout>

@@ -1,11 +1,28 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import artworkData from '../../../assets/data/artwork.json';
+
+const withVersion = (src) => {
+ const version = artworkData.cacheVersion;
+ if (!src || !version) return src || '';
+ return `${src}${src.includes('?') ? '&' : '?'}v=${encodeURIComponent(version)}`;
+};
+
+const renderCardClass = (item, forceHero = false) =>
+ forceHero || item.hero ? 'artwork-hero' : `artwork-card${item.wide ? ' artwork-card--wide' : ''}`;
+
+const renderArtworkButtonAttrs = (item) => ({
+ type: 'button',
+ 'data-full': withVersion(item.src),
+ 'data-title': item.title || 'Artwork',
+ 'aria-label': `Open ${item.title || 'Artwork'}`
+});
 ---
 <BaseLayout active="artwork" title="Artwork" description="USAGI.NETWORK key visuals, character art, and production references.">
  <h1>Artwork</h1>
  <div class="music-note" role="note">
   USAGI.NETWORK のキービジュアル、キャラクターアート、制作資料のギャラリーです。
+  <br />イラストの制作には OpenAI / DALL-E などの生成AIも活用されています。
  </div>
  <nav class="index-nav" aria-label="Artwork Contents">
   <span class="index-nav__label">INDEX</span>
@@ -14,15 +31,58 @@ import artworkData from '../../../assets/data/artwork.json';
  {(artworkData.groups || []).map(group => (
   <section id={group.id} class="strip">
    <h2 class="strip__title">{group.title}</h2>
-   <div class={group.layout === 'showcase' ? 'artwork-showcase' : 'artwork-grid artwork-grid--refs'}>
-    {(group.items || []).map(item => (
-     <a class={item.hero ? 'artwork-hero' : `artwork-card${item.wide ? ' artwork-card--wide' : ''}`} href={item.src} target="_blank" rel="noopener">
-      <img src={item.src} alt={item.title} loading="lazy" decoding="async" />
-      <span class={item.hero ? 'artwork-hero__label' : ''}>{item.title}</span>
-     </a>
-    ))}
-   </div>
+   {group.layout === 'showcase' ? (
+    <div class="artwork-showcase">
+     {(() => {
+      const items = group.items || [];
+      const hero = items.find(item => item.hero) || items[0];
+      const rest = items.filter(item => item !== hero);
+      return (
+       <>
+        {hero && (
+         <button class={renderCardClass(hero, true)} {...renderArtworkButtonAttrs(hero)}>
+          <img src={withVersion(hero.src)} alt={hero.title} loading="lazy" decoding="async" />
+          <span class="artwork-hero__label">{hero.title}</span>
+         </button>
+        )}
+        <div class="artwork-grid">
+         {rest.map(item => (
+          <button class={renderCardClass(item)} {...renderArtworkButtonAttrs(item)}>
+           <img src={withVersion(item.src)} alt={item.title} loading="lazy" decoding="async" />
+           <span>{item.title}</span>
+          </button>
+         ))}
+        </div>
+       </>
+      );
+     })()}
+    </div>
+   ) : (
+   <div class="artwork-grid artwork-grid--refs">
+     {(group.items || []).map(item => (
+      <button class={renderCardClass(item)} {...renderArtworkButtonAttrs(item)}>
+       <img src={withVersion(item.src)} alt={item.title} loading="lazy" decoding="async" />
+       <span>{item.title}</span>
+      </button>
+     ))}
+    </div>
+   )}
   </section>
  ))}
+ <section id="artwork-viewer" class="artwork-viewer" role="dialog" aria-modal="true" aria-labelledby="artwork-viewer-title" hidden>
+  <button class="artwork-viewer__backdrop" type="button" aria-label="Close"></button>
+  <div class="artwork-viewer__panel">
+   <div class="artwork-viewer__stage">
+    <img class="artwork-viewer__img" alt="" />
+    <button class="artwork-viewer__close" type="button" aria-label="Close">×</button>
+   </div>
+   <div class="artwork-viewer__title" id="artwork-viewer-title"></div>
+  </div>
+ </section>
+ <script type="module">
+  import { initImageLightbox, initIndexNav } from '/assets/js/utils/page.js';
+  const root = document.querySelector('#artwork-viewer')?.closest('main') || document;
+  initIndexNav(root);
+  initImageLightbox(root);
+ </script>
 </BaseLayout>
-

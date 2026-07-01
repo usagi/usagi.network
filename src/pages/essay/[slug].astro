@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { getEssays } from '../../lib/essays.js';
-import { formatDate } from '../../lib/site.js';
+import { formatDate, site } from '../../lib/site.js';
 
 export async function getStaticPaths()
 {
@@ -10,16 +10,71 @@ export async function getStaticPaths()
 }
 
 const { entry } = Astro.props;
+const canonicalUrl = new URL(`/essay/${entry.slug}/`, site.url).toString();
+const imageUrl = new URL(site.image, site.url).toString();
+const articleJsonLd = {
+ '@context': 'https://schema.org',
+ '@type': 'Article',
+ headline: entry.data.title,
+ description: entry.data.description || entry.data.subtitle || '',
+ author: {
+  '@type': 'Organization',
+  name: entry.data.author,
+  url: site.url,
+ },
+ publisher: {
+  '@type': 'Organization',
+  name: site.title,
+  url: site.url,
+  logo: {
+   '@type': 'ImageObject',
+   url: imageUrl,
+   width: 1200,
+   height: 630,
+  },
+ },
+ datePublished: entry.data.date.toISOString(),
+ dateModified: entry.data.date.toISOString(),
+ mainEntityOfPage: canonicalUrl,
+ inLanguage: entry.data.lang,
+ keywords: entry.data.tags.join(', '),
+ image: imageUrl,
+};
 ---
-<BaseLayout active="essay" title={entry.data.title} description={entry.data.description || entry.data.subtitle || ''}>
+<BaseLayout
+ active="essay"
+ title={entry.data.title}
+ description={entry.data.description || entry.data.subtitle || ''}
+ ogType="article"
+ author={entry.data.author}
+ publishedTime={entry.data.date.toISOString()}
+ tags={entry.data.tags}
+ jsonLd={articleJsonLd}
+>
  <article class="essay-article">
   <header class="essay-head">
-   <p><a href="/essay/">← Essay</a></p>
+   <a class="essay-back" href="/essay/">Essay Archive</a>
+   <p class="essay-kicker">USAGI.NETWORK Knowledge Archive</p>
    <h1>{entry.data.title}</h1>
    {entry.data.subtitle && <p class="essay-subtitle">{entry.data.subtitle}</p>}
-   <p class="essay-byline">{entry.data.author} / {formatDate(entry.data.date)}</p>
-   {entry.data.tags?.length > 0 && <p class="essay-tags">{entry.data.tags.map(tag => <span>{tag}</span>)}</p>}
+   <div class="essay-author">
+    <span class="essay-author__label">Author</span>
+    <span class="essay-author__name">{entry.data.author}</span>
+   </div>
+   <dl class="essay-paper-meta">
+    <div>
+     <dt>Published</dt>
+     <dd><time datetime={entry.data.date.toISOString()}>{formatDate(entry.data.date)}</time></dd>
+    </div>
+   </dl>
+   {entry.data.tags?.length > 0 && (
+    <div class="essay-keywords">
+     <span class="essay-keywords__label">Keywords</span>
+     <p>{entry.data.tags.join(', ')}</p>
+    </div>
+   )}
    <div class="feature__actions essay-actions">
+    <span class="essay-readtime" aria-label="Estimated reading time">{entry.readingMinutes} min read</span>
     <button class="btn" type="button" onclick="window.print()">Print / PDF</button>
    </div>
   </header>

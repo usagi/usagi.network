@@ -3,11 +3,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const html = fs.readFileSync(path.resolve('assets/views/about.html'), 'utf8')
- .replaceAll('href="#music" data-route="music"', 'href="/music/"')
- .replaceAll('href="#projects" data-route="projects"', 'href="/software/"');
+const html = fs.readFileSync(path.resolve('assets/views/about.html'), 'utf8');
 ---
 <BaseLayout active="about" title="About" description="Personnel dossier for Dr.USAGI / USAGI.NETWORK.">
  <Fragment set:html={html} />
 </BaseLayout>
-

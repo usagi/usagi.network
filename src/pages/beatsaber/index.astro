@@ -9,6 +9,8 @@ const html = fs.readFileSync(path.resolve('assets/views/beatsaber.html'), 'utf8'
  <section data-view="beatsaber">
   <Fragment set:html={html} />
  </section>
- <script type="module" src="/assets/js/views/beatsaber-terms.js"></script>
+ <script type="module">
+  import { enhance } from '/assets/js/views/beatsaber.js?v=20260702-gallery';
+  enhance().catch(err => console.warn('Beat Saber enhancement failed', err));
+ </script>
 </BaseLayout>
-

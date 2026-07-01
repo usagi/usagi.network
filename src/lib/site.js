@@ -2,6 +2,7 @@ export const site = {
   title: 'USAGI.NETWORK',
   description: 'Dr.USAGI / USAGI.NETWORK official website.',
   url: 'https://usagi.network',
+  image: '/ogp/usagi-network.png',
 };
 
 export const navItems = [
@@ -38,4 +39,3 @@ export function resolveThumb(url)
     .replace('%{width}x%{height}', '640x360')
     .replace('{width}x{height}', '640x360');
 }
-

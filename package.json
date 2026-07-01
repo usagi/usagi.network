@@ -1,6 +1,7 @@
 {
  "scripts": {
-  "build": "node scripts/build-latest-activity.cjs && astro build && node scripts/copy-static-assets.cjs",
+  "build:ogp": "node scripts/build-ogp.cjs",
+  "build": "npm run build:ogp && node scripts/build-latest-activity.cjs && astro build && node scripts/copy-static-assets.cjs",
   "build:artwork": "python scripts/build-artwork-webp.py",
   "build:latest": "node scripts/build-latest-activity.cjs",
   "check:content": "node scripts/check-content.cjs",
@@ -16,6 +17,7 @@
   "gray-matter": "^4.0.3",
   "marked": "^18.0.5",
   "playwright": "^1.60",
+  "sharp": "^0.35.3",
   "wrangler": "^4.95"
  }
 }

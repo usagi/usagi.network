@@ -263,7 +263,7 @@
         const url = `/assets/beatsaber/${cat}/${item}/${explicit}`;
         try{
           const head = await fetch(url, { method:'HEAD', cache:'no-store' });
-          if(head.ok){ a.setAttribute('href', url); a.setAttribute('download', explicit); return; }
+          if(head.ok){ a.setAttribute('href', url); a.setAttribute('download', explicit.split('/').pop() || explicit); return; }
         }catch{}
         // If HEAD fails, continue to generic candidates below
       }
