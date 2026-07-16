@@ -125,7 +125,7 @@ async function checkSoftware(page)
   canonical: document.querySelector('link[rel="canonical"]')?.href || '',
  }));
  if (state.indexCount < 1) fail('software: index is empty');
- if (state.cardCount < 3) fail(`software: expected at least 3 cards, got ${state.cardCount}`);
+ if (state.cardCount < 4) fail(`software: expected at least 4 cards, got ${state.cardCount}`);
  if (!state.screenshotSources.every(src => src.endsWith('.webp'))) {
   fail(`software: screenshots should use WebP\n${state.screenshotSources.join('\n')}`);
  }
@@ -134,6 +134,16 @@ async function checkSoftware(page)
  await gotoPath(page, '/software/un-avatar/');
  const detail = await page.evaluate(() => document.querySelector('h1')?.textContent || '');
  if (!/U\.N\. Avatar/.test(detail)) fail('software detail: U.N. Avatar page missing');
+ await gotoPath(page, '/software/un-vrc-perfectsync/');
+ const perfectSync = await page.evaluate(() => ({
+  h1: document.querySelector('h1')?.textContent || '',
+  imageWidth: document.querySelector('.software-media__shot')?.naturalWidth || 0,
+  officialLink: [...document.querySelectorAll('.software-actions a')]
+   .some(a => a.href === 'https://usagi.github.io/un-vrc-perfectsync/'),
+ }));
+ if (!/U\.N\. VRC PerfectSync/.test(perfectSync.h1)) fail('software detail: U.N. VRC PerfectSync page missing');
+ if (perfectSync.imageWidth !== 1920) fail(`software detail: bad PerfectSync image width ${perfectSync.imageWidth}`);
+ if (!perfectSync.officialLink) fail('software detail: PerfectSync official link missing');
 }
 
 async function checkBeatSaber(page)
@@ -184,9 +194,9 @@ async function checkEssay(page)
 {
  await gotoPath(page, '/essay/');
  const listCount = await page.locator('.essay-card').count();
- if (listCount < 1) fail(`essay: expected at least 1 essay, got ${listCount}`);
+ if (listCount < 2) fail(`essay: expected at least 2 essays, got ${listCount}`);
  const listState = await page.evaluate(() => {
-  const card = document.querySelector('.essay-card');
+  const card = document.querySelector('.essay-card__link[href="/essay/taste-geopolitics-fractality/"]')?.closest('.essay-card');
   return {
    labels: [...card?.querySelectorAll('.essay-card__details dt') || []].map(el => el.textContent?.trim() || ''),
    keywords: card?.querySelector('.essay-card__keywords p')?.textContent || '',
@@ -242,6 +252,25 @@ async function checkEssay(page)
   }
  }
  if (!state.printButton) fail('essay detail: print button missing');
+
+ await gotoPath(page, '/essay/observer-is-not-outside-the-universe/');
+ const observer = await page.evaluate(() => ({
+  h1: document.querySelector('h1')?.textContent || '',
+  firstHeading: document.querySelector('.essay-body h2')?.textContent?.trim() || '',
+  bodyText: document.querySelector('.essay-body')?.textContent || '',
+  author: document.querySelector('.essay-author__name')?.textContent?.trim() || '',
+  published: document.querySelector('.essay-paper-meta time')?.textContent?.trim() || '',
+  keywords: document.querySelector('.essay-keywords p')?.textContent || '',
+  duplicatedCoverMeta: [...document.querySelectorAll('.essay-body > p')]
+   .some(el => ['Author', 'Published', 'Keywords'].includes(el.textContent?.trim() || '')),
+ }));
+ if (!observer.h1.includes('観測者は宇宙の外にいない')) fail(`observer essay: bad h1 ${observer.h1}`);
+ if (observer.firstHeading !== 'Abstract') fail(`observer essay: bad first heading ${observer.firstHeading}`);
+ if (!observer.bodyText.includes('観測者は宇宙の外にいない')) fail('observer essay: body text missing');
+ if (observer.author !== 'USAGI.NETWORK') fail(`observer essay: bad author ${observer.author}`);
+ if (observer.published !== '2026-07-17') fail(`observer essay: bad published date ${observer.published}`);
+ if (!observer.keywords.includes('cosmology')) fail(`observer essay: bad keywords ${observer.keywords}`);
+ if (observer.duplicatedCoverMeta) fail('observer essay: source cover metadata leaked into rendered body');
 }
 
 async function checkMusic(page)

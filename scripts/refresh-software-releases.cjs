@@ -15,6 +15,7 @@ async function main()
    const release = await fetchLatestRelease(item.repo) || await fetchLatestTag(item.repo);
    if (!release) continue;
    item.fallbackVersion = release.tag.startsWith('v') ? release.tag : `v${release.tag}`;
+   item.fallbackReleaseTag = release.tag;
    if (release.date) item.fallbackReleaseDate = release.date;
   }
  }

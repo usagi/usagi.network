@@ -54,15 +54,16 @@ function softwareReleases()
  return items.map(item =>
  {
   const rawTag = item.fallbackVersion || '';
+  const releaseTag = item.fallbackReleaseTag || rawTag;
   const version = normalizeVersion(rawTag);
   return {
-   id: `release:${item.repo}:${rawTag || version}`,
+   id: `release:${item.repo}:${releaseTag || version}`,
    provider: 'github',
    kind: 'release',
    title: `${item.title || item.repo} ${rawTag || `v${version}`}`,
    date: item.fallbackReleaseDate || '',
    thumbnail: item.media?.screenshot || item.media?.icon || '',
-   url: buildReleaseUrl(item.repo, rawTag || version),
+   url: buildReleaseUrl(item.repo, releaseTag || version),
   };
  }).filter(item => item.id && item.date);
 }

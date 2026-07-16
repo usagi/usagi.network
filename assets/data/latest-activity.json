@@ -1,6 +1,15 @@
 {
-  "generated_at": "2026-07-01T22:35:40.192Z",
+  "generated_at": "2026-07-16T22:21:09.575Z",
   "items": [
+    {
+      "id": "release:usagi/un-vrc-perfectsync:1.0.0",
+      "provider": "github",
+      "kind": "release",
+      "title": "U.N. VRC PerfectSync v1.0.0",
+      "date": "2026-07-13T23:45:37Z",
+      "thumbnail": "/assets/software/un-vrc-perfectsync/screenshot-0.webp",
+      "url": "https://github.com/usagi/un-vrc-perfectsync/releases/tag/1.0.0"
+    },
     {
       "id": "release:usagi/un-avatar:v2.1.0",
       "provider": "github",
@@ -18,15 +27,6 @@
       "date": "2026-06-28T07:02:07Z",
       "thumbnail": "/assets/software/un-motion/screenshot-0.webp",
       "url": "https://github.com/usagi/un-motion/releases/tag/v1.1.1"
-    },
-    {
-      "id": "release:usagi/un-virtual-eye-tracker:v2.0.0",
-      "provider": "github",
-      "kind": "release",
-      "title": "U.N. Virtual Eye Tracker v2.0.0",
-      "date": "2026-05-27T21:32:30Z",
-      "thumbnail": "/assets/software/un-virtual-eye-tracker/screenshot-0.webp",
-      "url": "https://github.com/usagi/un-virtual-eye-tracker/releases/tag/v2.0.0"
     },
     {
       "id": "2550573937",

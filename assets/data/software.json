@@ -53,6 +53,32 @@
      }
     },
     {
+     "title": "U.N. VRC PerfectSync",
+     "tag": "PerfectSync Authoring",
+     "repo": "usagi/un-vrc-perfectsync",
+     "links": [
+      {
+       "label": "U.N. VRC PerfectSync Official Web",
+       "url": "https://usagi.github.io/un-vrc-perfectsync/"
+      }
+     ],
+     "fallbackVersion": "v1.0.0",
+     "fallbackReleaseTag": "1.0.0",
+     "fallbackReleaseDate": "2026-07-13T23:45:37Z",
+     "description": "VRChat アバターの既存 BlendShape を確認し、保守的な Auto Setup と手動割り当てによって Perfect Sync 52 Key を作成・調整する Unity Editor ツールです。",
+     "specs": [
+      "Unity 2022.3",
+      "VRChat Avatars 3.0",
+      "Perfect Sync 52 Key",
+      "Auto Setup",
+      "BlendShape"
+     ],
+     "media": {
+      "screenshot": "/assets/software/un-vrc-perfectsync/screenshot-0.webp",
+      "icon": "/assets/software/un-vrc-perfectsync/icon.png"
+     }
+    },
+    {
      "title": "U.N. Virtual Eye Tracker",
      "tag": "Virtual Eye Tracker",
      "repo": "usagi/un-virtual-eye-tracker",

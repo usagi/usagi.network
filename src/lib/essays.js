@@ -69,6 +69,12 @@ function stripCoverBlock(content, data)
   }
  }
 
+ const coverLabels = new Set(['Author', 'Published', 'Keywords']);
+ while (coverLabels.has((lines[index] || '').trim()) && /^\s*:\s*\S/.test(lines[index + 1] || '')) {
+  index += 2;
+  while (index < lines.length && !lines[index].trim()) index++;
+ }
+
  const author = String(data.author || '').trim();
  const authorLine = (lines[index] || '').trim().replace(/^\*\*|\*\*$/g, '').trim();
  if (author && authorLine === author) {
