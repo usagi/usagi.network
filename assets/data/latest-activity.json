@@ -1,6 +1,24 @@
 {
-  "generated_at": "2026-07-16T22:21:09.575Z",
+  "generated_at": "2026-07-24T13:58:31.360Z",
   "items": [
+    {
+      "id": "2827745155",
+      "provider": "twitch",
+      "kind": "vod",
+      "title": "【金曜夕夜枠】アークナイツ／辞歳行EXステージ攻略",
+      "date": "2026-07-24T10:12:44Z",
+      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/b2e59b5ace85dd0292f5_usaginetwork_316212150001_1784887959//thumb/thumb0-%{width}x%{height}.jpg",
+      "url": "https://www.twitch.tv/videos/2827745155"
+    },
+    {
+      "id": "release:usagi/un-avatar:2.2.1",
+      "provider": "github",
+      "kind": "release",
+      "title": "U.N. Avatar v2.2.1",
+      "date": "2026-07-14T03:45:19Z",
+      "thumbnail": "/assets/software/un-avatar/screenshot-0.webp",
+      "url": "https://github.com/usagi/un-avatar/releases/tag/2.2.1"
+    },
     {
       "id": "release:usagi/un-vrc-perfectsync:1.0.0",
       "provider": "github",
@@ -11,103 +29,85 @@
       "url": "https://github.com/usagi/un-vrc-perfectsync/releases/tag/1.0.0"
     },
     {
-      "id": "release:usagi/un-avatar:v2.1.0",
+      "id": "release:usagi/un-motion:1.2.0",
       "provider": "github",
       "kind": "release",
-      "title": "U.N. Avatar v2.1.0",
-      "date": "2026-06-29T11:38:46Z",
-      "thumbnail": "/assets/software/un-avatar/screenshot-0.webp",
-      "url": "https://github.com/usagi/un-avatar/releases/tag/v2.1.0"
-    },
-    {
-      "id": "release:usagi/un-motion:v1.1.1",
-      "provider": "github",
-      "kind": "release",
-      "title": "U.N. Motion v1.1.1",
-      "date": "2026-06-28T07:02:07Z",
+      "title": "U.N. Motion v1.2.0",
+      "date": "2026-07-13T04:08:21Z",
       "thumbnail": "/assets/software/un-motion/screenshot-0.webp",
-      "url": "https://github.com/usagi/un-motion/releases/tag/v1.1.1"
+      "url": "https://github.com/usagi/un-motion/releases/tag/1.2.0"
     },
     {
-      "id": "2550573937",
+      "id": "2799520666",
       "provider": "twitch",
       "kind": "vod",
-      "title": "【VRChat】新アバター動作試験、おすすめワールドがあれば教えてね（3D酔い or しごはじまで）",
-      "date": "2025-08-26T22:17:18Z",
-      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/4ca0a0a923d914dd8359_usaginetwork_314761108978_1756246632//thumb/thumb0-%{width}x%{height}.jpg",
-      "url": "https://www.twitch.tv/videos/2550573937"
+      "title": "【木曜夕夜枠】U.N. Avatar v2 リリースしたので lilToon/PhysBone そのまま＆お着替え機能 Wardrobe のテストを魔王城を作りながらするよ",
+      "date": "2026-06-18T10:48:53Z",
+      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/e70f345c2f0759907d6a_usaginetwork_316058516850_1781779728//thumb/thumb0-%{width}x%{height}.jpg",
+      "url": "https://www.twitch.tv/videos/2799520666"
     },
     {
-      "id": "2549557757",
+      "id": "2782788964",
       "provider": "twitch",
       "kind": "vod",
-      "title": "【ビートセイバー】新アバターFPS試験配信（※まだ腕治りきってないのでゆったり譜面しかやれないよ）",
-      "date": "2025-08-25T18:19:57Z",
-      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/a80ff504e38e878dfce1_usaginetwork_314756890738_1756145991//thumb/thumb0-%{width}x%{height}.jpg",
-      "url": "https://www.twitch.tv/videos/2549557757"
+      "title": "【木曜夕夜枠】モーキャプアプリとアバターレンダラーアプリを作ったのでなんとなく配信するぞい",
+      "date": "2026-05-28T09:11:29Z",
+      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/e2be6434b3267c4e9882_usaginetwork_315960267250_1779959483//thumb/thumb0-%{width}x%{height}.jpg",
+      "url": "https://www.twitch.tv/videos/2782788964"
     },
     {
-      "id": "2547947655",
+      "id": "CautiousAmericanKittenANELE-LXPqNoaxEuNb0GBE",
       "provider": "twitch",
-      "kind": "vod",
-      "title": "【アークナイツ】危機契約 #3 / ボリバル 改修中ののビーチ ＆ 血塗られし焦土 620↑",
-      "date": "2025-08-23T20:13:26Z",
-      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/a9ffc9fec61669f8fedb_usaginetwork_314779909747_1755980000//thumb/thumb0-%{width}x%{height}.jpg",
-      "url": "https://www.twitch.tv/videos/2547947655"
+      "kind": "clip",
+      "title": "わるくなったお肉をこちらの袋へ入れますと？",
+      "date": "2025-05-04T17:12:25Z",
+      "thumbnail": "https://static-cdn.jtvnw.net/twitch-video-assets/twitch-vap-video-assets-prod-us-west-2/fa6674af-027a-454d-a325-880892ee1f82/landscape/thumb/thumb-0000000000-480x272.jpg",
+      "url": "https://clips.twitch.tv/CautiousAmericanKittenANELE-LXPqNoaxEuNb0GBE"
     },
     {
-      "id": "2545866155",
+      "id": "WimpyPoliteCockroachYouWHY-IRzzeT0G41AXOvQF",
       "provider": "twitch",
-      "kind": "vod",
-      "title": "【アークナイツ】危機契約 #3 / リターニア 降塵の路地 ＆ 血塗られし焦土 540↑",
-      "date": "2025-08-21T11:58:05Z",
-      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/8bc1686cd63f59746539_usaginetwork_314770074995_1755777479//thumb/thumb0-%{width}x%{height}.jpg",
-      "url": "https://www.twitch.tv/videos/2545866155"
+      "kind": "clip",
+      "title": "ビートセイバー休めば休むほどうまくなる理論、「四ツ谷さんによろしく」編",
+      "date": "2025-04-13T11:08:20Z",
+      "thumbnail": "https://static-cdn.jtvnw.net/twitch-video-assets/twitch-vap-video-assets-prod-us-west-2/1145e2ca-d844-4740-b266-7278279df44b/landscape/thumb/thumb-0000000000-480x272.jpg",
+      "url": "https://clips.twitch.tv/WimpyPoliteCockroachYouWHY-IRzzeT0G41AXOvQF"
     },
     {
-      "id": "2543322176",
+      "id": "SwissNurturingDugongTheTarFu-ogcaRUJ9LCdagf7t",
       "provider": "twitch",
-      "kind": "vod",
-      "title": "【アークナイツ】危機契約 #3 / チェルノボーグ 第13区跡 ＆ 血塗られし焦土 天災降臨作戦/幽邃霊魂作戦/540チャレンジ",
-      "date": "2025-08-18T12:31:10Z",
-      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/04c981567df7bd923715_usaginetwork_314728075506_1755520261//thumb/thumb0-%{width}x%{height}.jpg",
-      "url": "https://www.twitch.tv/videos/2543322176"
+      "kind": "clip",
+      "title": "Laters ぶっちさんのカメラスクリプトは二刀でも簡単めの難易度でもとってもクールに映えます。DL情報等はマップ概要からどうぞ！",
+      "date": "2025-04-04T18:18:16Z",
+      "thumbnail": "https://static-cdn.jtvnw.net/twitch-video-assets/twitch-vap-video-assets-prod-us-west-2/1ac6fe60-fdfb-4faf-94dc-df4aebceb0fb/landscape/thumb/thumb-0000000000-480x272.jpg",
+      "url": "https://clips.twitch.tv/SwissNurturingDugongTheTarFu-ogcaRUJ9LCdagf7t"
     },
     {
-      "id": "2541599697",
+      "id": "ManlyPhilanthropicVanillaFrankerZ-yFq_6U62eDJuFADo",
       "provider": "twitch",
-      "kind": "vod",
-      "title": "【Poly Bridge】そうだ、橋を架けよう #7",
-      "date": "2025-08-16T13:28:57Z",
-      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/9f024a802a039ec2916a_usaginetwork_314750834675_1755350931//thumb/thumb0-%{width}x%{height}.jpg",
-      "url": "https://www.twitch.tv/videos/2541599697"
+      "kind": "clip",
+      "title": "世界で一番お姫様 // !bsr 4041c World is Mine",
+      "date": "2024-10-11T23:30:58Z",
+      "thumbnail": "https://static-cdn.jtvnw.net/twitch-video-assets/twitch-vap-video-assets-prod-us-west-2/99f69313-a261-45a4-8fab-ae8224136807/landscape/thumb/thumb-0000000000-480x272.jpg",
+      "url": "https://clips.twitch.tv/ManlyPhilanthropicVanillaFrankerZ-yFq_6U62eDJuFADo"
     },
     {
-      "id": "2540726142",
+      "id": "HandsomeYawningVampireKappaClaus-buoO9fqDyZKbW-MC",
       "provider": "twitch",
-      "kind": "vod",
-      "title": "【雑談 Beat Saber マッピング】3拍子はお好きですか？",
-      "date": "2025-08-15T14:20:31Z",
-      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/5e4d9efefcfe2599e07b_usaginetwork_314746919795_1755267625//thumb/thumb0-%{width}x%{height}.jpg",
-      "url": "https://www.twitch.tv/videos/2540726142"
+      "kind": "clip",
+      "title": "汎用カメラスクリプト usa-cam-00 できたよー！",
+      "date": "2024-08-19T21:26:38Z",
+      "thumbnail": "https://static-cdn.jtvnw.net/twitch-video-assets/twitch-vap-video-assets-prod-us-west-2/f5c0c0aa-af4f-43ec-97b6-cda3816097c0/landscape/thumb/thumb-0000000000-480x272.jpg",
+      "url": "https://clips.twitch.tv/HandsomeYawningVampireKappaClaus-buoO9fqDyZKbW-MC"
     },
     {
-      "id": "2539981675",
+      "id": "TransparentAliveMushroomPeteZaroll-PE4m7NaM4XwDNCX-",
       "provider": "twitch",
-      "kind": "vod",
-      "title": "【アークナイツ】危機契約 #3 / イェラグ蝕裂の氷湖 ＆ 血塗られし焦土 400",
-      "date": "2025-08-14T17:58:44Z",
-      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/d898b71a63a0340459b5_usaginetwork_314743554291_1755194319//thumb/thumb0-%{width}x%{height}.jpg",
-      "url": "https://www.twitch.tv/videos/2539981675"
-    },
-    {
-      "id": "2539210775",
-      "provider": "twitch",
-      "kind": "vod",
-      "title": "【アークナイツ】統合回顧「ミヅキと紺碧の樹」難易度上げ 5 から",
-      "date": "2025-08-13T20:08:01Z",
-      "thumbnail": "https://static-cdn.jtvnw.net/cf_vods/d3vd9lfkzbru3h/6bc9f01f8f38eb6daa18_usaginetwork_314739883763_1755115675//thumb/thumb0-%{width}x%{height}.jpg",
-      "url": "https://www.twitch.tv/videos/2539210775"
+      "kind": "clip",
+      "title": "!bsr 3ece3 「Mortal Eye」の回転も楽しい！",
+      "date": "2024-07-30T18:02:27Z",
+      "thumbnail": "https://static-cdn.jtvnw.net/twitch-video-assets/twitch-vap-video-assets-prod-us-west-2/99ede5dd-f9d2-4709-ad95-57a423cd98bd/landscape/thumb/thumb-0000000000-480x272.jpg",
+      "url": "https://clips.twitch.tv/TransparentAliveMushroomPeteZaroll-PE4m7NaM4XwDNCX-"
     }
   ]
 }
