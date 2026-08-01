@@ -48,7 +48,7 @@ async function main()
   try { return new URL(url).origin === localOrigin; } catch { return true; }
  });
  const relevantIssues = consoleIssues.filter(issue =>
-  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters|SoundCloud|Failed to load resource|Permissions policy violation: bluetooth/i.test(issue));
+  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters|SoundCloud|Failed to load resource|Permissions policy violation: bluetooth|\[GraphQL\].*(OfflineEmbedVODAndSchedule|OfflineStreamerInformation): service error/i.test(issue));
  if (relevantResponses.length) fail(`failed local resources:\n${relevantResponses.join('\n')}`);
  if (relevantIssues.length) fail(`console errors:\n${relevantIssues.join('\n')}`);
 
