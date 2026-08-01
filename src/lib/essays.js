@@ -31,12 +31,14 @@ export function getEssays()
     tags: Array.isArray(data.tags) ? data.tags : [],
    };
    const displayBody = stripCoverBlock(parsed.content, normalizedData);
-   const text = displayBody.replace(/```[\s\S]*?```/g, '').replace(/[#>*_`~\-[\]()]/g, ' ').replace(/\s+/g, ' ').trim();
+   const readingBody = displayBody.split(/^##\s+References\s*$/im)[0];
+   const text = readingBody.replace(/```[\s\S]*?```/g, '').replace(/[#>*_`~\-[\]()]/g, ' ').replace(/\s+/g, ' ').trim();
+   const readingMinutes = Math.max(1, Math.ceil(text.length / 560));
    return {
     slug: toSlug(file),
     body: parsed.content,
     html: marked.parse(displayBody),
-    readingMinutes: Math.max(1, Math.ceil(text.length / 650)),
+    readingMinutes,
     data: normalizedData,
    };
   })

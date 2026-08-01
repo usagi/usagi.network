@@ -48,7 +48,7 @@ async function main()
   try { return new URL(url).origin === localOrigin; } catch { return true; }
  });
  const relevantIssues = consoleIssues.filter(issue =>
-  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters|SoundCloud|Failed to load resource/i.test(issue));
+  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters|SoundCloud|Failed to load resource|Permissions policy violation: bluetooth/i.test(issue));
  if (relevantResponses.length) fail(`failed local resources:\n${relevantResponses.join('\n')}`);
  if (relevantIssues.length) fail(`console errors:\n${relevantIssues.join('\n')}`);
 
@@ -194,7 +194,7 @@ async function checkEssay(page)
 {
  await gotoPath(page, '/essay/');
  const listCount = await page.locator('.essay-card').count();
- if (listCount < 2) fail(`essay: expected at least 2 essays, got ${listCount}`);
+ if (listCount < 3) fail(`essay: expected at least 3 essays, got ${listCount}`);
  const listState = await page.evaluate(() => {
   const card = document.querySelector('.essay-card__link[href="/essay/taste-geopolitics-fractality/"]')?.closest('.essay-card');
   return {
@@ -206,7 +206,7 @@ async function checkEssay(page)
  if (!listState.labels.includes('Author')) fail('essay index: author attribute missing');
  if (!listState.labels.includes('Published')) fail('essay index: published attribute missing');
  if (!listState.keywords.includes('food-culture')) fail(`essay index: bad keywords ${listState.keywords}`);
- if (!/^\d+ min read$/.test(listState.readtime)) fail(`essay index: bad readtime ${listState.readtime}`);
+ if (listState.readtime !== '6 min read') fail(`essay index: bad readtime ${listState.readtime}`);
  await gotoPath(page, '/essay/taste-geopolitics-fractality/');
  const state = await page.evaluate(() => ({
   h1: document.querySelector('h1')?.textContent || '',
@@ -261,6 +261,7 @@ async function checkEssay(page)
   author: document.querySelector('.essay-author__name')?.textContent?.trim() || '',
   published: document.querySelector('.essay-paper-meta time')?.textContent?.trim() || '',
   keywords: document.querySelector('.essay-keywords p')?.textContent || '',
+  readtime: document.querySelector('.essay-actions .essay-readtime')?.textContent?.trim() || '',
   duplicatedCoverMeta: [...document.querySelectorAll('.essay-body > p')]
    .some(el => ['Author', 'Published', 'Keywords'].includes(el.textContent?.trim() || '')),
  }));
@@ -270,7 +271,30 @@ async function checkEssay(page)
  if (observer.author !== 'USAGI.NETWORK') fail(`observer essay: bad author ${observer.author}`);
  if (observer.published !== '2026-07-17') fail(`observer essay: bad published date ${observer.published}`);
  if (!observer.keywords.includes('cosmology')) fail(`observer essay: bad keywords ${observer.keywords}`);
+ if (observer.readtime !== '15 min read') fail(`observer essay: bad readtime ${observer.readtime}`);
  if (observer.duplicatedCoverMeta) fail('observer essay: source cover metadata leaked into rendered body');
+
+ await gotoPath(page, '/essay/erigonomics-design/');
+ const erigonomics = await page.evaluate(() => ({
+  h1: document.querySelector('h1')?.textContent || '',
+  firstHeading: document.querySelector('.essay-body h2')?.textContent?.trim() || '',
+  bodyText: document.querySelector('.essay-body')?.textContent || '',
+  author: document.querySelector('.essay-author__name')?.textContent?.trim() || '',
+  published: document.querySelector('.essay-paper-meta time')?.textContent?.trim() || '',
+  keywords: document.querySelector('.essay-keywords p')?.textContent || '',
+  readtime: document.querySelector('.essay-actions .essay-readtime')?.textContent?.trim() || '',
+  duplicatedCoverMeta: [...document.querySelectorAll('.essay-body > p')]
+   .some(el => ['Author', 'Published', 'Keywords'].includes(el.textContent?.trim() || '')),
+ }));
+ if (!erigonomics.h1.includes('エリゴノミクス・デザイン')) fail(`erigonomics essay: bad h1 ${erigonomics.h1}`);
+ if (erigonomics.firstHeading !== 'Abstract') fail(`erigonomics essay: bad first heading ${erigonomics.firstHeading}`);
+ if (!erigonomics.bodyText.includes('選り好みされた世界が人間を選び返す')) fail('erigonomics essay: body text missing');
+ if (erigonomics.author !== 'USAGI.NETWORK') fail(`erigonomics essay: bad author ${erigonomics.author}`);
+ if (erigonomics.published !== '2026-08-01') fail(`erigonomics essay: bad published date ${erigonomics.published}`);
+ if (!erigonomics.keywords.includes('niche-construction')) fail(`erigonomics essay: bad keywords ${erigonomics.keywords}`);
+ if (!/^\d+ min read$/.test(erigonomics.readtime)) fail(`erigonomics essay: bad readtime ${erigonomics.readtime}`);
+ if (erigonomics.readtime !== '10 min read') fail(`erigonomics essay: bad editorial readtime ${erigonomics.readtime}`);
+ if (erigonomics.duplicatedCoverMeta) fail('erigonomics essay: source cover metadata leaked into rendered body');
 }
 
 async function checkMusic(page)
