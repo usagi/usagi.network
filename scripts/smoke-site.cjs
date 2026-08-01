@@ -207,6 +207,8 @@ async function checkEssay(page)
  if (!listState.labels.includes('Published')) fail('essay index: published attribute missing');
  if (!listState.keywords.includes('food-culture')) fail(`essay index: bad keywords ${listState.keywords}`);
  if (listState.readtime !== '6 min read') fail(`essay index: bad readtime ${listState.readtime}`);
+ const erigonomicsKeywords = await page.locator('.essay-card__link[href="/essay/erigonomics-design/"] .essay-card__keywords p').textContent();
+ if (!erigonomicsKeywords?.includes('feedback-loop')) fail(`essay index: keywords truncated ${erigonomicsKeywords}`);
  await gotoPath(page, '/essay/taste-geopolitics-fractality/');
  const state = await page.evaluate(() => ({
   h1: document.querySelector('h1')?.textContent || '',

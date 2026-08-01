@@ -1846,6 +1846,9 @@ a:focus-visible {
 }
 .essay-card__keywords p {
  margin: 0;
+ max-width: 100%;
+ overflow-wrap: anywhere;
+ text-wrap: pretty;
  color: rgba(217, 220, 229, 0.86);
  font: 700 12px/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }

@@ -36,7 +36,7 @@ const essays = getEssays();
       {entry.data.tags?.length > 0 && (
        <div class="essay-card__keywords" aria-label="Keywords">
         <span>Keywords</span>
-        <p>{entry.data.tags.slice(0, 4).join(', ')}</p>
+        <p>{entry.data.tags.join(', ')}</p>
        </div>
       )}
       <p class="essay-readtime" aria-label="Estimated reading time">{entry.readingMinutes} min read</p>
