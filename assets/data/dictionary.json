@@ -1,0 +1,122 @@
+{
+ "title": "USAGI Dictionary",
+ "repo": "usagi/usagi-dictionary",
+ "description": "Dr.USAGIが長期にわたり選定・整備している、Google日本語入力／Mozc向けの分野横断IME辞書です。茶、食、科学、医学、プログラミング、ゲーム固有名詞などの語彙を収録しています。",
+ "fallbackVersion": "1.0.0",
+ "fallbackReleaseTag": "1.0.0",
+ "fallbackReleaseDate": "2026-08-09T18:52:30Z",
+ "downloadAssetName": "usagi-dictionary-merged.txt",
+ "downloadUrl": "https://github.com/usagi/usagi-dictionary/releases/download/1.0.0/usagi-dictionary-merged.txt",
+ "downloadDigest": "sha256:1f2384c6950860408c9a0defcccfce963c7686e706d7290f534e9c91f243a4e3",
+ "downloadSize": 259719,
+ "firstCommittedAt": "2012-01-20T10:19:41Z",
+ "lastCommittedAt": "2026-08-09T18:55:13Z",
+ "sourceFileCount": 65,
+ "entryCount": 5955,
+ "categories": [
+  {
+   "id": "tea",
+   "roots": [
+    "tea"
+   ],
+   "entryCount": 2285,
+   "label": "Tea",
+   "title": "茶",
+   "description": "茶名、品種、製茶、茶器、香味、文化と文献"
+  },
+  {
+   "id": "food",
+   "roots": [
+    "food"
+   ],
+   "entryCount": 1356,
+   "label": "Food",
+   "title": "食",
+   "description": "食材、料理、調味料、発酵、保存、地域食文化"
+  },
+  {
+   "id": "science",
+   "roots": [
+    "science"
+   ],
+   "entryCount": 1544,
+   "label": "Science",
+   "title": "科学・哲学",
+   "description": "自然科学、工学、認知、宇宙論、哲学、人類学"
+  },
+  {
+   "id": "medicine",
+   "roots": [
+    "medicine"
+   ],
+   "entryCount": 21,
+   "label": "Medicine",
+   "title": "医学",
+   "description": "医薬品、成分、漢方、生薬"
+  },
+  {
+   "id": "computing",
+   "roots": [
+    "programming"
+   ],
+   "entryCount": 12,
+   "label": "Computing",
+   "title": "情報技術",
+   "description": "プログラミング言語、コンピュータグラフィックス"
+  },
+  {
+   "id": "proper-names",
+   "roots": [
+    "arknights",
+    "personal",
+    "writing"
+   ],
+   "entryCount": 601,
+   "label": "Proper names",
+   "title": "固有名詞",
+   "description": "アークナイツ、エンドフィールド、個人用表現"
+  },
+  {
+   "id": "symbols",
+   "roots": [
+    "symbols"
+   ],
+   "entryCount": 136,
+   "label": "Symbols",
+   "title": "記号・絵文字",
+   "description": "数学記号、一般記号、矢印、絵文字"
+  }
+ ],
+ "samples": [
+  {
+   "reading": "あさひなぎょくろ",
+   "term": "朝比奈玉露",
+   "type": "名詞",
+   "group": "TEA"
+  },
+  {
+   "reading": "こうじかび",
+   "term": "麹黴",
+   "type": "名詞",
+   "group": "FOOD"
+  },
+  {
+   "reading": "かんけいてきりょうしりきがく",
+   "term": "関係的量子力学",
+   "type": "名詞",
+   "group": "SCIENCE"
+  },
+  {
+   "reading": "えねるぎーうんどうりょうてんそる",
+   "term": "エネルギー運動量テンソル",
+   "type": "名詞",
+   "group": "SCIENCE"
+  },
+  {
+   "reading": "いんせいそーんず",
+   "term": "引星ソーンズ",
+   "type": "人名",
+   "group": "ARKNIGHTS"
+  }
+ ]
+}

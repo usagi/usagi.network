@@ -1,6 +1,15 @@
 {
-  "generated_at": "2026-07-16T22:21:09.575Z",
+  "generated_at": "2026-08-09T20:27:50.831Z",
   "items": [
+    {
+      "id": "release:usagi/usagi-dictionary:1.0.0",
+      "provider": "github",
+      "kind": "release",
+      "title": "USAGI Dictionary v1.0.0",
+      "date": "2026-08-09T18:52:30Z",
+      "thumbnail": "/ogp/usagi-network.png",
+      "url": "/dictionary/"
+    },
     {
       "id": "release:usagi/un-vrc-perfectsync:1.0.0",
       "provider": "github",
@@ -18,15 +27,6 @@
       "date": "2026-06-29T11:38:46Z",
       "thumbnail": "/assets/software/un-avatar/screenshot-0.webp",
       "url": "https://github.com/usagi/un-avatar/releases/tag/v2.1.0"
-    },
-    {
-      "id": "release:usagi/un-motion:v1.1.1",
-      "provider": "github",
-      "kind": "release",
-      "title": "U.N. Motion v1.1.1",
-      "date": "2026-06-28T07:02:07Z",
-      "thumbnail": "/assets/software/un-motion/screenshot-0.webp",
-      "url": "https://github.com/usagi/un-motion/releases/tag/v1.1.1"
     },
     {
       "id": "2550573937",

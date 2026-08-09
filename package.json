@@ -9,7 +9,8 @@
   "smoke:site": "node scripts/smoke-site.cjs",
   "fetch:stream": "node scripts/fetch-stream-data.cjs",
   "fetch:soundcloud": "node scripts/fetch-soundcloud-data.cjs",
-  "refresh:software": "node scripts/refresh-software-releases.cjs"
+  "refresh:software": "node scripts/refresh-software-releases.cjs",
+  "refresh:dictionary": "node scripts/refresh-dictionary-data.cjs"
  },
  "devDependencies": {
   "@astrojs/sitemap": "^3.7.3",

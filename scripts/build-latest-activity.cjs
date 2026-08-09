@@ -68,12 +68,29 @@ function softwareReleases()
  }).filter(item => item.id && item.date);
 }
 
+function dictionaryRelease()
+{
+ const item = readJson('assets/data/dictionary.json', {});
+ if (!item.repo || !item.fallbackReleaseDate) return [];
+ const rawTag = item.fallbackVersion || '';
+ const releaseTag = item.fallbackReleaseTag || rawTag;
+ return [{
+  id: `release:${item.repo}:${releaseTag}`,
+  provider: 'github',
+  kind: 'release',
+  title: `${item.title || 'USAGI Dictionary'} v${normalizeVersion(rawTag)}`,
+  date: item.fallbackReleaseDate,
+  thumbnail: '/ogp/usagi-network.png',
+  url: '/dictionary/',
+ }];
+}
+
 function main()
 {
  const clips = normalizeStream(readJson('assets/data/stream/twitch-clips.json', []), 'twitch', 'clip');
  const vods = normalizeStream(readJson('assets/data/stream/twitch-vods.json', []), 'twitch', 'vod');
  const yt = normalizeStream(readJson('assets/data/stream/youtube-archives.json', []), 'youtube', 'archive');
- const releases = softwareReleases();
+ const releases = [...softwareReleases(), ...dictionaryRelease()];
  const streamItems = [...clips, ...vods, ...yt]
   .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
   .slice(0, 9);

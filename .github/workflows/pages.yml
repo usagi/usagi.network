@@ -26,9 +26,17 @@ jobs:
       - name: Overlay auto-refreshed data
         run: |
           cp assets/data/software.json /tmp/software-catalog.json
+          cp assets/data/dictionary.json /tmp/dictionary-catalog.json
           git fetch origin auto-data --depth=1 || true
           git checkout FETCH_HEAD -- assets/data || true
           node scripts/merge-software-data.cjs /tmp/software-catalog.json assets/data/software.json
+          if [ -f assets/data/dictionary.json ]; then
+            cp assets/data/dictionary.json /tmp/dictionary-refreshed.json
+          else
+            cp /tmp/dictionary-catalog.json /tmp/dictionary-refreshed.json
+          fi
+          node scripts/merge-dictionary-data.cjs /tmp/dictionary-catalog.json /tmp/dictionary-refreshed.json
+          cp /tmp/dictionary-refreshed.json assets/data/dictionary.json
       - name: Check content assets
         run: npm run check:content
       - name: Build (Astro)

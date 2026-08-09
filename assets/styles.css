@@ -2235,6 +2235,573 @@ a:focus-visible {
  gap: 10px;
 }
 
+/* ===== Dictionary */
+.dictionary-page {
+ display: grid;
+ gap: 48px;
+ padding-bottom: clamp(64px, 10vh, 120px);
+}
+.dictionary-hero {
+ position: relative;
+ display: grid;
+ grid-template-columns: minmax(0, 0.92fr) minmax(460px, 1.08fr);
+ gap: 42px;
+ align-items: center;
+ min-height: 540px;
+ padding: 42px 0 46px;
+ border-top: 1px solid rgba(255, 255, 255, 0.07);
+ border-bottom: 1px solid rgba(255, 255, 255, 0.09);
+ background:
+  linear-gradient(90deg, rgba(247, 211, 84, 0.055), transparent 34%),
+  repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 18px);
+}
+.dictionary-hero::before {
+ content: "";
+ position: absolute;
+ left: 0;
+ top: -1px;
+ width: 116px;
+ height: 3px;
+ background: linear-gradient(90deg, var(--accent), var(--accent-cyan), transparent);
+ transform: skewX(-18deg);
+}
+.dictionary-hero__copy {
+ position: relative;
+ z-index: 1;
+ padding-left: 24px;
+}
+.dictionary-eyebrow {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ margin: 0 0 14px;
+ color: var(--accent-cyan);
+ font: 800 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ letter-spacing: 0;
+ text-transform: uppercase;
+}
+.dictionary-eyebrow span {
+ padding: 4px 7px;
+ border: 1px solid rgba(247, 211, 84, 0.28);
+ border-radius: 4px;
+ color: var(--accent);
+ background: rgba(247, 211, 84, 0.055);
+}
+.dictionary-hero h1 {
+ margin: 0;
+ color: #fff8df;
+ font-size: 56px;
+ line-height: 1.05;
+ letter-spacing: 0;
+ text-shadow:
+  0 0 24px rgba(247, 211, 84, 0.12),
+  0 14px 36px rgba(0, 0, 0, 0.46);
+}
+.dictionary-hero h1::after {
+ content: "";
+ display: block;
+ width: 96px;
+ height: 3px;
+ margin-top: 16px;
+ background: linear-gradient(90deg, var(--accent), rgba(0, 229, 255, 0.42), transparent);
+ transform: skewX(-18deg);
+}
+.dictionary-lead {
+ margin: 22px 0 10px;
+ color: #f4f6fb;
+ font-size: 20px;
+ font-weight: 800;
+ line-height: 1.5;
+}
+.dictionary-summary {
+ max-width: 630px;
+ margin: 0;
+ color: rgba(224, 228, 237, 0.8);
+ line-height: 1.85;
+}
+.dictionary-stats {
+ display: grid;
+ grid-template-columns: repeat(3, minmax(0, 1fr));
+ gap: 1px;
+ margin: 26px 0 0;
+ border: 1px solid rgba(255, 255, 255, 0.08);
+ border-radius: var(--radius-card);
+ overflow: hidden;
+ background: rgba(255, 255, 255, 0.08);
+}
+.dictionary-stats div {
+ min-width: 0;
+ padding: 12px 14px;
+ background: rgba(8, 11, 16, 0.9);
+}
+.dictionary-stats dt {
+ color: rgba(0, 229, 255, 0.72);
+ font: 800 10px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ letter-spacing: 0;
+ text-transform: uppercase;
+}
+.dictionary-stats dd {
+ margin: 5px 0 0;
+ color: #fff2c1;
+ font: 800 24px/1.1 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ letter-spacing: 0;
+}
+.dictionary-stats dd small {
+ margin-left: 4px;
+ color: rgba(221, 225, 234, 0.68);
+ font-size: 11px;
+}
+.dictionary-actions {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 10px;
+ margin-top: 22px;
+}
+.dictionary-download-note {
+ margin: 9px 0 0;
+ color: rgba(218, 222, 232, 0.56);
+ font: 700 11px/1.4 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ letter-spacing: 0;
+}
+.dictionary-specimen {
+ position: relative;
+ min-width: 0;
+ margin-right: 24px;
+ border: 1px solid rgba(255, 255, 255, 0.11);
+ border-radius: var(--radius-card);
+ overflow: hidden;
+ background:
+  linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent 22%),
+  #090c12;
+ box-shadow:
+  0 24px 60px rgba(0, 0, 0, 0.38),
+  inset 0 0 0 1px rgba(255, 255, 255, 0.018);
+}
+.dictionary-specimen::after {
+ content: "";
+ position: absolute;
+ top: 0;
+ right: 0;
+ width: 72px;
+ height: 3px;
+ background: linear-gradient(90deg, transparent, rgba(247, 211, 84, 0.9));
+}
+.dictionary-specimen > img {
+ position: absolute;
+ inset: 0;
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+ opacity: 0.075;
+ filter: saturate(0.72) contrast(1.08);
+ pointer-events: none;
+}
+.dictionary-specimen__head,
+.dictionary-specimen__foot {
+ position: relative;
+ z-index: 1;
+ display: flex;
+ justify-content: space-between;
+ gap: 12px;
+ padding: 12px 16px;
+ color: rgba(218, 223, 234, 0.56);
+ font: 800 10px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ letter-spacing: 0;
+ text-transform: uppercase;
+}
+.dictionary-specimen__head {
+ border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+ color: var(--accent-cyan);
+}
+.dictionary-specimen__rows {
+ position: relative;
+ z-index: 1;
+}
+.dictionary-specimen__row {
+ display: grid;
+ grid-template-columns: minmax(150px, 1.25fr) minmax(130px, 1fr) 56px 76px;
+ gap: 12px;
+ align-items: center;
+ min-height: 58px;
+ padding: 10px 16px;
+ border-bottom: 1px solid rgba(255, 255, 255, 0.065);
+ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.dictionary-specimen__row span {
+ min-width: 0;
+ overflow: hidden;
+ color: rgba(208, 214, 225, 0.68);
+ font-size: 11px;
+ text-overflow: ellipsis;
+ white-space: nowrap;
+}
+.dictionary-specimen__row strong {
+ color: #f5f7fb;
+ font-size: 15px;
+ letter-spacing: 0;
+}
+.dictionary-specimen__row small {
+ color: rgba(247, 211, 84, 0.8);
+ font-size: 10px;
+}
+.dictionary-specimen__row em {
+ color: rgba(0, 229, 255, 0.66);
+ font-size: 9px;
+ font-style: normal;
+ text-align: right;
+}
+.dictionary-specimen__foot {
+ display: grid;
+ grid-template-columns: minmax(150px, 1.25fr) minmax(130px, 1fr) 56px 76px;
+ background: rgba(255, 255, 255, 0.018);
+}
+.dictionary-specimen__foot span:last-child {
+ text-align: right;
+}
+.dictionary-section {
+ margin: 0;
+}
+.dictionary-section__lead {
+ max-width: 760px;
+ margin: 0 0 20px;
+ color: rgba(218, 222, 232, 0.72);
+ line-height: 1.8;
+}
+.dictionary-fields {
+ display: grid;
+ grid-template-columns: repeat(4, minmax(0, 1fr));
+ gap: 12px;
+}
+.dictionary-field {
+ position: relative;
+ min-width: 0;
+ min-height: 150px;
+ padding: 18px;
+ border: 1px solid var(--line);
+ border-radius: var(--radius-card);
+ overflow: hidden;
+ background:
+  linear-gradient(145deg, rgba(0, 229, 255, 0.045), transparent 55%),
+  var(--surface);
+ box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+}
+.dictionary-field::after {
+ content: "";
+ position: absolute;
+ top: 0;
+ right: 0;
+ width: 48px;
+ height: 2px;
+ background: linear-gradient(90deg, transparent, rgba(247, 211, 84, 0.62));
+}
+.dictionary-field__meta > span,
+.dictionary-use__methods article > span {
+ color: var(--accent-cyan);
+ font: 800 10px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ letter-spacing: 0;
+ text-transform: uppercase;
+}
+.dictionary-field__meta {
+ display: flex;
+ align-items: baseline;
+ justify-content: space-between;
+ gap: 12px;
+}
+.dictionary-field__meta strong {
+ color: rgba(247, 211, 84, 0.78);
+ font: 800 12px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ letter-spacing: 0;
+ white-space: nowrap;
+}
+.dictionary-field__meta small {
+ color: rgba(218, 222, 232, 0.5);
+ font-size: 8px;
+ text-transform: uppercase;
+}
+.dictionary-field h3,
+.dictionary-use__methods h3 {
+ margin: 9px 0 7px;
+ color: #f4f6fb;
+ font-size: 18px;
+ line-height: 1.3;
+ letter-spacing: 0;
+}
+.dictionary-field p,
+.dictionary-use__methods p {
+ margin: 0;
+ color: rgba(210, 215, 225, 0.7);
+ font-size: 13px;
+ line-height: 1.7;
+}
+.dictionary-use {
+ display: grid;
+ grid-template-columns: minmax(250px, 0.72fr) minmax(0, 1.28fr);
+ gap: 28px 42px;
+ align-items: start;
+ padding: 32px 0;
+ border-top: 1px solid rgba(255, 255, 255, 0.07);
+ border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+.dictionary-use__methods {
+ display: grid;
+ grid-template-columns: repeat(2, minmax(0, 1fr));
+ gap: 12px;
+}
+.dictionary-use__methods article {
+ min-width: 0;
+ padding: 18px;
+ border-left: 2px solid rgba(247, 211, 84, 0.48);
+ background: rgba(16, 19, 25, 0.62);
+}
+.dictionary-use__methods code {
+ overflow-wrap: anywhere;
+ color: #fff0ba;
+}
+.dictionary-use__methods a {
+ display: inline-block;
+ margin-top: 14px;
+}
+.dictionary-ime-guides {
+ grid-column: 1 / -1;
+ display: grid;
+ grid-template-columns: repeat(2, minmax(0, 1fr));
+ gap: 12px;
+}
+.dictionary-ime-guides article {
+ min-width: 0;
+ padding: 18px;
+ border: 1px solid rgba(255, 255, 255, 0.08);
+ border-radius: var(--radius-card);
+ background:
+  linear-gradient(145deg, rgba(0, 229, 255, 0.035), transparent 58%),
+  rgba(255, 255, 255, 0.02);
+}
+.dictionary-ime-guides article > span {
+ color: var(--accent-cyan);
+ font: 800 10px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ text-transform: uppercase;
+}
+.dictionary-ime-guides h3 {
+ margin: 8px 0 10px;
+ color: #f4f6fb;
+ font-size: 17px;
+ letter-spacing: 0;
+}
+.dictionary-ime-guides ol {
+ margin: 0;
+ padding-left: 20px;
+ color: rgba(218, 222, 232, 0.7);
+ font-size: 13px;
+ line-height: 1.85;
+}
+.dictionary-ime-guides code {
+ overflow-wrap: anywhere;
+ color: #fff0ba;
+}
+.dictionary-update-note {
+ grid-column: 1 / -1;
+ display: grid;
+ grid-template-columns: 84px 1fr;
+ gap: 16px;
+ align-items: start;
+ padding: 13px 18px;
+ border-left: 2px solid rgba(247, 211, 84, 0.56);
+ background: rgba(247, 211, 84, 0.035);
+}
+.dictionary-update-note strong {
+ color: var(--accent);
+}
+.dictionary-update-note p {
+ margin: 0;
+ color: rgba(218, 222, 232, 0.7);
+ font-size: 13px;
+}
+.dictionary-provenance {
+ display: grid;
+ grid-template-columns: minmax(280px, 0.82fr) minmax(0, 1.18fr);
+ gap: 22px 44px;
+ align-items: start;
+}
+.dictionary-provenance__copy > p:last-child {
+ color: rgba(218, 222, 232, 0.72);
+ line-height: 1.85;
+}
+.dictionary-history-line {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 8px 16px;
+ margin: 8px 0 16px;
+ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ text-transform: uppercase;
+}
+.dictionary-history-line span {
+ color: var(--accent-cyan);
+}
+.dictionary-history-line strong {
+ color: #fff0ba;
+}
+.dictionary-release {
+ display: grid;
+ grid-template-columns: repeat(2, minmax(0, 1fr));
+ gap: 1px;
+ margin: 0;
+ border: 1px solid rgba(255, 255, 255, 0.08);
+ border-radius: var(--radius-card);
+ overflow: hidden;
+ background: rgba(255, 255, 255, 0.08);
+}
+.dictionary-release div {
+ min-width: 0;
+ padding: 13px 15px;
+ background: #0e1117;
+}
+.dictionary-release dt {
+ color: rgba(0, 229, 255, 0.62);
+ font: 800 10px/1.2 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ text-transform: uppercase;
+}
+.dictionary-release dd {
+ min-width: 0;
+ margin: 6px 0 0;
+ color: #eef0f5;
+ font: 700 13px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.dictionary-release code {
+ display: block;
+ max-width: 100%;
+ overflow: hidden;
+ color: rgba(238, 240, 245, 0.82);
+ text-overflow: ellipsis;
+ white-space: nowrap;
+}
+.dictionary-checksum {
+ grid-column: 2;
+ margin: -8px 0 0;
+ color: rgba(218, 222, 232, 0.6);
+ font-size: 12px;
+}
+
+@media (max-width: 1180px) {
+ .topbar .affil {
+  display: none;
+ }
+}
+@media (max-width: 1040px) {
+ .side-links {
+  display: none;
+ }
+ .app,
+ .app:has(.hero[data-view="home"]) {
+  width: auto;
+  max-width: calc(100vw - 28px);
+  margin-left: 14px;
+  margin-right: 14px;
+ }
+ .topbar {
+  display: block;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  scroll-padding-inline: 14px;
+ }
+ .topbar::-webkit-scrollbar {
+  display: none;
+ }
+ .topbar .brand {
+  display: none;
+ }
+ .topbar .nav {
+  flex-wrap: nowrap;
+  gap: 0.35rem;
+  width: max-content;
+  min-width: 100%;
+  padding-right: 28px;
+ }
+ .topbar .nav__link {
+  white-space: nowrap;
+  scroll-margin-inline: 40px;
+ }
+ .dictionary-hero {
+  grid-template-columns: 1fr;
+  gap: 30px;
+  padding-top: 34px;
+ }
+ .dictionary-hero__copy {
+  padding-right: 24px;
+ }
+ .dictionary-specimen {
+  margin: 0 24px;
+ }
+ .dictionary-fields {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+ }
+}
+@media (max-width: 680px) {
+ .dictionary-page {
+  gap: 36px;
+ }
+ .dictionary-hero {
+  min-height: 0;
+  margin: 0 -2px;
+  padding: 28px 0 30px;
+ }
+ .dictionary-hero__copy {
+  padding: 0 14px;
+ }
+ .dictionary-hero h1 {
+  font-size: 38px;
+ }
+ .dictionary-lead {
+  font-size: 17px;
+ }
+ .dictionary-stats dd {
+  font-size: 19px;
+ }
+ .dictionary-actions .btn {
+  width: 100%;
+ }
+ .dictionary-specimen {
+  margin: 0 14px;
+ }
+ .dictionary-specimen__head span:last-child,
+ .dictionary-specimen__foot,
+ .dictionary-specimen__row small {
+  display: none;
+ }
+ .dictionary-specimen__row {
+  grid-template-columns: minmax(108px, 1fr) minmax(116px, 1fr) 64px;
+  gap: 8px;
+  padding-inline: 12px;
+ }
+ .dictionary-specimen__row em {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+ }
+ .dictionary-fields,
+ .dictionary-use,
+ .dictionary-use__methods,
+ .dictionary-provenance,
+ .dictionary-release {
+  grid-template-columns: 1fr;
+ }
+ .dictionary-field {
+  min-height: 0;
+ }
+ .dictionary-ime-guides,
+ .dictionary-update-note,
+ .dictionary-checksum {
+  grid-column: 1;
+ }
+ .dictionary-ime-guides,
+ .dictionary-update-note {
+  grid-template-columns: 1fr;
+ }
+ .dictionary-update-note {
+  gap: 3px;
+ }
+}
+
 /* ===== Artwork */
 .artwork-showcase {
  display: grid;

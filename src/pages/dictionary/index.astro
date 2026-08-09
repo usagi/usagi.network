@@ -1,0 +1,173 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import dictionary from '../../../assets/data/dictionary.json';
+import { completedYears, formatBytes } from '../../lib/dictionary.js';
+import { formatDate } from '../../lib/site.js';
+
+const repoUrl = `https://github.com/${dictionary.repo}`;
+const releasesUrl = `${repoUrl}/releases`;
+const releaseUrl = `${releasesUrl}/tag/${encodeURIComponent(dictionary.fallbackReleaseTag)}`;
+const checksumUrl = `${releasesUrl}/download/${encodeURIComponent(dictionary.fallbackReleaseTag)}/SHA256SUMS.txt`;
+const activeYears = completedYears(dictionary.firstCommittedAt, dictionary.lastCommittedAt);
+const firstYear = new Date(dictionary.firstCommittedAt).getUTCFullYear();
+const entryCount = new Intl.NumberFormat('ja-JP').format(dictionary.entryCount);
+const fileCount = new Intl.NumberFormat('ja-JP').format(dictionary.sourceFileCount);
+const downloadSize = formatBytes(dictionary.downloadSize);
+const digest = String(dictionary.downloadDigest || '').replace(/^sha256:/i, '');
+const description = 'USAGI Dictionaryは、Dr.USAGIが選定・整備するGoogle日本語入力／Mozc向けの分野横断IME辞書です。';
+const jsonLd = {
+ '@context': 'https://schema.org',
+ '@type': 'Dataset',
+ name: dictionary.title,
+ description: dictionary.description,
+ url: 'https://usagi.network/dictionary/',
+ version: dictionary.fallbackVersion,
+ dateCreated: dictionary.firstCommittedAt,
+ dateModified: dictionary.lastCommittedAt,
+ datePublished: dictionary.fallbackReleaseDate,
+ license: `${repoUrl}/blob/main/LICENSE.md`,
+ creator: {
+  '@type': 'Person',
+  name: 'Dr.USAGI',
+  url: 'https://usagi.network/about/',
+ },
+ distribution: {
+  '@type': 'DataDownload',
+  encodingFormat: 'text/plain',
+  contentUrl: dictionary.downloadUrl,
+  contentSize: downloadSize,
+ },
+};
+---
+<BaseLayout active="dictionary" title={dictionary.title} description={description} jsonLd={jsonLd}>
+ <article class="dictionary-page">
+  <header class="dictionary-hero">
+   <div class="dictionary-hero__copy">
+    <p class="dictionary-eyebrow">IME Lexical Resource <span>v{dictionary.fallbackVersion}</span></p>
+    <h1>{dictionary.title}</h1>
+    <p class="dictionary-lead">ことばを集め、確かめ、入力できる知識へ。</p>
+    <p class="dictionary-summary">{dictionary.description}</p>
+    <dl class="dictionary-stats" aria-label="Dictionary summary">
+     <div>
+      <dt>Vocabulary</dt>
+      <dd>{entryCount}<small>語</small></dd>
+     </div>
+     <div>
+      <dt>Sources</dt>
+      <dd>{fileCount}<small>辞書</small></dd>
+     </div>
+     <div>
+      <dt>History</dt>
+      <dd>{activeYears}<small>年</small></dd>
+     </div>
+    </dl>
+    <div class="dictionary-actions" aria-label="Dictionary links">
+     <a class="btn" href={dictionary.downloadUrl}>Download Dictionary</a>
+     <a class="btn btn--ghost" href={repoUrl} target="_blank" rel="noopener">Repository</a>
+     <a class="btn btn--ghost" href={releasesUrl} target="_blank" rel="noopener">Releases</a>
+    </div>
+    <p class="dictionary-download-note">Google日本語入力／Mozc互換 · UTF-8 · {downloadSize}</p>
+   </div>
+
+   <div class="dictionary-specimen" aria-label="USAGI Dictionary lexical specimen">
+    <img src="/ogp/usagi-network.png" alt="" loading="eager" decoding="async" />
+    <div class="dictionary-specimen__head">
+     <span>LEXICAL SPECIMEN</span>
+     <span>{fileCount} SOURCES / {entryCount} ENTRIES</span>
+    </div>
+    <div class="dictionary-specimen__rows">
+     {dictionary.samples.map(sample => (
+      <div class="dictionary-specimen__row">
+       <span>{sample.reading}</span>
+       <strong>{sample.term}</strong>
+       <small>{sample.type}</small>
+       <em>{sample.group}</em>
+      </div>
+     ))}
+    </div>
+    <div class="dictionary-specimen__foot">
+     <span>READING</span><span>TERM</span><span>CLASS</span><span>DOMAIN</span>
+    </div>
+   </div>
+  </header>
+
+  <section class="dictionary-section" aria-labelledby="dictionary-fields-title">
+   <h2 class="strip__title" id="dictionary-fields-title">Knowledge Fields</h2>
+   <p class="dictionary-section__lead">学部・学科ではなく、選択して導入しやすく、語彙を保守しやすい単位で分類しています。</p>
+   <div class="dictionary-fields">
+    {dictionary.categories.map(category => (
+     <article class="dictionary-field" data-entry-count={category.entryCount}>
+      <div class="dictionary-field__meta">
+       <span>{category.label}</span>
+       <strong>{new Intl.NumberFormat('ja-JP').format(category.entryCount)} <small>terms</small></strong>
+      </div>
+      <h3>{category.title}</h3>
+      <p>{category.description}</p>
+     </article>
+    ))}
+   </div>
+  </section>
+
+  <section class="dictionary-section dictionary-use" aria-labelledby="dictionary-use-title">
+   <div>
+    <h2 class="strip__title" id="dictionary-use-title">Use Dictionary</h2>
+    <p class="dictionary-section__lead">Releaseから統合辞書を一つ取得するか、Repositoryから必要な分野だけを選べます。</p>
+   </div>
+   <div class="dictionary-use__methods">
+    <article>
+     <span>01 / Recommended</span>
+     <h3>全辞書をまとめて使う</h3>
+     <p><code>usagi-dictionary-merged.txt</code>をダウンロードし、専用のユーザー辞書へインポートします。</p>
+     <a href={dictionary.downloadUrl}>統合辞書をダウンロード</a>
+    </article>
+    <article>
+     <span>02 / Selective</span>
+     <h3>必要な辞書だけを使う</h3>
+     <p>Repositoryの分類フォルダーから、必要な<code>.txt</code>だけを選んで個別にインポートします。</p>
+     <a href={repoUrl} target="_blank" rel="noopener">分類フォルダーを見る</a>
+    </article>
+   </div>
+   <div class="dictionary-ime-guides" aria-label="IME installation guides">
+    <article>
+     <span>Google Japanese Input / Mozc</span>
+     <h3>UTF-8のままインポート</h3>
+     <ol>
+      <li><a href={dictionary.downloadUrl}>統合辞書</a>をダウンロード</li>
+      <li>辞書ツールを開き、USAGI Dictionary用のユーザー辞書を作成</li>
+      <li><code>usagi-dictionary-merged.txt</code>をそのままインポート</li>
+     </ol>
+    </article>
+    <article>
+     <span>Microsoft IME</span>
+     <h3>UTF-16 LE BOMへ変換して登録</h3>
+     <ol>
+      <li><a href={dictionary.downloadUrl}>統合辞書</a>をダウンロード</li>
+      <li>テキストエディターでUTF-16 LE BOMとして保存し直す</li>
+      <li>辞書ツールの「テキストファイルからの登録」で読み込む</li>
+     </ol>
+    </article>
+   </div>
+   <div class="dictionary-update-note" role="note">
+    <strong>更新時</strong>
+    <p>削除済みの語を残さないため、専用のユーザー辞書を空にするか作り直してから最新版をインポートしてください。</p>
+   </div>
+  </section>
+
+  <section class="dictionary-section dictionary-provenance" aria-labelledby="dictionary-provenance-title">
+   <div class="dictionary-provenance__copy">
+    <h2 class="strip__title" id="dictionary-provenance-title">History & Integrity</h2>
+    <p class="dictionary-history-line"><span>Since {firstYear}</span><strong>{activeYears} years of revision</strong></p>
+    <p>最初のコミットから最新コミットまでの履歴をGitHubから取得し、継続年数を自動算出しています。統合辞書はRust製ツールで決定論的に生成・検査されます。</p>
+   </div>
+   <dl class="dictionary-release">
+    <div><dt>Latest Release</dt><dd><a href={releaseUrl} target="_blank" rel="noopener">v{dictionary.fallbackVersion}</a></dd></div>
+    <div><dt>Published</dt><dd>{formatDate(dictionary.fallbackReleaseDate)}</dd></div>
+    <div><dt>First Commit</dt><dd>{formatDate(dictionary.firstCommittedAt)}</dd></div>
+    <div><dt>Latest Commit</dt><dd>{formatDate(dictionary.lastCommittedAt)}</dd></div>
+    <div><dt>SHA-256</dt><dd><code title={digest}>{digest}</code></dd></div>
+    <div><dt>License</dt><dd><a href={`${repoUrl}/blob/main/LICENSE.md`} target="_blank" rel="noopener">MIT</a></dd></div>
+   </dl>
+   <p class="dictionary-checksum"><a href={checksumUrl}>SHA256SUMS.txt</a>で配布物を検証できます。</p>
+  </section>
+ </article>
+</BaseLayout>

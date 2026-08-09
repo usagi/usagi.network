@@ -5,7 +5,7 @@ import latestData from '../../assets/data/latest-activity.json';
 
 const items = latestData.items || [];
 ---
-<BaseLayout active="home" title="USAGI.NETWORK" description="USAGI.NETWORK official archive for Dr.USAGI streams, music, software, artwork, and essays.">
+<BaseLayout active="home" title="USAGI.NETWORK" description="USAGI.NETWORK official archive for Dr.USAGI streams, music, software, dictionary, artwork, and essays.">
  <section class="hero" data-view="home">
   <div class="hero__bg"></div>
   <canvas id="hero-webgpu" class="hero__webgpu" aria-hidden="true"></canvas>
@@ -53,7 +53,7 @@ const items = latestData.items || [];
 </section>
 
 <script type="module">
- import { mount } from '/assets/js/views/home.js?v=20260702-hero2';
+ import { mount } from '/assets/js/views/home.js?v=20260810-dictionary';
  mount().catch(err => console.warn('Home runtime failed', err));
 </script>
 

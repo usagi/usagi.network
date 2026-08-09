@@ -14,7 +14,7 @@ export async function mount()
  if (!grid) return;
  try
  {
-  const { fetchLatestActivity } = await import('../api/aggregate-latest.js?v=20260702');
+  const { fetchLatestActivity } = await import('../api/aggregate-latest.js?v=20260810-dictionary');
   const items = await fetchLatestActivity();
   if (items.length === 0)
   {
@@ -50,9 +50,19 @@ async function startHeroVisual()
 
 function renderLatestCard(it)
 {
- const a = document.createElement('article');
+ const isReleaseLink = it.provider === 'github' && Boolean(it.url);
+ const a = document.createElement(isReleaseLink ? 'a' : 'article');
  const cutClass = it.kind === 'clip' ? 'card--clip' : it.kind === 'vod' ? 'card--vod' : it.kind === 'release' ? 'card--release' : 'card--map';
  a.className = `card ${cutClass}`;
+ if (isReleaseLink)
+ {
+  a.href = it.url;
+  if (/^https?:\/\//i.test(it.url))
+  {
+   a.target = '_blank';
+   a.rel = 'noopener';
+  }
+ }
  const tag = it.kind === 'clip' ? 'Clip' : it.kind === 'vod' ? 'VOD' : it.kind === 'release' ? 'Release' : (it.provider === 'youtube' ? 'YouTube' : 'Archive');
  const thumb = resolveItemThumb(it);
  const isPlayable = isPlayableItem(it);
@@ -65,7 +75,7 @@ function renderLatestCard(it)
 			<div class="card__date">${formatActivityDate(it.date)}</div>
 		</div>
 	`;
- if (isPlayable)
+ if (isPlayable && !isReleaseLink)
  {
   a.style.cursor = 'pointer';
   a.addEventListener('click', () => openDetailEmbed(it));
@@ -95,7 +105,6 @@ function renderLatestCard(it)
 function isPlayableItem(it)
 {
  if (!it || !it.id) return false;
- if (it.provider === 'github' && it.url) return true;
  return (it.provider === 'twitch' && (it.kind === 'clip' || it.kind === 'vod'))
   || (it.provider === 'youtube');
 }

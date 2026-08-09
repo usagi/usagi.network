@@ -46,8 +46,12 @@ async function fetchSoftwareReleases()
 {
  try
  {
-  const data = await safeJson('/assets/data/software.json');
+  const [data, dictionary] = await Promise.all([
+   safeJson('/assets/data/software.json'),
+   safeJson('/assets/data/dictionary.json'),
+  ]);
   const items = (data?.groups || []).flatMap(group => group.items || []);
+  if (dictionary?.repo) items.push({ ...dictionary, dictionary: true });
   const repos = items.map(item => item.repo).filter(Boolean);
   let releases = [];
   try { releases = await getLatestGitHubReleases(repos); } catch { releases = []; }
@@ -61,10 +65,12 @@ async function fetchSoftwareReleases()
     id: `release:${item.repo}:${rawTag || version}`,
     provider: 'github',
     kind: 'release',
-    title: `${item.title || item.repo} ${rawTag || `v${version}`}`,
+    title: item.dictionary
+     ? `${item.title || 'USAGI Dictionary'} v${version}`
+     : `${item.title || item.repo} ${rawTag || `v${version}`}`,
     date: release.date || item.fallbackReleaseDate || '',
-    thumbnail: item.media?.screenshot || item.media?.icon || '',
-    url: release.url || buildReleaseUrl(item.repo, rawTag || version),
+    thumbnail: item.dictionary ? '/ogp/usagi-network.png' : item.media?.screenshot || item.media?.icon || '',
+    url: item.dictionary ? '/dictionary/' : release.url || buildReleaseUrl(item.repo, rawTag || version),
    };
   }).filter(item => item.date);
  } catch { return []; }

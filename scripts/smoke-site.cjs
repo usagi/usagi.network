@@ -1,4 +1,5 @@
 const { chromium } = require('playwright');
+const dictionaryData = require('../assets/data/dictionary.json');
 
 const baseUrl = normalizeBase(process.argv[2] || process.env.SITE_URL || 'http://127.0.0.1:4173/');
 const failures = [];
@@ -33,6 +34,7 @@ async function main()
  await checkHome(page);
  await checkBeatSaber(page);
  await checkSoftware(page);
+ await checkDictionary(page);
  await checkArtwork(page);
  await checkEssay(page);
  await checkMusic(page);
@@ -103,14 +105,19 @@ async function checkHome(page)
  const state = await page.evaluate(() => ({
   title: document.title,
   navEssay: !!document.querySelector('.nav__link[href="/essay/"]'),
+  navDictionary: !!document.querySelector('.nav__link[href="/dictionary/"]'),
   latestCount: document.querySelectorAll('#latest-grid .card').length,
   releaseCount: [...document.querySelectorAll('#latest-grid .card')]
    .filter(card => card.querySelector('.card__tag')?.textContent === 'Release').length,
+  dictionaryRelease: [...document.querySelectorAll('#latest-grid .card')]
+   .some(card => card.textContent?.includes('USAGI Dictionary') && card.getAttribute('href') === '/dictionary/'),
  }));
  if (!/USAGI\.NETWORK/.test(state.title)) fail(`home: invalid title ${state.title}`);
  if (!state.navEssay) fail('home: Essay nav missing');
+ if (!state.navDictionary) fail('home: Dictionary nav missing');
  if (state.latestCount < 6) fail(`home: expected latest cards, got ${state.latestCount}`);
  if (state.releaseCount < 1) fail(`home: expected release card, got ${state.releaseCount}`);
+ if (!state.dictionaryRelease) fail('home: USAGI Dictionary release missing');
 }
 
 async function checkSoftware(page)
@@ -144,6 +151,52 @@ async function checkSoftware(page)
  if (!/U\.N\. VRC PerfectSync/.test(perfectSync.h1)) fail('software detail: U.N. VRC PerfectSync page missing');
  if (perfectSync.imageWidth !== 1920) fail(`software detail: bad PerfectSync image width ${perfectSync.imageWidth}`);
  if (!perfectSync.officialLink) fail('software detail: PerfectSync official link missing');
+}
+
+async function checkDictionary(page)
+{
+ await gotoPath(page, '/dictionary/');
+ const state = await page.evaluate(() => ({
+  h1: document.querySelector('h1')?.textContent || '',
+  activeNav: document.querySelector('.nav__link[aria-current="page"]')?.textContent || '',
+  stats: [...document.querySelectorAll('.dictionary-stats dd')].map(item => item.textContent?.trim() || ''),
+  samples: document.querySelectorAll('.dictionary-specimen__row').length,
+  fields: document.querySelectorAll('.dictionary-field').length,
+  fieldCounts: [...document.querySelectorAll('.dictionary-field')].map(item => Number(item.dataset.entryCount || 0)),
+  imeGuides: [...document.querySelectorAll('.dictionary-ime-guides article > span')].map(item => item.textContent?.trim() || ''),
+  download: document.querySelector('.dictionary-actions a')?.getAttribute('href') || '',
+  history: document.querySelector('.dictionary-history-line')?.textContent || '',
+  canonical: document.querySelector('link[rel="canonical"]')?.href || '',
+ }));
+ if (state.h1.trim() !== 'USAGI Dictionary') fail(`dictionary: bad h1 ${state.h1}`);
+ if (state.activeNav.trim() !== 'Dictionary') fail(`dictionary: bad active nav ${state.activeNav}`);
+ const expectedEntries = new Intl.NumberFormat('ja-JP').format(dictionaryData.entryCount);
+ const expectedYears = completedYears(dictionaryData.firstCommittedAt, dictionaryData.lastCommittedAt);
+ const expectedFirstYear = new Date(dictionaryData.firstCommittedAt).getUTCFullYear();
+ if (!state.stats.some(value => value.includes(expectedEntries))) fail(`dictionary: entry count missing ${state.stats}`);
+ if (!state.stats.some(value => value.includes(String(expectedYears)))) fail(`dictionary: history years missing ${state.stats}`);
+ if (state.samples < 4) fail(`dictionary: expected lexical samples, got ${state.samples}`);
+ if (state.fields < 4) fail(`dictionary: expected knowledge fields, got ${state.fields}`);
+ if (state.fieldCounts.reduce((sum, value) => sum + value, 0) !== Number(dictionaryData.entryCount)) {
+  fail(`dictionary: field counts do not match total ${state.fieldCounts}`);
+ }
+ if (!state.imeGuides.some(value => /Google Japanese Input/.test(value))) fail(`dictionary: Google IME guide missing ${state.imeGuides}`);
+ if (!state.imeGuides.some(value => /Microsoft IME/.test(value))) fail(`dictionary: Microsoft IME guide missing ${state.imeGuides}`);
+ if (!state.download.includes('usagi-dictionary-merged.txt')) fail(`dictionary: bad download ${state.download}`);
+ if (!new RegExp(`Since ${expectedFirstYear}`, 'i').test(state.history)) fail(`dictionary: bad history ${state.history}`);
+ if (!state.canonical.endsWith('/dictionary/')) fail(`dictionary: bad canonical ${state.canonical}`);
+}
+
+function completedYears(startValue, endValue)
+{
+ const start = new Date(startValue || '');
+ const end = new Date(endValue || '');
+ if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime()) || end < start) return 0;
+ let years = end.getUTCFullYear() - start.getUTCFullYear();
+ const anniversaryPassed = end.getUTCMonth() > start.getUTCMonth()
+  || (end.getUTCMonth() === start.getUTCMonth() && end.getUTCDate() >= start.getUTCDate());
+ if (!anniversaryPassed) years -= 1;
+ return Math.max(0, years);
 }
 
 async function checkBeatSaber(page)

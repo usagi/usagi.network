@@ -11,6 +11,7 @@ export const navItems = [
   { href: '/music/', label: 'Music', key: 'music' },
   { href: '/beatsaber/', label: 'Beat Saber', key: 'beatsaber' },
   { href: '/software/', label: 'Software', key: 'software' },
+  { href: '/dictionary/', label: 'Dictionary', key: 'dictionary' },
   { href: '/essay/', label: 'Essay', key: 'essay' },
   { href: '/artwork/', label: 'Artwork', key: 'artwork' },
   { href: '/about/', label: 'About', key: 'about' },

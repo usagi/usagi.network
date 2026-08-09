@@ -95,6 +95,34 @@ function checkArtwork()
  }
 }
 
+function checkDictionary()
+{
+ const data = readJson('assets/data/dictionary.json');
+ requireText(data.title, 'dictionary title');
+ requireText(data.repo, 'dictionary repo');
+ requireText(data.description, 'dictionary description');
+ requireText(data.fallbackVersion, 'dictionary fallbackVersion');
+ requireText(data.fallbackReleaseTag, 'dictionary fallbackReleaseTag');
+ requireIsoDate(data.fallbackReleaseDate, 'dictionary fallbackReleaseDate');
+ requireIsoDate(data.firstCommittedAt, 'dictionary firstCommittedAt');
+ requireIsoDate(data.lastCommittedAt, 'dictionary lastCommittedAt');
+ requireText(data.downloadUrl, 'dictionary downloadUrl');
+ requireText(data.downloadDigest, 'dictionary downloadDigest');
+ if (Number(data.entryCount) < 1) failures.push('dictionary: invalid entryCount');
+ if (Number(data.sourceFileCount) < 1) failures.push('dictionary: invalid sourceFileCount');
+ if (!Array.isArray(data.categories) || data.categories.length < 4) failures.push('dictionary: categories are incomplete');
+ for (const category of data.categories || [])
+ {
+  requireText(category.id, 'dictionary category id');
+  requireText(category.title, `${category.id} title`);
+  if (!Array.isArray(category.roots) || !category.roots.length) failures.push(`${category.id}: roots are missing`);
+  if (Number(category.entryCount) < 1) failures.push(`${category.id}: invalid entryCount`);
+ }
+ const categoryTotal = (data.categories || []).reduce((sum, category) => sum + Number(category.entryCount || 0), 0);
+ if (categoryTotal !== Number(data.entryCount)) failures.push(`dictionary: category total ${categoryTotal} != ${data.entryCount}`);
+ if (!Array.isArray(data.samples) || data.samples.length < 4) failures.push('dictionary: samples are incomplete');
+}
+
 function checkImageDimensions(file, source)
 {
  const ext = path.extname(file).toLowerCase();
@@ -141,6 +169,7 @@ function readWebpSize(data)
 
 checkSoftware();
 checkArtwork();
+checkDictionary();
 
 if (failures.length)
 {

@@ -33,10 +33,12 @@ jobs:
           TWITCH_CHANNEL_LOGIN: usaginetwork
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           YOUTUBE_CHANNEL_ID: ${{ secrets.YOUTUBE_CHANNEL_ID }}
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           node scripts/fetch-stream-data.cjs
           node scripts/fetch-soundcloud-data.cjs
           node scripts/refresh-software-releases.cjs
+          node scripts/refresh-dictionary-data.cjs
           node scripts/normalize-software-media.cjs
           node scripts/build-latest-activity.cjs
 
@@ -49,7 +51,7 @@ jobs:
           else
             git config user.name "github-actions"
             git config user.email "actions@users.noreply.github.com"
-            git add assets/data/stream/*.json assets/data/soundcloud-tracks.json assets/data/software.json assets/data/latest-activity.json
+            git add assets/data/stream/*.json assets/data/soundcloud-tracks.json assets/data/software.json assets/data/dictionary.json assets/data/latest-activity.json
             git commit -m "chore(data): refresh auto data"
             git push --force origin HEAD:auto-data
             gh workflow run deploy-pages --ref main
