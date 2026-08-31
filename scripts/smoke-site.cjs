@@ -247,7 +247,7 @@ async function checkEssay(page)
 {
  await gotoPath(page, '/essay/');
  const listCount = await page.locator('.essay-card').count();
- if (listCount < 3) fail(`essay: expected at least 3 essays, got ${listCount}`);
+ if (listCount < 4) fail(`essay: expected at least 4 essays, got ${listCount}`);
  const listState = await page.evaluate(() => {
   const card = document.querySelector('.essay-card__link[href="/essay/taste-geopolitics-fractality/"]')?.closest('.essay-card');
   return {
@@ -350,6 +350,35 @@ async function checkEssay(page)
  if (!/^\d+ min read$/.test(erigonomics.readtime)) fail(`erigonomics essay: bad readtime ${erigonomics.readtime}`);
  if (erigonomics.readtime !== '10 min read') fail(`erigonomics essay: bad editorial readtime ${erigonomics.readtime}`);
  if (erigonomics.duplicatedCoverMeta) fail('erigonomics essay: source cover metadata leaked into rendered body');
+
+ await gotoPath(page, '/essay/akuma-wa-jibun-wo-akuma-da-to-shiranai/');
+ const akuma = await page.evaluate(() => ({
+  h1: document.querySelector('h1')?.textContent || '',
+  firstHeading: document.querySelector('.essay-body h2')?.textContent?.trim() || '',
+  bodyText: document.querySelector('.essay-body')?.textContent || '',
+  author: document.querySelector('.essay-author__name')?.textContent?.trim() || '',
+  published: document.querySelector('.essay-paper-meta time')?.textContent?.trim() || '',
+  keywords: document.querySelector('.essay-keywords p')?.textContent || '',
+  readtime: document.querySelector('.essay-actions .essay-readtime')?.textContent?.trim() || '',
+  footnoteRefs: document.querySelectorAll('[data-footnote-ref]').length,
+  footnotes: document.querySelectorAll('.footnotes li').length,
+  quotes: document.querySelectorAll('.essay-quote').length,
+  flows: document.querySelectorAll('.essay-flow').length,
+ }));
+ if (!akuma.h1.includes('悪魔は、自分を悪魔だと知らない')) fail(`akuma essay: bad h1 ${akuma.h1}`);
+ if (akuma.firstHeading !== '私は悪魔だったらしい') fail(`akuma essay: bad first heading ${akuma.firstHeading}`);
+ if (!akuma.bodyText.includes('この文章は、自ら定義した悪魔の作用を読者に対して実行している')) {
+  fail('akuma essay: body text missing');
+ }
+ if (akuma.author !== 'USAGI.NETWORK') fail(`akuma essay: bad author ${akuma.author}`);
+ if (akuma.published !== '2026-08-31') fail(`akuma essay: bad published date ${akuma.published}`);
+ if (!akuma.keywords.includes('possible-selves')) fail(`akuma essay: bad keywords ${akuma.keywords}`);
+ if (!/^\d+ min read$/.test(akuma.readtime)) fail(`akuma essay: bad readtime ${akuma.readtime}`);
+ if (akuma.footnoteRefs !== 6 || akuma.footnotes !== 6) {
+  fail(`akuma essay: bad footnotes ${akuma.footnoteRefs}/${akuma.footnotes}`);
+ }
+ if (akuma.quotes < 10 || akuma.flows !== 1) fail(`akuma essay: bad quote rendering ${akuma.quotes}/${akuma.flows}`);
+ if (/\[\^[^\]]+\]/.test(akuma.bodyText)) fail('akuma essay: raw footnote syntax leaked into body');
 }
 
 async function checkMusic(page)

@@ -2026,6 +2026,47 @@ a:focus-visible {
 .essay-body strong {
  color: #fff3bd;
 }
+.essay-body .essay-quote {
+ position: relative;
+ margin-top: 2em;
+ margin-bottom: 2em;
+ border: 1px solid rgba(0, 229, 255, 0.13);
+ border-left: 3px solid rgba(0, 229, 255, 0.68);
+ border-radius: 4px;
+ padding: 1.05em 1.35em;
+ background: linear-gradient(90deg, rgba(0, 229, 255, 0.055), rgba(13, 16, 23, 0.82) 38%);
+ box-shadow: 0 12px 30px rgba(0, 0, 0, 0.14);
+ color: #edf1f7;
+}
+.essay-body .essay-quote p {
+ margin-top: 0.56em;
+ margin-bottom: 0.56em;
+}
+.essay-body .essay-quote strong {
+ color: #fff0a8;
+}
+.essay-body .essay-flow {
+ border-left-width: 1px;
+ padding: 1.35em clamp(1em, 4vw, 2.5em);
+ background:
+  linear-gradient(90deg, transparent, rgba(247, 211, 84, 0.035) 50%, transparent),
+  rgba(13, 16, 23, 0.88);
+ text-align: center;
+}
+.essay-body .essay-flow p {
+ margin: 0.42em auto;
+ max-width: 34em;
+ font-weight: 650;
+}
+.essay-body .essay-flow p:nth-child(even) {
+ margin-top: 0.1em;
+ margin-bottom: 0.1em;
+ color: var(--accent-cyan);
+ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ font-size: 0.88em;
+ line-height: 1;
+ text-shadow: 0 0 12px rgba(0, 229, 255, 0.3);
+}
 .essay-body pre {
  overflow: auto;
  padding: 14px;
@@ -2035,6 +2076,58 @@ a:focus-visible {
 }
 .essay-body code {
  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+.essay-body [data-footnote-ref] {
+ margin-left: 0.12em;
+ color: var(--accent-yellow);
+ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ font-size: 0.72em;
+ font-weight: 800;
+ text-decoration: none;
+}
+.essay-body .footnotes {
+ margin-top: 4.5em;
+ border-top: 1px solid rgba(247, 211, 84, 0.28);
+ padding-top: 1.4em;
+ color: #b9c0cc;
+ font-size: 0.82em;
+ line-height: 1.75;
+}
+.essay-body .footnotes::before {
+ content: "Notes";
+ display: block;
+ margin-bottom: 1.25em;
+ color: var(--accent-cyan);
+ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ font-size: 0.78em;
+ font-weight: 800;
+ letter-spacing: 0.08em;
+ text-transform: uppercase;
+}
+.essay-body .footnotes ol {
+ margin: 0;
+ padding-left: 1.8em;
+}
+.essay-body .footnotes li {
+ padding-left: 0.45em;
+}
+.essay-body .footnotes li::marker {
+ color: var(--accent-yellow);
+ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+ font-weight: 800;
+}
+.essay-body .footnotes [data-footnote-backref] {
+ color: var(--accent-cyan);
+ text-decoration: none;
+}
+.essay-body .sr-only {
+ position: absolute;
+ width: 1px;
+ height: 1px;
+ overflow: hidden;
+ clip: rect(0, 0, 0, 0);
+ white-space: nowrap;
+ clip-path: inset(50%);
 }
 .essay-actions {
  justify-content: center;

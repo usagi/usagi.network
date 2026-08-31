@@ -1,9 +1,21 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
-import { marked } from 'marked';
+import { Marked } from 'marked';
+import markedFootnote from 'marked-footnote';
 
 const essayDir = path.resolve('src/content/essays');
+const essayQuotes = {
+ renderer: {
+  blockquote(token)
+  {
+   const isFlow = token.tokens.some(item => item.type === 'paragraph' && item.text.trim() === '↓');
+   const className = isFlow ? 'essay-quote essay-flow' : 'essay-quote';
+   return `<blockquote class="${className}">\n${this.parser.parse(token.tokens)}</blockquote>\n`;
+  },
+ },
+};
+const markdown = new Marked().use(markedFootnote(), essayQuotes);
 
 function toSlug(file)
 {
@@ -37,7 +49,7 @@ export function getEssays()
    return {
     slug: toSlug(file),
     body: parsed.content,
-    html: marked.parse(displayBody),
+    html: markdown.parse(displayBody),
     readingMinutes,
     data: normalizedData,
    };
