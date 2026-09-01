@@ -112,6 +112,10 @@ async function checkHome(page)
    .filter(card => card.querySelector('.card__tag')?.textContent === 'Release').length,
   dictionaryRelease: [...document.querySelectorAll('#latest-grid .card')]
    .some(card => card.textContent?.includes('USAGI Dictionary') && card.getAttribute('href') === '/dictionary/'),
+  musicRelease: [...document.querySelectorAll('#latest-grid .card--track')]
+   .some(card => card.querySelector('.card__tag')?.textContent === 'Music'
+    && /^https:\/\/soundcloud\.com\/usagi-network\//.test(card.getAttribute('href') || '')
+    && card.querySelector('.card__thumb')?.naturalWidth > 0),
  }));
  if (!/USAGI\.NETWORK/.test(state.title)) fail(`home: invalid title ${state.title}`);
  if (!state.navEssay) fail('home: Essay nav missing');
@@ -122,6 +126,7 @@ async function checkHome(page)
  if (state.latestCount < 6) fail(`home: expected latest cards, got ${state.latestCount}`);
  if (state.releaseCount < 1) fail(`home: expected release card, got ${state.releaseCount}`);
  if (!state.dictionaryRelease) fail('home: USAGI Dictionary release missing');
+ if (!state.musicRelease) fail('home: SoundCloud music release missing');
 }
 
 async function checkSoftware(page)

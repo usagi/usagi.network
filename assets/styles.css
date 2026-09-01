@@ -1046,6 +1046,10 @@ a:focus-visible {
 .card--track .card__cut {
  border-bottom-color: var(--accent-orange);
 }
+.card--track .card__tag {
+ background: rgba(242, 82, 31, 0.16);
+ color: #ff9b76;
+}
 .card--release .card__cut {
  border-bottom-color: var(--accent);
 }

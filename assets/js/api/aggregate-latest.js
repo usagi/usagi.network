@@ -16,11 +16,16 @@ export async function fetchLatestActivity()
   '/assets/data/stream/twitch-vods.json',
   '/assets/data/stream/youtube-archives.json',
  ];
+ const soundcloudSources = [
+  String(SOURCES.soundcloud?.dataUrl || '').trim(),
+  '/assets/data/soundcloud-tracks.json',
+ ].filter(Boolean);
  // Prefer remote version-1 data first; fallback to local assets if unavailable.
- const [clips, vods, yt, releases] = await Promise.all([
+ const [clips, vods, yt, tracks, releases] = await Promise.all([
   firstAvailableArray([sources[0], sources[3]].filter(Boolean)),
   firstAvailableArray([sources[1], sources[4]].filter(Boolean)),
   firstAvailableArray([sources[2], sources[5]].filter(Boolean)),
+  firstAvailableTracks(soundcloudSources),
   fetchSoftwareReleases(),
  ]);
  const mapItem = (it) => ({
@@ -34,10 +39,15 @@ export async function fetchLatestActivity()
  const streamItems = [...clips, ...vods, ...yt].map(mapItem)
   .filter(x => x.id && x.date)
   .sort((a, b) => new Date(b.date) - new Date(a.date));
+ const musicItems = tracks.map(mapSoundCloudTrack)
+  .filter(x => x.id && x.date && x.url)
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
+ const mediaItems = [...streamItems, ...musicItems]
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
  const releaseItems = releases
   .filter(x => x.id && x.date)
   .sort((a, b) => new Date(b.date) - new Date(a.date));
- return [...streamItems.slice(0, 9), ...releaseItems.slice(0, 3)]
+ return [...mediaItems.slice(0, 9), ...releaseItems.slice(0, 3)]
   .sort((a, b) => new Date(b.date) - new Date(a.date))
   .slice(0, 12);
 }
@@ -114,6 +124,31 @@ function guessKind(it)
  if (it.clip_id || (it.kind === 'clip')) return 'clip';
  if (it.video_id || it.kind === 'vod') return 'vod';
  return 'archive';
+}
+
+async function firstAvailableTracks(paths)
+{
+ for (const p of paths)
+ {
+  const data = await safeJson(p);
+  const tracks = Array.isArray(data) ? data : Array.isArray(data?.tracks) ? data.tracks : [];
+  if (tracks.length) return tracks;
+ }
+ return [];
+}
+
+function mapSoundCloudTrack(track)
+{
+ const url = track.permalink_url || track.permalink || '';
+ return {
+  id: track.id || `soundcloud:${url}`,
+  provider: 'soundcloud',
+  kind: 'music',
+  title: track.title || 'Untitled',
+  date: track.created_at || track.date || '',
+  thumbnail: track.artwork_url || track.user?.avatar_url || '',
+  url,
+ };
 }
 function normalizeVersion(value)
 {

@@ -25,6 +25,24 @@ function normalizeStream(items, provider, kind)
  })).filter(item => item.id && item.date);
 }
 
+function normalizeSoundCloud(data)
+{
+ const tracks = Array.isArray(data) ? data : Array.isArray(data?.tracks) ? data.tracks : [];
+ return tracks.map(track =>
+ {
+  const url = track.permalink_url || track.permalink || '';
+  return {
+   id: track.id || `soundcloud:${url}`,
+   provider: 'soundcloud',
+   kind: 'music',
+   title: track.title || 'Untitled',
+   date: track.created_at || track.date || '',
+   thumbnail: track.artwork_url || track.user?.avatar_url || '',
+   url,
+  };
+ }).filter(item => item.id && item.date && item.url);
+}
+
 function buildStreamUrl(item, provider, kind)
 {
  const id = item.id || item.video_id || item.clip_id || item.yt_id || '';
@@ -90,14 +108,15 @@ function main()
  const clips = normalizeStream(readJson('assets/data/stream/twitch-clips.json', []), 'twitch', 'clip');
  const vods = normalizeStream(readJson('assets/data/stream/twitch-vods.json', []), 'twitch', 'vod');
  const yt = normalizeStream(readJson('assets/data/stream/youtube-archives.json', []), 'youtube', 'archive');
+ const music = normalizeSoundCloud(readJson('assets/data/soundcloud-tracks.json', { tracks: [] }));
  const releases = [...softwareReleases(), ...dictionaryRelease()];
- const streamItems = [...clips, ...vods, ...yt]
+ const mediaItems = [...clips, ...vods, ...yt, ...music]
   .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
   .slice(0, 9);
  const releaseItems = releases
   .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
   .slice(0, 3);
- const items = [...streamItems, ...releaseItems]
+ const items = [...mediaItems, ...releaseItems]
   .sort((a, b) => new Date(b.date || 0) - new Date(a.date || 0))
   .slice(0, 12);
  const payload = {

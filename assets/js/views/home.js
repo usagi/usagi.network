@@ -14,7 +14,7 @@ export async function mount()
  if (!grid) return;
  try
  {
-  const { fetchLatestActivity } = await import('../api/aggregate-latest.js?v=20260810-dictionary');
+  const { fetchLatestActivity } = await import('../api/aggregate-latest.js?v=20260901-music');
   const items = await fetchLatestActivity();
   if (items.length === 0)
   {
@@ -50,11 +50,12 @@ async function startHeroVisual()
 
 function renderLatestCard(it)
 {
- const isReleaseLink = it.provider === 'github' && Boolean(it.url);
- const a = document.createElement(isReleaseLink ? 'a' : 'article');
- const cutClass = it.kind === 'clip' ? 'card--clip' : it.kind === 'vod' ? 'card--vod' : it.kind === 'release' ? 'card--release' : 'card--map';
+ const isPlayable = isPlayableItem(it);
+ const isLinkedItem = Boolean(it.url) && !isPlayable;
+ const a = document.createElement(isLinkedItem ? 'a' : 'article');
+ const cutClass = it.kind === 'clip' ? 'card--clip' : it.kind === 'vod' ? 'card--vod' : it.kind === 'music' ? 'card--track' : it.kind === 'release' ? 'card--release' : 'card--map';
  a.className = `card ${cutClass}`;
- if (isReleaseLink)
+ if (isLinkedItem)
  {
   a.href = it.url;
   if (/^https?:\/\//i.test(it.url))
@@ -63,9 +64,8 @@ function renderLatestCard(it)
    a.rel = 'noopener';
   }
  }
- const tag = it.kind === 'clip' ? 'Clip' : it.kind === 'vod' ? 'VOD' : it.kind === 'release' ? 'Release' : (it.provider === 'youtube' ? 'YouTube' : 'Archive');
+ const tag = it.kind === 'clip' ? 'Clip' : it.kind === 'vod' ? 'VOD' : it.kind === 'music' ? 'Music' : it.kind === 'release' ? 'Release' : (it.provider === 'youtube' ? 'YouTube' : 'Archive');
  const thumb = resolveItemThumb(it);
- const isPlayable = isPlayableItem(it);
  a.innerHTML = `
 		<div class="card__cut"></div>
 		${thumb ? `<img class="card__thumb" src="${thumb}" alt="">` : ''}
@@ -75,7 +75,7 @@ function renderLatestCard(it)
 			<div class="card__date">${formatActivityDate(it.date)}</div>
 		</div>
 	`;
- if (isPlayable && !isReleaseLink)
+ if (isPlayable && !isLinkedItem)
  {
   a.style.cursor = 'pointer';
   a.addEventListener('click', () => openDetailEmbed(it));
