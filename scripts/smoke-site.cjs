@@ -50,7 +50,7 @@ async function main()
   try { return new URL(url).origin === localOrigin; } catch { return true; }
  });
  const relevantIssues = consoleIssues.filter(issue =>
-  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters|SoundCloud|Failed to load resource|Permissions policy violation: bluetooth|\[GraphQL\].*(OfflineEmbedVODAndSchedule|OfflineStreamerInformation): service error/i.test(issue));
+  !/Twitch|Autoplay|MasterPlaylist|429|WebGPU|No available adapters|SoundCloud|Failed to load resource|Permissions policy violation: bluetooth|getLayoutMap\(\) must be called from a top-level browsing context or allowed by the permission policy|\[GraphQL\].*(OfflineEmbedVODAndSchedule|OfflineStreamerInformation): service error/i.test(issue));
  if (relevantResponses.length) fail(`failed local resources:\n${relevantResponses.join('\n')}`);
  if (relevantIssues.length) fail(`console errors:\n${relevantIssues.join('\n')}`);
 
@@ -106,6 +106,7 @@ async function checkHome(page)
   title: document.title,
   navEssay: !!document.querySelector('.nav__link[href="/essay/"]'),
   navDictionary: !!document.querySelector('.nav__link[href="/dictionary/"]'),
+  creed: document.querySelector('.hero__creed-greek')?.textContent?.trim() || '',
   latestCount: document.querySelectorAll('#latest-grid .card').length,
   releaseCount: [...document.querySelectorAll('#latest-grid .card')]
    .filter(card => card.querySelector('.card__tag')?.textContent === 'Release').length,
@@ -115,6 +116,9 @@ async function checkHome(page)
  if (!/USAGI\.NETWORK/.test(state.title)) fail(`home: invalid title ${state.title}`);
  if (!state.navEssay) fail('home: Essay nav missing');
  if (!state.navDictionary) fail('home: Dictionary nav missing');
+ if (state.creed !== 'Εὔχομαι τὴν ἀνθρωπίνην σοφίαν, ἐπιστήμην καὶ τέχνην προκόπτειν.') {
+  fail(`home: bad Greek creed ${state.creed}`);
+ }
  if (state.latestCount < 6) fail(`home: expected latest cards, got ${state.latestCount}`);
  if (state.releaseCount < 1) fail(`home: expected release card, got ${state.releaseCount}`);
  if (!state.dictionaryRelease) fail('home: USAGI Dictionary release missing');
