@@ -14,8 +14,8 @@
        "url": "https://usagi.github.io/un-avatar/"
       }
      ],
-     "fallbackVersion": "v2.1.0",
-     "fallbackReleaseDate": "2026-06-29T11:38:46Z",
+     "fallbackVersion": "v2.3.0",
+     "fallbackReleaseDate": "2026-08-08T14:40:56Z",
      "description": "UNMF/Z または VMC/UDP のモーション入力を受け、VRM / MToon / SpringBone, VRC 向けモデル / lilToon / PhysBone のアバターを軽快に描画する仮想アバターレンダラーです。透過ウィンドウ、スクリーンショット保存、Spout2 Sender 出力に対応します。",
      "specs": [
       "VRM",
@@ -31,14 +31,15 @@
      "media": {
       "screenshot": "/assets/software/un-avatar/screenshot-0.webp",
       "icon": "/assets/software/un-avatar/icon.png"
-     }
+     },
+     "fallbackReleaseTag": "2.3.0"
     },
     {
      "title": "U.N. Motion",
      "tag": "Motion Capture",
      "repo": "usagi/un-motion",
-     "fallbackVersion": "v1.1.1",
-     "fallbackReleaseDate": "2026-06-28T07:02:07Z",
+     "fallbackVersion": "v1.3.0",
+     "fallbackReleaseDate": "2026-08-08T14:26:01Z",
      "description": "Web カメラや VMC/UDP、iFacialMocap 入力から体、顔、手などのモーションを推定・補正し、UNMF/Z または VMC/UDP で出力するモーションキャプチャアプリです。",
      "specs": [
       "Webcam",
@@ -50,7 +51,8 @@
      "media": {
       "screenshot": "/assets/software/un-motion/screenshot-0.webp",
       "icon": "/assets/software/un-motion/icon.png"
-     }
+     },
+     "fallbackReleaseTag": "1.3.0"
     },
     {
      "title": "U.N. VRC PerfectSync",
@@ -82,8 +84,8 @@
      "title": "U.N. Virtual Eye Tracker",
      "tag": "Virtual Eye Tracker",
      "repo": "usagi/un-virtual-eye-tracker",
-     "fallbackVersion": "v2.0.0",
-     "fallbackReleaseDate": "2026-05-27T21:32:30Z",
+     "fallbackVersion": "v2.1.0",
+     "fallbackReleaseDate": "2026-08-08T14:04:58Z",
      "description": "UNMF/Z、VMC/OSC、iFacialMocap などのフェイストラッキング入力を、ETS2 / ATS のヘッドトラッキングやマウス・キーボード出力へ変換する仮想アイトラッカーです。",
      "specs": [
       "Face Tracking",
@@ -95,7 +97,8 @@
      "media": {
       "screenshot": "/assets/software/un-virtual-eye-tracker/screenshot-0.webp",
       "icon": "/assets/software/un-virtual-eye-tracker/icon.png"
-     }
+     },
+     "fallbackReleaseTag": "2.1.0"
     }
    ]
   }
