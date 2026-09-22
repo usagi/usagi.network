@@ -43,7 +43,7 @@ export function getEssays()
     tags: Array.isArray(data.tags) ? data.tags : [],
    };
    const displayBody = stripCoverBlock(parsed.content, normalizedData);
-   const readingBody = displayBody.split(/^##\s+References\s*$/im)[0];
+   const readingBody = displayBody.split(/^##\s+(?:References|註と参考文献)\s*$/im)[0];
    const text = readingBody.replace(/```[\s\S]*?```/g, '').replace(/[#>*_`~\-[\]()]/g, ' ').replace(/\s+/g, ' ').trim();
    const readingMinutes = Math.max(1, Math.ceil(text.length / 560));
    return {

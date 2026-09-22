@@ -256,7 +256,10 @@ async function checkEssay(page)
 {
  await gotoPath(page, '/essay/');
  const listCount = await page.locator('.essay-card').count();
- if (listCount < 4) fail(`essay: expected at least 4 essays, got ${listCount}`);
+ if (listCount < 5) fail(`essay: expected at least 5 essays, got ${listCount}`);
+ if (await page.locator('.essay-card__link[href="/essay/loosely-coupled-polyphony/"]').count() !== 1) {
+  fail('essay index: polyphony essay missing');
+ }
  const listState = await page.evaluate(() => {
   const card = document.querySelector('.essay-card__link[href="/essay/taste-geopolitics-fractality/"]')?.closest('.essay-card');
   return {
@@ -388,6 +391,23 @@ async function checkEssay(page)
  }
  if (akuma.quotes < 10 || akuma.flows !== 1) fail(`akuma essay: bad quote rendering ${akuma.quotes}/${akuma.flows}`);
  if (/\[\^[^\]]+\]/.test(akuma.bodyText)) fail('akuma essay: raw footnote syntax leaked into body');
+
+ await gotoPath(page, '/essay/loosely-coupled-polyphony/');
+ const polyphony = await page.evaluate(() => ({
+  title: document.querySelector('h1')?.textContent?.trim(),
+  firstHeading: document.querySelector('.essay-body h2')?.textContent?.trim(),
+  body: document.querySelector('.essay-body')?.textContent || '',
+  refs: [...document.querySelectorAll('[data-footnote-ref]')].map(el => el.getAttribute('href')),
+  footnotes: [...document.querySelectorAll('.footnotes li')].map(el => `#${el.id}`),
+  readtime: document.querySelector('.essay-readtime')?.textContent?.trim(),
+ }));
+ if (polyphony.title !== 'うさぎが愛した疎結合性ポリフォニー') fail('polyphony essay: title missing');
+ if (polyphony.firstHeading !== 'どうやら私は、同じものを何度も愛していた') fail('polyphony essay: opening missing');
+ if (!polyphony.body.includes('私の嗜好の一覧そのものも、以前とは少し違って見えている。')) fail('polyphony essay: ending missing');
+ if (polyphony.refs.length !== 8 || polyphony.footnotes.length !== 7 ||
+     polyphony.refs.some(href => !polyphony.footnotes.includes(href))) fail('polyphony essay: broken footnotes');
+ if (/\[\^[^\]]+\]/.test(polyphony.body)) fail('polyphony essay: raw footnotes leaked');
+ if (polyphony.readtime !== '6 min read') fail(`polyphony essay: bad readtime ${polyphony.readtime}`);
 }
 
 async function checkMusic(page)
