@@ -32,6 +32,7 @@ async function main()
  });
 
  await checkHome(page);
+ await checkHomeMusicRendering(page);
  await checkBeatSaber(page);
  await checkSoftware(page);
  await checkDictionary(page);
@@ -112,8 +113,8 @@ async function checkHome(page)
    .filter(card => card.querySelector('.card__tag')?.textContent === 'Release').length,
   dictionaryRelease: [...document.querySelectorAll('#latest-grid .card')]
    .some(card => card.textContent?.includes('USAGI Dictionary') && card.getAttribute('href') === '/dictionary/'),
-  musicRelease: [...document.querySelectorAll('#latest-grid .card--track')]
-   .some(card => card.querySelector('.card__tag')?.textContent === 'Music'
+  musicCardsValid: [...document.querySelectorAll('#latest-grid .card--track')]
+   .every(card => card.querySelector('.card__tag')?.textContent === 'Music'
     && /^https:\/\/soundcloud\.com\/usagi-network\//.test(card.getAttribute('href') || '')
     && card.querySelector('.card__thumb')?.naturalWidth > 0),
  }));
@@ -126,7 +127,35 @@ async function checkHome(page)
  if (state.latestCount < 6) fail(`home: expected latest cards, got ${state.latestCount}`);
  if (state.releaseCount < 1) fail(`home: expected release card, got ${state.releaseCount}`);
  if (!state.dictionaryRelease) fail('home: USAGI Dictionary release missing');
- if (!state.musicRelease) fail('home: SoundCloud music release missing');
+ // Music can legitimately age out of the nine most recent media items.
+ if (!state.musicCardsValid) fail('home: invalid SoundCloud music card');
+}
+
+async function checkHomeMusicRendering(page)
+{
+ // Keep music rendering covered even when the live feed contains only streams.
+ const fixture = {
+  id: 'smoke-music', provider: 'soundcloud', kind: 'music',
+  title: 'Smoke music fixture', date: '2026-09-01T00:00:00Z',
+  url: 'https://soundcloud.com/usagi-network/smoke-music',
+  thumbnail: '/ogp/usagi-network.png',
+ };
+ const pattern = /\/(?:assets\/js\/api\/aggregate-latest|_astro\/aggregate-latest\.[^/]+)\.js(?:\?.*)?$/;
+ const handler = route => route.fulfill({
+  contentType: 'text/javascript',
+  body: `export async function fetchLatestActivity() { return ${JSON.stringify([fixture])}; }`,
+ });
+ await page.route(pattern, handler);
+ try {
+  await page.goto(new URL('/', baseUrl).toString(), { waitUntil: 'load' });
+  const card = page.locator(`#latest-grid a.card--track[href="${fixture.url}"]`);
+  await card.waitFor({ state: 'visible', timeout: 10000 });
+  if (await card.locator('.card__tag').textContent() !== 'Music') fail('home: fixture music label missing');
+  if (await card.locator('.card__title').textContent() !== fixture.title) fail('home: fixture music title missing');
+  await card.locator('.card__thumb').evaluate(img => img.decode());
+ } finally {
+  await page.unroute(pattern, handler);
+ }
 }
 
 async function checkSoftware(page)
