@@ -111,8 +111,10 @@ async function checkHome(page)
   latestCount: document.querySelectorAll('#latest-grid .card').length,
   releaseCount: [...document.querySelectorAll('#latest-grid .card')]
    .filter(card => card.querySelector('.card__tag')?.textContent === 'Release').length,
-  dictionaryRelease: [...document.querySelectorAll('#latest-grid .card')]
-   .some(card => card.textContent?.includes('USAGI Dictionary') && card.getAttribute('href') === '/dictionary/'),
+  dictionaryCardsValid: [...document.querySelectorAll('#latest-grid .card')]
+   .filter(card => card.textContent?.includes('USAGI Dictionary'))
+   .every(card => card.getAttribute('href') === '/dictionary/'
+    && card.querySelector('.card__tag')?.textContent === 'Release'),
   musicCardsValid: [...document.querySelectorAll('#latest-grid .card--track')]
    .every(card => card.querySelector('.card__tag')?.textContent === 'Music'
     && /^https:\/\/soundcloud\.com\/usagi-network\//.test(card.getAttribute('href') || '')
@@ -126,7 +128,8 @@ async function checkHome(page)
  }
  if (state.latestCount < 6) fail(`home: expected latest cards, got ${state.latestCount}`);
  if (state.releaseCount < 1) fail(`home: expected release card, got ${state.releaseCount}`);
- if (!state.dictionaryRelease) fail('home: USAGI Dictionary release missing');
+ // Dictionary can legitimately age out of the three most recent releases.
+ if (!state.dictionaryCardsValid) fail('home: invalid USAGI Dictionary release card');
  // Music can legitimately age out of the nine most recent media items.
  if (!state.musicCardsValid) fail('home: invalid SoundCloud music card');
 }

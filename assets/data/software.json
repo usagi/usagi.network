@@ -5,6 +5,34 @@
    "title": "U.N. Avatar Series",
    "items": [
     {
+     "title": "U.N. Virtual Avatar Connect",
+     "tag": "Streaming Assistant",
+     "repo": "usagi/un-virtual-avatar-connect",
+     "links": [
+      {
+       "label": "Virtual Avatar Connect Official Web",
+       "url": "https://usagi.github.io/un-virtual-avatar-connect/"
+      }
+     ],
+     "fallbackVersion": "v2.0.0",
+     "fallbackReleaseTag": "2.0.0",
+     "fallbackReleaseDate": "2026-11-21T05:05:11Z",
+     "description": "Twitch の通知やクリップ紹介から始められる、Windows x64 向けの統合配信支援アプリです。字幕・翻訳・チャット読み上げや、ゲーム画面を見て声と表情で応える AI 共演者を追加できます。Flowgraph でイベントと処理を組み合わせ、OBS・U.N. Avatar・U.N. Motion と連携します。",
+     "specs": [
+      "Windows x64",
+      "Twitch",
+      "OBS",
+      "字幕・翻訳",
+      "AI 共演者",
+      "Flowgraph",
+      "UNMF/Z"
+     ],
+     "media": {
+      "screenshot": "/assets/software/un-virtual-avatar-connect/screenshot-0.webp",
+      "icon": "/assets/software/un-virtual-avatar-connect/icon.png"
+     }
+    },
+    {
      "title": "U.N. Avatar",
      "tag": "Avatar Renderer",
      "repo": "usagi/un-avatar",
@@ -37,6 +65,12 @@
      "title": "U.N. Motion",
      "tag": "Motion Capture",
      "repo": "usagi/un-motion",
+     "links": [
+      {
+       "label": "U.N. Motion Official Web",
+       "url": "https://usagi.github.io/un-motion/"
+      }
+     ],
      "fallbackVersion": "v1.1.1",
      "fallbackReleaseDate": "2026-06-28T07:02:07Z",
      "description": "Web カメラや VMC/UDP、iFacialMocap 入力から体、顔、手などのモーションを推定・補正し、UNMF/Z または VMC/UDP で出力するモーションキャプチャアプリです。",
